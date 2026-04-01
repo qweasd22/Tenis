@@ -1,6 +1,6 @@
 /* ===== Hero документов ===== */
 .documents-hero {
-    background: linear-gradient(90deg, rgba(32,192,204,0.15), rgba(32,192,204,0.05));
+    background: linear-gradient(90deg, rgba(225, 25, 25, 0.15), rgba(32,192,204,0.05));
     padding: 3rem 1rem;
     border-radius: 1rem;
     text-align: center;
@@ -108,7 +108,7 @@
 }
 /* ====== Hero ====== */
 .documents-hero {
-    background: linear-gradient(90deg, rgba(32,192,204,0.15), rgba(32,192,204,0.05));
+    background: linear-gradient(90deg, rgba(204, 32, 32, 0.15), rgba(212, 22, 22, 0.05));
     padding: 3rem 1rem;
     border-radius: 1rem;
     text-align: center;
