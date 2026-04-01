@@ -114,7 +114,10 @@
     </style>
 
     {% block extra_css %}{% endblock %}
+    
+
 </head>
+
 <body class="d-flex flex-column min-vh-100">
 
     <!-- Header / Навигация -->
@@ -132,9 +135,8 @@
                     <li class="nav-item"><a class="nav-link" href="{% url 'teams:teams' %}">Сборные</a></li>
                     <li class="nav-item"><a class="nav-link" href="{% url 'projects:list' %}">Проекты</a></li>
                     <li class="nav-item"><a class="nav-link" href="{% url 'news:news_list' %}">Новости</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#">Календарь</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#">Медиа</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#">О федерации</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'calendar:calendar' %}">Календарь</a></li>
+                    
                 </ul>
             </div>
         </nav>

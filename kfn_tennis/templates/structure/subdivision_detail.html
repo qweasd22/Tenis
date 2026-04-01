@@ -2,68 +2,59 @@
 {% load static %}
 
 {% block extra_css %}
-<link rel="stylesheet" href="{% static 'css/structure.css'  %}">
+<link rel="stylesheet" href="{% static 'css/structure.css' %}">
 {% endblock %}
 
 {% block content %}
 <div class="container">
-    <nav class="breadcrumbs">
-        <a href="{% url 'structure:structure_home' %}">Структура</a> {{ subdivision.get_title_display }}
-        <a style="float:right;" href="{% url 'structure:structure_home' %}">Вернуться к списку подразделений</a>
-    </nav>
-    <section class="subdivision-header">
+
+    <!-- Hero подразделения -->
+    <section class="hero-subdivision-detail">
         <h1>{{ subdivision.get_title_display }}</h1>
         {% if subdivision.description %}
         <p>{{ subdivision.description }}</p>
         {% endif %}
+        <a href="{% url 'structure:structure_home' %}" class="btn-back">← Вернуться к списку подразделений</a>
     </section>
-    
 
+
+    <!-- Сетка участников -->
     {% if active_members %}
     <section class="members-grid">
         {% for person in active_members %}
         <div class="member-card">
-    <div class="photo-wrapper">
-        {% if person.photo %}
-        <img src="{{ person.photo.url }}" alt="{{ person.full_name }}">
-        {% else %}
-        <div class="no-photo">Нет фото</div>
-        {% endif %}
-    </div>
-
-    <div class="member-info">
-        <h3>{{ person.full_name }}</h3>
-        {% if person.role %}
-        <p class="role">Должность: {{ person.role }}</p>
-        {% endif %}
-
-        <hr>
-
-        {% if person.email %}
-        <p class="contact"><span class="label">📧 Email:</span> <a href="mailto:{{ person.email }}">{{ person.email }}</a></p>
-        {% endif %}
-        {% if person.phone %}
-        <p class="contact"><span class="label">📞 Телефон:</span> <a href="tel:{{ person.phone }}">{{ person.phone }}</a></p>
-        {% endif %}
-        {% if person.period %}
-        <p class="period"><span class="label">Стаж работы:</span> {{ person.period }}</p>
-        {% endif %}
-
-        {% if person.bio %}
-        <hr>
-        <p class="bio"><span class="label">О сотруднике:</span> {{ person.bio }}</p>
-        {% endif %}
-    </div>
-</div>
+            <div class="photo-wrapper">
+                {% if person.photo %}
+                <img src="{{ person.photo.url }}" alt="{{ person.full_name }}">
+                {% else %}
+                <div class="no-photo">{{ person.full_name|slice:":1" }}</div>
+                {% endif %}
+            </div>
+            <div class="member-info">
+                <h3>{{ person.full_name }}</h3>
+                {% if person.role %}
+                <p class="role">{{ person.role }}</p>
+                {% endif %}
+                <hr>
+                {% if person.email %}
+                <p class="contact"><span class="label">📧 Email:</span> <a href="mailto:{{ person.email }}">{{ person.email }}</a></p>
+                {% endif %}
+                {% if person.phone %}
+                <p class="contact"><span class="label">📞 Телефон:</span> <a href="tel:{{ person.phone }}">{{ person.phone }}</a></p>
+                {% endif %}
+                {% if person.period %}
+                <p class="period"><span class="label">Стаж работы:</span> {{ person.period }}</p>
+                {% endif %}
+                {% if person.bio %}
+                <hr>
+                <p class="bio">{{ person.bio }}</p>
+                {% endif %}
+            </div>
+        </div>
         {% endfor %}
     </section>
     {% else %}
     <p style="text-align:center; color:#555;">В этом подразделении пока нет активных участников.</p>
     {% endif %}
 </div>
-<style>
-    .body{
-        font-family: var(--font-family);
-    }
-</style>
 {% endblock %}

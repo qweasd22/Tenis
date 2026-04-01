@@ -1,0 +1,86 @@
+/* ===== Hero календаря ===== */
+.calendar-hero {
+    background: linear-gradient(90deg, rgba(32,192,204,0.15), rgba(32,192,204,0.05));
+    padding: 3rem 1rem;
+    border-radius: 1rem;
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.calendar-hero h1 {
+    color: #343A40;
+    font-weight: 700;
+}
+
+.calendar-hero p {
+    color: #6c757d;
+    font-size: 1.1rem;
+}
+
+/* ===== Карточка календаря ===== */
+.calendar-card {
+    background-color: #ffffff;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+/* ===== FullCalendar стили ===== */
+.fc {
+    font-family: 'Inter', sans-serif;
+}
+
+.fc-toolbar-title {
+    font-weight: 600;
+}
+
+.fc .fc-button {
+    background-color: var(--accent-color);
+    border: none;
+    color: #fff;
+}
+
+.fc .fc-button:hover {
+    background-color: #159c82;
+}
+
+.fc .fc-daygrid-event {
+    background-color: var(--accent-color);
+    color: #fff;
+    border-radius: 6px;
+    padding: 2px 5px;
+}
+
+.fc .fc-event-time {
+    font-size: 0.85rem;
+    opacity: 0.9;
+}
+
+.fc .fc-list-event-title {
+    font-weight: 500;
+}
+
+.fc .fc-list-event-time {
+    font-size: 0.85rem;
+    opacity: 0.8;
+}
+/* Мобильные адаптации */
+@media (max-width: 992px) {
+    .fc-toolbar-title { font-size: 1.5rem; }
+    .fc .fc-col-header-cell-cushion { font-size: 0.9rem; }
+    .fc-event { font-size: 0.75rem; }
+}
+
+@media (max-width: 768px) {
+    #calendar { padding: 10px; }
+    .fc-toolbar { flex-wrap: wrap; gap: 0.5rem; }
+    .fc .fc-col-header-cell-cushion { font-size: 0.85rem; }
+    .fc-event { font-size: 0.7rem; padding: 2px 4px; }
+}
+
+@media (max-width: 576px) {
+    #calendar { padding: 5px; }
+    .fc-toolbar { flex-direction: column; gap: 0.5rem; }
+    .fc .fc-col-header-cell-cushion { font-size: 0.8rem; }
+    .fc-event { font-size: 0.65rem; padding: 1px 3px; }
+}

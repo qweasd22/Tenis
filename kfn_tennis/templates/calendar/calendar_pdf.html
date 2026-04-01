@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Календарь {{ period }}</title>
+    <style>
+        body { font-family: sans-serif; background-color: #fff; color: #343A40; }
+        h1 { text-align: center; color: #20C; margin-bottom: 30px; }
+        .event-card { border: 1px solid #20C; border-radius: 8px; padding: 10px; margin-bottom: 10px; }
+        .event-date { font-weight: bold; color: #6C63FF; }
+        .event-title { margin-top: 5px; font-size: 1.1em; }
+    </style>
+</head>
+<body>
+    <h1>Календарь {{ period }}</h1>
+    {% for event in events %}
+    <div class="event-card">
+        <div class="event-date">{{ event.date|date:"d F Y" }}</div>
+        <div class="event-title">{{ event.title }}</div>
+        {% if event.pdf %}
+        <div><a href="{{ event.pdf.url }}">Скачать PDF</a></div>
+        {% endif %}
+    </div>
+    {% empty %}
+    <p>Событий нет.</p>
+    {% endfor %}
+</body>
+</html>

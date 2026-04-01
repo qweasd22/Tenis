@@ -1,0 +1,340 @@
+/* ====================== */
+/* Страница проектов */
+/* ====================== */
+body.projects-page {
+    background: linear-gradient(180deg, #f0f3f5 0%, #e6e9ec 100%);
+    font-family: 'Inter', sans-serif;
+    color: #343A40;
+}
+
+/* ==== Заголовок секции ==== */
+.projects-header {
+    background: linear-gradient(90deg, rgba(32,192,204,0.15), rgba(32,192,204,0.05));
+    padding: 3rem 1rem;
+    border-radius: 1rem;
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.projects-header h1 {
+    color: #343A40;
+    font-weight: 700;
+}
+
+.projects-header p {
+    color: #6c757d;
+    font-size: 1.1rem;
+}
+
+/* ==== Карточки проектов ==== */
+.project-card {
+    background: #fefefe; /* чуть кремовый фон */
+    border-radius: 1rem;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    position: relative;
+}
+
+.project-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 25px rgba(32,192,204,0.3);
+}
+
+/* Изображение карточки */
+.project-card img {
+    transition: transform 0.4s ease;
+    border-top-left-radius: 1rem;
+    border-top-right-radius: 1rem;
+    width: 100%;
+    display: block;
+}
+
+.project-card:hover img {
+    transform: scale(1.05);
+}
+
+/* Overlay градиент на изображение */
+.project-card .ratio::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(0,0,0,0.1), rgba(0,0,0,0));
+    border-radius: 1rem 1rem 0 0;
+}
+
+/* Категория */
+.project-card .badge {
+    background: var(--accent-color);
+    color: #fff;
+    font-weight: 500;
+}
+
+/* Название проекта */
+.project-card .card-title {
+    color: #343A40;
+}
+
+/* Кнопка Подробнее */
+.project-card .btn {
+    background: linear-gradient(90deg, var(--accent-color), #17a2b8);
+    color: #fff;
+    border: none;
+    transition: background 0.3s ease;
+}
+
+.project-card .btn:hover {
+    background: linear-gradient(90deg, #17a2b8, var(--accent-color));
+    color: #fff;
+}
+
+/* ==== Страница конкретного проекта ==== */
+.project-main-image {
+    position: relative;
+    overflow: hidden;
+    border-radius: 1rem;
+    margin-bottom: 3rem;
+}
+
+.project-main-image img {
+    width: 100%;
+    transition: transform 0.4s ease;
+}
+
+.project-main-image:hover img {
+    transform: scale(1.05);
+}
+
+.project-main-image::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: linear-gradient(180deg, rgba(0,0,0,0.25), rgba(0,0,0,0));
+}
+
+/* Кнопки на странице проекта */
+.project-content .btn {
+    background: linear-gradient(90deg, var(--accent-color), #17a2b8);
+    color: #fff;
+    border: none;
+    padding: 0.6rem 1.2rem;
+    transition: background 0.3s ease;
+}
+
+.project-content .btn:hover {
+    background: linear-gradient(90deg, #17a2b8, var(--accent-color));
+}
+
+/* Боковая панель */
+.project-sidebar {
+    background: #f8f9fa;
+    border-radius: 1rem;
+    padding: 2rem;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+/* Заголовки в боковой панели */
+.project-sidebar h5 {
+    border-bottom: 2px solid var(--accent-color);
+    padding-bottom: 0.5rem;
+    display: inline-block;
+}
+
+/* Таблицы в описании проекта */
+.project-content table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.project-content table td,
+.project-content table th {
+    padding: 8px;
+    border: 1px solid #dee2e6;
+}
+
+/* Плавное появление карточек при скролле */
+.project-card {
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeUp 0.6s forwards;
+}
+
+@keyframes fadeUp {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ==== Разделение строк карточек ==== */
+.row:nth-child(even) {
+    background: rgba(32,192,204,0.02);
+    padding: 2rem 0;
+    border-radius: 1rem;
+}
+
+/* ======================= */
+/* Страница конкретного проекта */
+/* ======================= */
+
+/* Фон страницы */
+body.project-page {
+    background: linear-gradient(180deg, #f7f8fa 0%, #e6e9ec 100%);
+    font-family: 'Inter', sans-serif;
+    color: #343A40;
+}
+
+/* Заголовок и категория */
+.project-header h1 {
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+
+.category-badge {
+    background: var(--accent-color);
+    color: #fff;
+    font-weight: 500;
+    padding: 0.25rem 0.75rem;
+    border-radius: 0.5rem;
+    font-size: 0.85rem;
+}
+
+/* Главное изображение */
+.project-main-image {
+    position: relative;
+    overflow: hidden;
+    border-radius: 1rem;
+}
+
+.project-main-image img {
+    width: 100%;
+    transition: transform 0.4s ease;
+}
+
+.project-main-image:hover img {
+    transform: scale(1.05);
+}
+
+.project-main-image::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(0,0,0,0.15), rgba(0,0,0,0));
+}
+
+/* Контент проекта */
+.project-content p {
+    margin-bottom: 1.25rem;
+    line-height: 1.7;
+}
+
+/* Таблицы в контенте */
+.project-content table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.project-content table td,
+.project-content table th {
+    padding: 8px;
+    border: 1px solid #dee2e6;
+}
+
+.project-content table tr:hover {
+    background-color: rgba(32,192,204,0.05);
+}
+
+/* Кнопки */
+.btn-project {
+    background: linear-gradient(90deg, var(--accent-color), #17a2b8);
+    color: #fff;
+    border: none;
+    padding: 0.6rem 1.2rem;
+    transition: background 0.3s ease, transform 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+}
+
+.btn-project:hover {
+    background: linear-gradient(90deg, #17a2b8, var(--accent-color));
+    transform: translateY(-2px);
+}
+
+/* Боковая панель */
+.project-sidebar {
+    background: #f8f9fa;
+    border-radius: 1rem;
+    padding: 2rem;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeUp 0.6s forwards;
+}
+
+.project-sidebar h5 {
+    border-bottom: 2px solid var(--accent-color);
+    padding-bottom: 0.5rem;
+    margin-bottom: 1rem;
+    display: inline-block;
+}
+
+/* Анимация появления */
+.project-content, .project-sidebar {
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeUp 0.6s forwards;
+    animation-delay: 0.2s;
+}
+
+@keyframes fadeUp {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+/* Похожие проекты */
+.related-projects h3 {
+    color: #343A40;
+    margin-bottom: 2rem;
+}
+
+/* Карточки похожих проектов наследуют стиль основных карточек */
+.related-projects .project-card {
+    background: #fefefe;
+    border-radius: 1rem;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.related-projects .project-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 25px rgba(32,192,204,0.3);
+}
+
+.related-projects .project-card img {
+    transition: transform 0.4s ease;
+}
+
+.related-projects .project-card:hover img {
+    transform: scale(1.05);
+}
+
+.related-projects .badge {
+    background: var(--accent-color);
+    color: #fff;
+    font-weight: 500;
+}
+
+.related-projects .btn-project {
+    background: linear-gradient(90deg, var(--accent-color), #17a2b8);
+    color: #fff;
+    border: none;
+    padding: 0.5rem 1rem;
+    transition: background 0.3s ease, transform 0.2s ease;
+    font-size: 0.9rem;
+}
+
+.related-projects .btn-project:hover {
+    background: linear-gradient(90deg, #17a2b8, var(--accent-color));
+    transform: translateY(-2px);
+}

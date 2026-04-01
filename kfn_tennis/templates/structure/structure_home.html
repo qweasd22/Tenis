@@ -6,15 +6,17 @@
 {% endblock %}
 
 {% block content %}
-<div class="container">
-    <section class="hero-section d-flex flex-column justify-content-center align-items-center text-center">
+<div class="container my-1">
+
+    <!-- Hero главной страницы -->
+    <section class="hero-structure-home d-flex flex-column justify-content-center align-items-center text-center">
     <div class="hero-overlay"></div>
-    <h1 class="hero-title mb-3 fw-bold">Структура федерации</h1>
-    <p class="hero-subtitle lead mb-4">Выберите подразделение, чтобы просмотреть состав и подробную информацию.</p>
+    <h1>Структура федерации</h1>
+    <p>Выберите подразделение, чтобы просмотреть состав и подробную информацию.</p>
     </section>
 
-    
 
+    <!-- Сетка подразделений -->
     <section class="subdivisions-grid">
         {% for subdivision in subdivisions %}
         <div class="subdivision-card">
@@ -23,7 +25,6 @@
                     <h3>{{ subdivision.get_title_display }}</h3>
                     {% if subdivision.description %}
                     <p>{{ subdivision.description|truncatechars:80 }}</p>
-                    
                     {% endif %}
                 </div>
             </a>
@@ -31,39 +32,4 @@
         {% endfor %}
     </section>
 </div>
-<style>
-    .hero-section {
-    position: relative;
-    width: 100%;
-    height: 300px; /* или под нужный размер */
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    background-image: url('/static/images/structure-hero-bg-2.jpg'); /* путь к картинке */
-    background-size: cover; /* масштабируем под размер блока */
-    background-position: center;
-    background-repeat: no-repeat;
-    color: #fff; /* цвет текста */
-    margin-bottom: 2%;
-}
-
-.hero-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0,0,0,0.5); /* полупрозрачный тёмный слой для читаемости */
-    z-index: 1;
-}
-
-.hero-section h1,
-.hero-section p {
-    position: relative;
-    z-index: 2; /* текст поверх overlay */
-}
-.hero-title, .hero-subtitle { position: relative; z-index: 1; }
-</style>
 {% endblock %}

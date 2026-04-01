@@ -5,16 +5,26 @@ body.teams-page {
 }
 
 /* Заголовок */
-.section-header {
+/* ======= Хедер сборных ======= */
+/* ======= Hero хедер сборных ======= */
+.teams-hero {
+    background: linear-gradient(90deg, rgba(32,192,204,0.15), rgba(32,192,204,0.05));
+    padding: 3rem 1rem;
+    border-radius: 1rem;
+    text-align: center;
     margin-bottom: 3rem;
 }
-.section-header h1 {
+
+.teams-hero h1 {
+    color: #343A40;
     font-weight: 700;
 }
-.section-header p {
+
+.teams-hero p {
     color: #6c757d;
     font-size: 1.1rem;
 }
+
 
 /* Карточки игроков */
 .document-card {

@@ -25,11 +25,11 @@ SECRET_KEY = 'django-insecure-qvxhwud!i*r2d6-6itl@bz*ti@j8^%0zf6(3fk*cv0*%%%croe
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*','192.168.3.172']
+ALLOWED_HOSTS = ['*','192.168.3.172','192.168.2.3']
 
 
 # Application definition
-
+WEASYPRINT_BASEURL = '/'
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -45,6 +45,8 @@ INSTALLED_APPS = [
     'documents',
     'projects',
     'teams',
+    'eventcalendar',
+    
 ]
 
 MIDDLEWARE = [
@@ -62,6 +64,7 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
+
 # CKEditor 5
 customColorPalette = [
     {"color": "hsl(4, 90%, 58%)", "label": "Red"},
@@ -161,7 +164,7 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
-
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Password validation
 # https://docs.djangoproject.com/en/6.0/ref/settings/#auth-password-validators

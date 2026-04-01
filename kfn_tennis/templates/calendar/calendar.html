@@ -1,0 +1,122 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/calendar.css' %}">
+<link href='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/main.min.css' rel='stylesheet' />
+{% endblock %}
+
+{% block content %}
+<div class="container calendar-container my-1">
+    <section class="hero-calendar text-center mb-4">
+        <h1>Календарь событий</h1>
+        <p>Просматривайте все турниры и мероприятия федерации</p>
+    </section>
+
+    <div id='calendar'></div>
+</div>
+{% endblock %}
+
+
+
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/locales-all.global.min.js"></script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+
+    const calendar = new FullCalendar.Calendar(
+        document.getElementById('calendar'),
+        {
+            initialView: 'dayGridMonth',
+            locale: 'ru',
+            height: 'auto',
+
+            headerToolbar: {
+                left: 'prev,next today',
+                center: 'title',
+                right: 'dayGridMonth,listMonth'
+            },
+
+            buttonText: {
+                today: 'Сегодня',
+                month: 'Месяц',
+                list: 'Список'
+            },
+
+            events: '{% url "calendar:calendar_events_json" %}',
+
+            noEventsContent: 'Нет событий',
+
+            eventContent: function(arg) {
+
+                const start = arg.event.start;
+                const end = arg.event.end;
+                const allDay = arg.event.allDay;
+
+                const formatTime = (date) =>
+                    date.toLocaleTimeString('ru-RU', {
+                        hour: '2-digit',
+                        minute: '2-digit'
+                    });
+
+                const formatDate = (date) =>
+                    date.toLocaleDateString('ru-RU');
+
+                let timeText = '';
+
+                if (!allDay) {
+                    if (end) {
+                        if (start.toDateString() !== end.toDateString()) {
+                            timeText =
+                                formatDate(start) + ' ' + formatTime(start) +
+                                ' — ' +
+                                formatDate(end) + ' ' + formatTime(end);
+                        } else {
+                            timeText =
+                                formatTime(start) + ' — ' + formatTime(end);
+                        }
+                    } else {
+                        timeText = formatTime(start);
+                    }
+                } else {
+                    if (end) {
+                        const realEnd = new Date(end);
+                        realEnd.setDate(realEnd.getDate() - 1);
+
+                        if (start.toDateString() !== realEnd.toDateString()) {
+                            timeText =
+                                formatDate(start) + ' — ' + formatDate(realEnd);
+                        }
+                    }
+                }
+
+                return {
+                    html: `
+                        <div class="fc-custom-event">
+                            ${timeText ? `<div class="fc-custom-time">${timeText}</div>` : ''}
+                            <div class="fc-custom-title">${arg.event.title}</div>
+                        </div>
+                    `
+                };
+            },
+
+            eventColor: 'var(--accent-color)',
+            eventTextColor: '#ffffff',
+
+            eventClick: function(info) {
+                if (info.event.url) {
+                    window.open(info.event.url, '_blank');
+                    info.jsEvent.preventDefault();
+                }
+            }
+        }
+    );
+
+    calendar.render();
+});
+
+</script>
+{% endblock %}

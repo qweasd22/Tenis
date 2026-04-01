@@ -1,18 +1,42 @@
 {% extends "base.html" %}
-
+{% load static %}
 {% block title %}{{ news.title }} - Новости{% endblock %}
 
-{% block content %}
-<article class="mb-5">
-    <h2 class="fw-bold">{{ news.title }}</h2>
-    <p class="text-muted">{{ news.created_at|date:"d M Y" }}</p>
-    {% if news.image %}
-    <img src="{{ news.image.url }}" class="img-fluid rounded mb-3" alt="{{ news.title }}">
-    {% endif %}
-    <div class="content">
-        {{ news.content|linebreaks }}
-    </div>
-</article>
 
-<a href="{% url 'news:news_list' %}" class="btn btn-outline-accent">← Все новости</a>
+{% block content %}
+<div class="container py-5 news-detail-container">
+
+    <!-- Кнопка назад -->
+    <div class="mb-4">
+        <a href="{% url 'news:news_list' %}" class="btn btn-back">
+            ← Все новости
+        </a>
+    </div>
+
+    <article class="news-article">
+
+        <header class="news-header d-flex flex-column flex-md-row align-items-start gap-4 mb-4">
+
+            {% if news.image %}
+            <div class="news-image flex-shrink-0">
+                <img src="{{ news.image.url }}" alt="{{ news.title }}">
+            </div>
+            {% endif %}
+
+            <div class="news-text">
+                <h1 class="news-title">{{ news.title }}</h1>
+                <div class="news-date">{{ news.created_at|date:"d M Y" }}</div>
+            </div>
+
+        </header>
+
+        <div class="news-content">
+            {{ news.content|linebreaks }}
+        </div>
+
+    </article>
+</div>
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/news.css' %}">
+{% endblock %}
 {% endblock %}

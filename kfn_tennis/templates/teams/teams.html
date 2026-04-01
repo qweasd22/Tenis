@@ -8,11 +8,14 @@
 {% endblock %}
 
 {% block content %}
+<div class="container py-5">
+<!-- Хедер сборных -->
 
-<section class="section-header text-center mb-4">
-    <h1>Сборные Курской федерации</h1>
-    <p>Выберите сезон и найдите игрока по имени.</p>
-</section>
+    <div class="teams-hero mb-5">
+        <h1 class="fw-bold">Сборные Курской федерации</h1>
+        <p class="text-muted mt-2">Выберите сезон и найдите игрока по имени.</p>
+    </div>
+
 
 <!-- Фильтр + поиск -->
 <div class="col-md-6 mx-auto mb-5">
@@ -72,7 +75,7 @@
     </div>
     <p id="no-results" class="text-muted text-center mt-4" style="display: none;">Игроки не найдены.</p>
 </section>
-
+</div>
 <style>
 .search-wrapper {
     position: relative;

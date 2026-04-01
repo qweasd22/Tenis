@@ -1,223 +1,142 @@
 {% extends "base.html" %}
+{% load static %}
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/documents.css' %}">
+{% endblock %}
+{% block title %}
+{% if category %}{{ category.name }} - Документы{% else %}Документы{% endif %}
+{% endblock %}
 
 {% block content %}
-
-{% comment %} Навигация для выбранной категории {% endcomment %}
-{% if category %}
-<nav class="mb-4">
-  <a href="{% url 'documents:categories' %}" class="text-decoration-none" style="color: var(--accent-color);">
-    ← Все категории
-  </a>
-</nav>
-<section class="mb-4 text-center">
-  <h2 class="section-title">{{ category.name }}</h2>
+<div class="container py-5">
+<!-- Hero / Хедер категории -->
+<section class="documents-hero text-center mb-5 py-5">
+    <div class="container">
+        {% if category %}
+            <h1 class="fw-bold">{{ category.name }}</h1>
+            <p class="text-muted mt-2">Официальные документы Курской федерации настольного тенниса</p>
+            <a href="{% url 'documents:categories' %}" class="btn btn-outline-accent mt-3 px-4 py-2">← Все категории</a>
+        {% else %}
+            <h1 class="fw-bold">Документы Курской федерации</h1>
+            <p class="text-muted mt-2">Официальные документы Курской федерации настольного тенниса</p>
+        {% endif %}
+    </div>
 </section>
-{% endif %}
 
 <!-- Поиск -->
 <form method="get" class="mb-5 col-md-6 mx-auto position-relative" id="search-form">
-  <input type="text"
-         name="q"
-         id="search-docs"
-         class="form-control ps-5"
-         placeholder="Поиск по документам"
-         value="{{ request.GET.q|default:'' }}"
-         autocomplete="off">
-  <span class="position-absolute top-50 start-0 translate-middle-y ps-3 text-muted search-icon">
-    <i class="bi bi-search"></i>
-  </span>
-  <button type="button" class="btn btn-outline-secondary position-absolute top-50 end-0 translate-middle-y me-2 clear-btn">
-    <i class="bi bi-x-lg"></i>
-  </button>
+    <input type="text"
+           name="q"
+           id="search-docs"
+           class="form-control ps-5"
+           placeholder="Поиск по документам"
+           value="{{ request.GET.q|default:'' }}"
+           autocomplete="off">
+    <span class="position-absolute top-50 start-0 translate-middle-y ps-3 text-muted search-icon">
+        <i class="bi bi-search"></i>
+    </span>
+    <button type="button" class="btn btn-outline-secondary position-absolute top-50 end-0 translate-middle-y me-2 clear-btn">
+        <i class="bi bi-x-lg"></i>
+    </button>
 </form>
 
 <section class="container-xl my-5">
-  {% if not category and not request.GET.q %}
-  {# Показываем категории, если категория не выбрана и поиск пуст #}
-  <div class="row g-5 justify-content-center">
-    {% for cat in categories %}
-    <div class="col-sm-12 col-md-6 col-lg-4 col-xl-3">
-      <a href="{% url 'documents:category' cat.slug %}" class="text-decoration-none">
-        <div class="card-premium h-100">
-          <div class="card-content">
-            <i class="bi bi-folder"></i>
-            <h5>{{ cat.name }}</h5>
-            <p class="small mb-0">Перейти к документам</p>
-          </div>
+    {% if not category and not request.GET.q %}
+    <div class="row g-4 justify-content-center">
+        {% for cat in categories %}
+        <div class="col-sm-12 col-md-6 col-lg-4 col-xl-3 player-card">
+            <a href="{% url 'documents:category' cat.slug %}" class="text-decoration-none">
+                <div class="card-section h-100">
+                    <i class="bi bi-folder"></i>
+                    <h5>{{ cat.name }}</h5>
+                    <p class="small mb-0">Перейти к документам</p>
+                </div>
+            </a>
         </div>
-      </a>
+        {% endfor %}
     </div>
-    {% endfor %}
-  </div>
-
-  {% else %}
-  {# Показываем документы выбранной категории или результаты поиска #}
-  <div class="row g-5 justify-content-center">
-    {% for doc in documents %}
-    <div class="col-sm-12 col-md-6 col-lg-4 col-xl-3">
-      <div class="card document-card h-100 shadow-sm">
-        <div class="card-body d-flex flex-column">
-          <div class="d-flex align-items-center mb-3">
-            <i class="bi bi-file-earmark-text fs-2 me-3" style="color: var(--accent-color);"></i>
-            <h5 class="card-title mb-0" style="color: var(--text-color);">{{ doc.title }}</h5>
-          </div>
-          <p class="card-text text-muted mb-3">
-            {{ doc.created_at|date:"d.m.Y" }} · {{ doc.file.size|filesizeformat }}
-          </p>
-          <a href="{{ doc.file.url }}" class="btn mt-auto" style="background-color: var(--accent-color); color: #fff;">
-            <i class="bi bi-download me-2"></i> Скачать
-          </a>
+    {% else %}
+    <div class="row g-4 justify-content-center" id="docsContainer">
+        {% for doc in documents %}
+        <div class="col-sm-12 col-md-6 col-lg-4 col-xl-3 player-card" data-title="{{ doc.title|lower }}">
+            <div class="card-section h-100 text-center">
+                <i class="bi bi-file-earmark-text fs-3"></i>
+                <h5>{{ doc.title }}</h5>
+                <p class="text-muted mb-2" style="font-size: 0.85rem;">{{ doc.created_at|date:"d.m.Y" }} · {{ doc.file.size|filesizeformat }}</p>
+                <a href="{{ doc.file.url }}" class="btn btn-accent btn-sm mt-auto px-3 py-1">
+                    <i class="bi bi-download me-1"></i> Скачать
+                </a>
+            </div>
         </div>
-      </div>
+        {% endfor %}
     </div>
-    {% empty %}
-    <p class="text-muted text-center mt-4">Документы отсутствуют.</p>
-    {% endfor %}
-  </div>
 
-  {% if documents.has_other_pages %}
-  <nav class="mt-4 d-flex justify-content-center">
-    <ul class="pagination">
-      {% for p in documents.paginator.page_range %}
-        <li class="page-item {% if documents.number == p %}active{% endif %}">
-          <a class="page-link" href="?page={{ p }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">{{ p }}</a>
-        </li>
-      {% endfor %}
-    </ul>
-  </nav>
-  {% endif %}
-  {% endif %}
+    <p id="no-docs" class="text-muted text-center mt-4" style="display: none;">Документы не найдены.</p>
+
+    {% if documents.has_other_pages %}
+    <nav class="mt-4 d-flex justify-content-center">
+        <ul class="pagination">
+            {% for p in documents.paginator.page_range %}
+            <li class="page-item {% if documents.number == p %}active{% endif %}">
+                <a class="page-link" href="?page={{ p }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">{{ p }}</a>
+            </li>
+            {% endfor %}
+        </ul>
+    </nav>
+    {% endif %}
+    {% endif %}
 </section>
+</div>
 
-<style>
-/* ====== Общие стили ====== */
-.section-title {
-    font-size: 2rem;
-    font-weight: 600;
-    border-bottom: 3px solid var(--accent-color);
-    display: inline-block;
-    padding-bottom: 0.25rem;
-    color: var(--text-color);
-}
-
-/* ====== Категории ====== */
-.card-premium {
-    border-radius: 1.2rem;
-    padding: 2rem 1rem;
-    text-align: center;
-    background: linear-gradient(145deg, var(--card-bg), #f1f3f5);
-    cursor: pointer;
-    transition: transform 0.4s, box-shadow 0.4s, background 0.4s;
-}
-.card-premium:hover {
-    transform: translateY(-6px);
-    box-shadow: 0 20px 35px rgba(0,0,0,0.15);
-    background: linear-gradient(145deg, #e9f5f1, var(--card-bg));
-}
-.card-premium i {
-    font-size: 3rem;
-    margin-bottom: 0.75rem;
-    color: var(--accent-color);
-    transition: transform 0.3s, color 0.3s;
-}
-.card-premium:hover i {
-    transform: scale(1.2);
-    color: var(--accent-hover);
-}
-.card-premium h5 {
-    font-weight: 600;
-    color: var(--text-color);
-}
-.card-premium p {
-    color: var(--accent-color);
-    font-weight: 500;
-}
-
-/* ====== Поиск ====== */
-#search-docs {
-    border-radius: 50px;
-    padding: 0.5rem 1rem 0.5rem 2.5rem;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-    transition: box-shadow 0.3s;
-    background-color: var(--card-bg);
-    color: var(--text-color);
-}
-#search-docs:focus {
-    box-shadow: 0 6px 18px rgba(0,0,0,0.12);
-}
-.search-icon {
-    font-size: 1.2rem;
-    color: var(--accent-color);
-    transition: opacity 0.3s ease;
-}
-.clear-btn {
-    border-radius: 50%;
-    padding: 0.25rem 0.4rem;
-    opacity: 0;
-    transition: opacity 0.3s ease;
-}
-.clear-btn.show {
-    opacity: 1;
-}
-
-/* ====== Документы ====== */
-.document-card {
-    border-radius: 1rem;
-    background-color: var(--card-bg);
-    transition: transform 0.3s, box-shadow 0.3s;
-}
-.document-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 15px 25px rgba(0,0,0,0.1);
-}
-.download-btn {
-    transition: transform 0.2s, box-shadow 0.2s;
-}
-.download-btn:hover {
-    transform: translateY(-2px) scale(1.05);
-    box-shadow: 0 4px 10px rgba(0,0,0,0.08);
-}
-
-/* Пустые документы */
-.text-muted.text-center {
-    margin-top: 2rem;
-    font-style: italic;
-}
-</style>
 
 <script>
-const searchInput = document.getElementById('search-docs');
-const searchForm = document.getElementById('search-form');
-const searchIcon = document.querySelector('.search-icon');
-const clearBtn = document.querySelector('.clear-btn');
-
-function toggleIcons() {
-    if (searchInput.value.trim().length > 0) {
-        searchIcon.classList.add('hidden');
-        clearBtn.classList.add('show');
-    } else {
-        searchIcon.classList.remove('hidden');
-        clearBtn.classList.remove('show');
-    }
-}
-
-// Инициализация при загрузке страницы
 document.addEventListener('DOMContentLoaded', function() {
-    toggleIcons();
-});
+    const searchInput = document.getElementById('search-docs');
+    const clearBtn = document.querySelector('.clear-btn');
+    const searchIcon = document.querySelector('.search-icon');
+    const docCards = document.querySelectorAll('.player-card');
+    const noDocs = document.getElementById('no-docs');
 
-searchInput.addEventListener('input', function() {
-    toggleIcons();
-    clearTimeout(window.debounceTimeout);
-    window.debounceTimeout = setTimeout(() => {
-        searchForm.submit();
-    }, 500);
-});
+    function toggleIcons() {
+        if (searchInput.value.trim()) {
+            clearBtn.classList.add('show');
+            searchIcon.style.display = 'none';
+        } else {
+            clearBtn.classList.remove('show');
+            searchIcon.style.display = 'block';
+        }
+    }
 
-clearBtn.addEventListener('click', function() {
-    searchInput.value = '';
+    function filterDocs() {
+        const query = searchInput.value.toLowerCase().trim();
+        let visibleCount = 0;
+
+        docCards.forEach(card => {
+            if (!query || card.dataset.title.includes(query)) {
+                card.style.display = 'block';
+                visibleCount++;
+            } else {
+                card.style.display = 'none';
+            }
+        });
+
+        noDocs.style.display = visibleCount === 0 ? 'block' : 'none';
+    }
+
     toggleIcons();
-    searchForm.submit();
+    filterDocs();
+
+    searchInput.addEventListener('input', function() {
+        toggleIcons();
+        filterDocs();
+    });
+
+    clearBtn.addEventListener('click', function() {
+        searchInput.value = '';
+        toggleIcons();
+        filterDocs();
+        searchInput.focus();
+    });
 });
 </script>
 

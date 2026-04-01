@@ -5,7 +5,9 @@ class Season(models.Model):
     team_list_pdf = models.FileField("Список игроков PDF", upload_to='team_lists/', blank=True, null=True)
     def __str__(self):
         return str(self.year)
-
+    class Meta:
+        verbose_name = 'Сезон'
+        verbose_name_plural = 'Сезоны'
 
 
 class Player(models.Model):
