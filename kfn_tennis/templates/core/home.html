@@ -1,68 +1,179 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block title %}Главная - Курская федерация настольного тенниса{% endblock %}
+{% block title %}Главная - КСО РОО «ФНТ»{% endblock %}
 
 {% block content %}
 <!-- Hero-блок -->
 <section class="hero-section d-flex flex-column justify-content-center align-items-center text-center">
     <div class="hero-overlay"></div>
-    <h1 class="hero-title mb-3 fw-bold">Курская федерация настольного тенниса</h1>
-    <p class="hero-subtitle lead mb-4">Развиваем настольный теннис в Курской области</p>
-   
+    <h2 class="hero-title mb-1 fw-bold">
+        Курская физкультурно-спортивная региональная общественная организация «ФЕДЕРАЦИЯ НАСТОЛЬНОГО ТЕНИСА»
+    </h2>
+    <p class="hero-subtitle mb-2 small"></p>
 </section>
 
-<!-- О федерации -->
-<section id="about" class="container py-5">
-    <h2 class="section-title text-center mb-4">О федерации</h2>
-    <p class="text-center mb-4">
-        Курская федерация настольного тенниса была основана в XXXX году. 
-        Мы развиваем настольный теннис на региональном уровне, проводим турниры, обучаем детей и взрослых.
-    </p>
-    <p class="text-center">
-        <strong>Наша миссия:</strong> популяризация настольного тенниса, здоровый образ жизни, поддержка талантливых спортсменов.
-    </p>
+<!-- Последние новости -->
+<section id="latest-news" class="py-5 bg-light">
+    <div class="container">
+        <h2 class="section-title text-center mb-5">Последние новости</h2>
+
+        <div id="newsCarousel" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-inner">
+
+                {% for news in latest_news %}
+                    {% if forloop.counter0|divisibleby:3 %}
+                    <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                        <div class="row g-4 justify-content-center">
+                    {% endif %}
+
+                    <div class="col-md-4">
+                        <div class="card h-100 news-card border-0 shadow-sm">
+
+                            <div class="ratio ratio-16x9 position-relative">
+                                {% if news.image %}
+                                    <img src="{{ news.image.url }}"
+                                         class="card-img-top object-fit-cover"
+                                         alt="{{ news.title }}">
+                                {% else %}
+                                    <div class="news-placeholder d-flex align-items-center justify-content-center">
+                                        <span class="news-placeholder-text">
+                                            {{ news.title|truncatechars:40 }}
+                                        </span>
+                                    </div>
+                                {% endif %}
+                            </div>
+
+                            <div class="card-body d-flex flex-column">
+                                <div class="text-muted small mb-2">
+                                    {{ news.created_at|date:"d.m.Y" }}
+                                </div>
+
+                                <h5 class="card-title fw-semibold">
+                                    {{ news.title }}
+                                </h5>
+
+                                <p class="card-text text-muted small mb-4">
+                                    {{ news.full_description|truncatechars:100|striptags }}
+                                </p>
+
+                                <div class="mt-auto">
+                                    <a href="{{ news.get_absolute_url }}" class="btn w-100 btn-news">
+                                        Подробнее
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {% if forloop.counter|divisibleby:3 or forloop.last %}
+                        </div>
+                    </div>
+                    {% endif %}
+                {% endfor %}
+
+            </div>
+
+            <!-- Кнопки -->
+            <button class="carousel-control-prev" type="button" data-bs-target="#newsCarousel" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon"></span>
+            </button>
+
+            <button class="carousel-control-next" type="button" data-bs-target="#newsCarousel" data-bs-slide="next">
+                <span class="carousel-control-next-icon"></span>
+            </button>
+        </div>
+
+        
+    </div>
 </section>
 
 <!-- Партнеры -->
 <section id="partners" class="py-5 bg-light">
     <div class="container">
         <h2 class="section-title text-center mb-5">Наши партнеры</h2>
-        <div class="row g-4 justify-content-center align-items-center">
-            {% for partner in partners %}
-            <div class="col-6 col-md-3 text-center">
-                {% if partner.url %}
-                <a href="{{ partner.url }}" target="_blank">
-                    <img src="{{ partner.logo.url }}" class="img-fluid partner-logo" alt="{{ partner.name }}">
-                </a>
-                {% else %}
-                <img src="{{ partner.logo.url }}" class="img-fluid partner-logo" alt="{{ partner.name }}">
-                {% endif %}
+
+        <div id="partnerCarousel" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-inner">
+                {% for partner_group in partner_groups %}
+                <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                    <div class="row g-4 justify-content-center align-items-center">
+                        {% for partner in partner_group %}
+                        <div class="col-6 col-md-3 text-center">
+                            {% if partner.url %}
+                            <a href="{{ partner.url }}" target="_blank">
+                                <img src="{{ partner.logo.url }}" class="img-fluid partner-logo" alt="{{ partner.name }}">
+                            </a>
+                            {% else %}
+                            <img src="{{ partner.logo.url }}" class="img-fluid partner-logo" alt="{{ partner.name }}">
+                            {% endif %}
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endfor %}
             </div>
-            {% endfor %}
+
+            <!-- Кнопки, как у новостей -->
+            <button class="carousel-control-prev " type="button" data-bs-target="#partnerCarousel" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon"></span>
+            </button>
+
+            <button class="carousel-control-next" type="button" data-bs-target="#partnerCarousel" data-bs-slide="next">
+                <span class="carousel-control-next-icon"></span>
+            </button>
         </div>
     </div>
 </section>
 
-<!-- Контакты -->
-<section id="contacts" class="container py-5">
-    <h2 class="section-title text-center mb-4">Контакты</h2>
-    <p class="text-center">
-        Адрес: г. Курск, ул. Примерная, д.1<br>
-        Телефон: +7 (XXX) XXX-XX-XX<br>
-        Email: info@kfnt.ru
-    </p>
-    <div class="text-center mt-3">
-        <a href="#" class="btn btn-accent me-2">VK</a>
-        <a href="#" class="btn btn-accent me-2">Telegram</a>
-        <a href="#" class="btn btn-accent">Instagram</a>
+<!-- О федерации -->
+<section id="about" class="py-5 bg-light">
+    <div class="container">
+        <h2 class="section-title text-center mb-5">О федерации</h2>
+
+        <div class="row align-items-center g-5">
+            <!-- Текст -->
+            <div class="col-12 col-md-6">
+                <p class="lead mb-3">
+                    Курская федерация настольного тенниса (КФНТ) — официальная региональная спортивная организация.
+                </p>
+                <p class="text-muted">
+                    Мы занимаемся развитием и популяризацией настольного тенниса в Курской области,
+                    организуем соревнования, поддерживаем спортсменов и вовлекаем в спорт людей всех возрастов.
+                </p>
+            </div>
+
+            <!-- Картинка -->
+            <div class="col-12 col-md-6 text-center">
+                <div class="about-img-wrapper">
+                    <img src="{% static 'images/base/about.png' %}" 
+                        class="about-img" 
+                        alt="О федерации">
+                </div>
+            </div>
+        </div>
     </div>
 </section>
 {% endblock %}
 
+
 {% block extra_css %}
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const carousel = document.querySelector('#newsCarousel .carousel-inner');
+    if (!carousel) return;
+
+    let maxHeight = 0;
+    carousel.querySelectorAll('.carousel-item').forEach(item => {
+        const h = item.offsetHeight;
+        if (h > maxHeight) maxHeight = h;
+    });
+
+    carousel.style.height = maxHeight + 'px';
+});
+</script>
 <style>
-/* --- Hero Section --- */
+/* Hero Section */
 .hero-section {
     position: relative;
     background: url("{% static 'images/home.jpg' %}") center/cover no-repeat;
@@ -76,6 +187,18 @@
     border-radius: 16px;
     margin-bottom: 50px;
 }
+/* Кнопки карусели - одинаковые для новостей и партнеров */
+
+
+.partner-logo {
+    max-height: 100px;
+    object-fit: contain;
+    transition: transform 0.3s;
+}
+
+.partner-logo:hover {
+    transform: scale(1.1);
+}
 .hero-overlay {
     position: absolute;
     top:0; left:0; right:0; bottom:0;
@@ -84,28 +207,111 @@
 }
 .hero-title, .hero-subtitle { position: relative; z-index: 1; }
 
-.btn-accent {
-    background-color: #20C997;
+/* Кнопки карусели поверх всего слайдера - новости */
+#newsCarousel,
+#partnersCarousel {  /* исправлено: должно совпадать с id слайдера */
+    max-width: 100%;
+    margin: 0 auto;
+    position: relative; /* важно для абсолютного позиционирования кнопок */
+     min-height: 250px; /* минимум, под размер карточки с изображением */
+}
+
+#newsCarousel .carousel-control-prev,
+#newsCarousel .carousel-control-next,
+#partnersCarousel .carousel-control-prev,
+#partnersCarousel .carousel-control-next {
+    width: 2%; /* чтобы кнопки не перекрывали карточки */
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+#newsCarousel .carousel-control-prev-icon,
+#newsCarousel .carousel-control-next-icon,
+#partnersCarousel .carousel-control-prev-icon,
+#partnersCarousel .carousel-control-next-icon {
+    filter: invert(1);
+    background-size: 100%, 100%;
+}
+
+/* Чтобы карточки не перекрывались кнопками */
+#newsCarousel .carousel-inner,
+#partnersCarousel .carousel-inner {
+    padding: 0 2.5%; /* небольшой отступ слева и справа */
+    min-height: 350px; /* ставим фиксированную высоту под самый высокий слайд */
+}
+#partnerCarousel {
+    max-width: 100%;
+    margin: 0 auto;
+    position: relative; /* важно для абсолютного позиционирования кнопок */
+}
+
+#partnerCarousel .carousel-control-prev,
+#partnerCarousel .carousel-control-next {
+    width: 2%; /* не заходят на карточки */
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+#partnerCarousel .carousel-control-prev-icon,
+#partnerCarousel .carousel-control-next-icon {
+    filter: invert(1);
+    background-size: 100%, 100%;
+}
+
+/* Чтобы карточки не перекрывались кнопками */
+#partnerCarousel .carousel-inner {
+    padding: 0 2.5%; /* небольшой отступ слева и справа */
+}
+/* News Cards */
+.news-card {
+    border-radius: 1rem;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+.news-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 25px rgba(32,192,204,0.3);
+}
+.news-card img {
+    border-top-left-radius: 1rem;
+    border-top-right-radius: 1rem;
+    width: 100%;
+    min-height: 200px; /* или столько, сколько обычно изображение */
+    object-fit: cover;
+}
+.news-placeholder {
+    width: 100%;
+    height: 200px;
+    background: linear-gradient(135deg, #ff6b6b, #ff8e72, #ffb199, #ffe0e0);
     color: #fff;
-    border-radius: 0.375rem;
-    transition: transform 0.3s, box-shadow 0.3s, background-color 0.3s;
-}
-.btn-accent:hover {
-    background-color: #17a589;
-    transform: translateY(-3px);
-    box-shadow: 0 6px 15px rgba(0,0,0,0.2);
-}
-
-/* Section Titles */
-.section-title {
-    border-bottom: 2px solid #20C997;
-    display: inline-block;
-    padding-bottom: 0.25rem;
-    margin-bottom: 2rem;
     font-weight: 600;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    border-top-left-radius: 1rem;
+    border-top-right-radius: 1rem;
+}
+.news-placeholder-text {
+    position: relative;
+    z-index: 2;
+}
+.btn-news {
+    background: linear-gradient(135deg, #ff6b6b, #ff8e72, #ffb199, #ffe0e0);
+    color: #fff;
+    border: none;
+    transition: background 0.3s ease;
+}
+.btn-news:hover {
+    background: linear-gradient(135deg, #ff8e72, #ff6b6b, #ffb199, #ffe0e0);
+    color: #fff;
 }
 
-/* Партнеры */
+/* Partners */
 .partner-logo {
     max-height: 100px;
     object-fit: contain;
@@ -113,6 +319,33 @@
 }
 .partner-logo:hover {
     transform: scale(1.05);
+}
+
+/* About section */
+.about-img-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.about-img {
+    max-width: 300px;
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+    border-radius: 12px;
+    padding: 10px;
+    background: #fff;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+.about-img:hover {
+    transform: scale(1.05);
+    box-shadow: 0 12px 30px rgba(0,0,0,0.15);
+}
+
+/* Sections spacing */
+section {
+    margin-bottom: 60px;
 }
 </style>
 {% endblock %}

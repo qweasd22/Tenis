@@ -16,7 +16,7 @@
     <style>
         :root {
             --main-bg: #343A40;      /* хедер и футер */
-            --accent-color: #e40d0d; /* кнопки и ссылки */
+            --accent-color: rgb(228, 13, 13); /* кнопки и ссылки */
             --accent-hover: #a51717;
             --text-color: #212529;   /* основной текст */
             --card-bg: #FFFFFF;      /* карточки и секции */
@@ -34,9 +34,24 @@
             background-color: var(--main-bg);
         }
 
-        footer {
-            background-color: var(--main-bg);
-            color: #FFFFFF;
+        /* Футер */
+        .footer a { text-decoration: none; }
+        .footer-icon-img {
+            width: 32px;
+            height: 32px;
+            transition: transform 0.3s, opacity 0.3s;
+        }
+        .footer-icon-img:hover {
+            transform: scale(1.2);
+            opacity: 0.8;
+        }
+        .footer-center { display: flex; gap: 15px; align-items: center; }
+        .footer-left, .footer-center, .footer-right { margin: 0.5rem 0; }
+        .footer-center a:hover { text-decoration: underline; }
+        @media(max-width:768px){
+            .footer { text-align: center; }
+            .footer-left, .footer-center, .footer-right { text-align: center; }
+            .footer-right { margin-top: 1rem; }
         }
 
         a {
@@ -123,7 +138,7 @@
     <!-- Header / Навигация -->
     <header>
         <nav class="navbar navbar-expand-lg navbar-dark container py-3">
-            <a class="navbar-brand fw-bold" href="{% url 'core:home' %}">КФНТ</a>
+            <a class="navbar-brand fw-bold" href="{% url 'core:home' %}">КСО РОО «ФНТ»</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -150,11 +165,31 @@
 </main>
 
     <!-- Footer -->
-    <footer class="text-center py-3 mt-auto">
-        <div class="container">
-            © 2025 Курская федерация настольного тенниса
+    <footer class="footer py-4 bg-dark text-white">
+    <div class="container d-flex justify-content-between align-items-center flex-wrap">
+        <!-- Левый блок -->
+        <div class="footer-left">
+            <strong>КСО РОО «ФНТ»</strong>
         </div>
-    </footer>
+
+        <!-- Центр: иконки мессенджеров -->
+        <div class="footer-center d-flex gap-3">
+            <a href="#" target="_blank" class="footer-icon">
+                <img src="{% static 'images/base/vk.png' %}" alt="VK" class="footer-icon-img">
+            </a>
+            <a href="#" target="_blank" class="footer-icon">
+                <img src="{% static 'images/base/max.svg' %}" alt="MAX" class="footer-icon-img">
+            </a>
+            
+        </div>
+
+        <!-- Правый блок -->
+        <div class="footer-right text-end">
+            <div>г. Курск, ул. Примерная, д.1</div>
+            <div>+7 (XXX) XXX-XX-XX</div>
+        </div>
+    </div>
+</footer>
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

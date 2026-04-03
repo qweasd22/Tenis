@@ -12,7 +12,11 @@ class News(models.Model):
     image = models.ImageField(upload_to='news/', blank=True, null=True, verbose_name='Изображение')
     created_at = models.DateTimeField(default=timezone.now, verbose_name='Дата создания')
     published = models.BooleanField(default=True, verbose_name='Опубликовано')
-
+    show_in_slider = models.BooleanField(
+    default=False,
+    verbose_name='Показать в слайдере',
+    help_text='Отметьте, если эта новость должна отображаться в слайдере на главной'
+)
     class Meta:
         ordering = ['-created_at']
         verbose_name = 'Новость'
