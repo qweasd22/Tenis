@@ -8,28 +8,85 @@
 {% block content %}
 <div class="container my-1">
 
-    <!-- Hero главной страницы -->
-    <section class="hero-structure-home d-flex flex-column justify-content-center align-items-center text-center">
-    <div class="hero-overlay"></div>
-    <h1>Структура федерации</h1>
-    <p>Выберите подразделение, чтобы просмотреть состав и подробную информацию.</p>
+    <!-- Заголовок -->
+    <section class="hero-structure-home-simple text-center mb-4">
+        <h1>О федерации</h1>
+        <p>Главные члены федерации</p>
     </section>
 
-
-    <!-- Сетка подразделений -->
-    <section class="subdivisions-grid">
-        {% for subdivision in subdivisions %}
-        <div class="subdivision-card">
-            <a href="{% url 'structure:subdivision_detail' subdivision.id %}" aria-label="Подробнее о {{ subdivision.get_title_display }}">
-                <div class="card-content">
-                    <h3>{{ subdivision.get_title_display }}</h3>
-                    {% if subdivision.description %}
-                    <p>{{ subdivision.description|truncatechars:80 }}</p>
-                    {% endif %}
-                </div>
-            </a>
+    <!-- 7 карточек людей -->
+    <section class="members-grid">
+        {% for person in top_persons %}
+        <div class="member-card">
+            <div class="photo-wrapper">
+                {% if person.photo %}
+                    <img src="{{ person.photo.url }}" alt="{{ person.full_name }}">
+                {% else %}
+                    <div class="no-photo">{{ person.full_name|slice:":1" }}</div>
+                {% endif %}
+            </div>
+            <div class="member-info">
+                <h3>{{ person.full_name }}</h3>
+                {% if person.role %}
+                <div class="role">{{ person.role }}</div>
+                {% endif %}
+            </div>
         </div>
         {% endfor %}
     </section>
+
+    <!-- Вкладки -->
+    <!-- Вкладки -->
+<section class="tabs-section mt-5">
+    <div class="tabs-nav">
+        <button class="tab-btn active" data-tab="board">Попечительский совет</button>
+        <button class="tab-btn" data-tab="members">Члены федерации</button>
+    </div>
+
+    <div class="tabs-content">
+
+        <!-- Попечительский совет -->
+        <div class="tab-pane active" id="board">
+            <div class="text-lists">
+                {% for person in board_members %}
+                <div class="list-item">
+                    <span class="name">{{ person.full_name }}</span>
+                    {% if person.role %} – <span class="role">{{ person.role }}</span>{% endif %}
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Члены федерации -->
+        <div class="tab-pane" id="members">
+            <div class="text-lists">
+                {% for person in federation_members %}
+                <div class="list-item">
+                    <span class="name">{{ person.full_name }}</span>
+                    {% if person.role %} – <span class="role">{{ person.role }}</span>{% endif %}
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+    </div>
+</section>
+
 </div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+const tabButtons = document.querySelectorAll('.tab-btn');
+const tabPanes = document.querySelectorAll('.tab-pane');
+
+tabButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+        tabButtons.forEach(b => b.classList.remove('active'));
+        tabPanes.forEach(p => p.classList.remove('active'));
+        btn.classList.add('active');
+        document.getElementById(btn.dataset.tab).classList.add('active');
+    });
+});
+</script>
 {% endblock %}

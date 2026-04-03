@@ -1,41 +1,25 @@
 /* =======================
-   Общие стили для обеих страниц
+   Основной фон секции
    ======================= */
-
-
-
-
-/* Сетки */
-.subdivisions-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px,1fr));
-    gap:25px;
-    margin-bottom: 40px;
+.hero-structure-home-simple {
+    background: linear-gradient(135deg, #ff6b6b, #ff8e72, #ffb199, #ffe0e0);
+    padding: 2rem 1rem;
+    border-radius: 1rem;
+    text-align: center;
+    color: #fff;
+    margin-bottom: 2rem;
 }
-.subdivision-card {
-    background:#fff;
-    border-radius:1rem;
-    overflow:hidden;
-    box-shadow:0 4px 15px rgba(0,0,0,0.08);
-    transition: transform 0.3s, box-shadow 0.3s;
-}
-.subdivision-card:hover {
-    transform: translateY(-5px);
-    box-shadow:0 12px 25px rgba(32,192,204,0.3);
-}
-.card-content { padding:20px; text-align:center; }
-.card-content h3 { font-size:1.3rem; color:#20C997; margin-bottom:10px; }
-.card-content p { font-size:0.9rem; color:#555; }
 
-/* Сетка участников */
+/* =======================
+   Сетка карточек
+   ======================= */
 .members-grid {
-    display:grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px,1fr));
-    gap:25px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 25px;
     margin-bottom: 40px;
 }
 
-/* Карточка участника */
 .member-card {
     background:#fff;
     border-radius:1rem;
@@ -50,9 +34,8 @@
 }
 .member-card:hover {
     transform: translateY(-5px);
-    box-shadow:0 12px 25px rgba(32,192,204,0.3);
+    box-shadow:0 12px 25px rgba(255,107,107,0.3); /* мягкий красный */
 }
-
 .photo-wrapper {
     width:120px;
     height:120px;
@@ -68,86 +51,126 @@
 .no-photo { 
     font-size:1.5rem; 
     color:#fff; 
-    background: linear-gradient(135deg, #20C997, #17a2b8); 
+    background: linear-gradient(135deg, #ff6b6b, #ff8e72, #ffb199, #ffe0e0); 
     width:100%; height:100%; 
     display:flex; align-items:center; justify-content:center; 
     border-radius:50%; 
 }
-
 .member-info h3 { font-size:1.2rem; margin-bottom:5px; color:#222; }
-.role { font-size:0.95rem; font-weight:500; color:#20C997; margin-bottom:10px; }
-.contact, .period, .bio { font-size:0.85rem; color:#555; margin:3px 0; }
-.contact a { color:#007BFF; text-decoration:none; }
-.contact a:hover { text-decoration:underline; }
-hr { width:80%; border:0; border-top:1px solid #eee; margin:10px 0; }
+.role { font-size:0.95rem; font-weight:500; color:#ff6b6b; margin-bottom:10px; }
 
-/* Кнопка назад */
-.btn-back {
-    margin-top: 100px;
-    background: linear-gradient(90deg, #20C997, #17a2b8);
+/* =======================
+   Кнопки
+   ======================= */
+button, .btn-back {
+    background: linear-gradient(135deg, #ff6b6b, #ff8e72, #ffb199, #ffe0e0);
     color: #fff;
-    padding: 0.2rem 0.7rem;
+    border: none;
     border-radius: 0.5rem;
-    text-decoration: none;
-    font-weight: 400;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    transition: background 0.3s;
 }
-.btn-back:hover { background: linear-gradient(90deg, #17a2b8, #20C997); }
 
-/* =======================
-   Страница 1: Главная структура (фото + overlay)
-   ======================= */
-.hero-structure-home {
-    position: relative;
+button:hover, .btn-back:hover {
+    background: linear-gradient(135deg, #ff8e72, #ff6b6b, #ffb199, #ffe0e0);
+}
+
+/* ===== Вкладки ===== */
+.tabs-section {
+    margin-top: 3rem;
+}
+
+.tabs-nav {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+}
+
+.tab-btn {
+    padding: 0.5rem 1.2rem;
+    font-size: 1rem;
+    font-weight: 500;
+    border: none;
+    border-radius: 0.6rem;
+    cursor: pointer;
+    background: #fff;
+    color: #ff6b6b;
+    transition: all 0.3s ease;
+}
+
+.tab-btn.active {
+    background: linear-gradient(135deg, #ff6b6b, #ff8e72, #ffb199, #ffe0e0);
+    color: #fff;
+    box-shadow: 0 4px 15px rgba(255,107,107,0.4);
+    transform: scale(1.05);
+}
+
+.tab-btn:hover {
+    background: linear-gradient(135deg, #ff8e72, #ff6b6b, #ffb199, #ffe0e0);
+    color: #fff;
+}
+
+.tabs-content {
     width: 100%;
-    height: 300px;
-    display:flex;
-    flex-direction: column;
-    justify-content:center;
-    align-items:center;
-    text-align:center;
-    border-radius:1rem;
-    margin-bottom:2rem;
-    color:#fff;
-    background-image: url('/static/images/structure-hero-bg-2.jpg');
-    background-size: cover;
-    background-position: center;
 }
 
-.hero-structure-home .hero-overlay {
-    position:absolute;
-    top:0; left:0; width:100%; height:100%;
-    background-color: rgba(0,0,0,0.3);
-    border-radius:1rem;
-    z-index:1;
+.tab-pane { 
+    display: none; 
+    margin-top: 1rem;
 }
 
-.hero-structure-home h1,
-.hero-structure-home p {
-    position:relative;
-    z-index:2;
-    
-    font-size: 1.1rem;
+.tab-pane.active { 
+    display: block; 
 }
 
-.hero-structure-home h1 { font-size:2.2rem; font-weight:700; margin-bottom:0.5rem; }
-.hero-structure-home p { font-size:1.1rem; color:#f8f9fa; }
-
-/* =======================
-   Страница 2: Подразделение (светлый фон, фото участников)
-   ======================= */
-.hero-subdivision-detail {
-    background: linear-gradient(90deg, rgba(32,192,204,0.15), rgba(32,192,204,0.05));
-    padding: 3rem 1rem;
+/* ===== Текстовые списки в 3 колонки ===== */
+.text-lists {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* строго 3 колонки */
+    gap: 1rem 2rem; /* вертикальные и горизонтальные отступы */
+    background: #fff5f5; /* лёгкий фон для выделения блока */
+    padding: 1rem 1.5rem;
     border-radius: 1rem;
-    text-align: center;
-    margin-bottom: 3rem;
+    box-shadow: 0 4px 12px rgba(255,107,107,0.1);
+    margin-bottom: 2rem;
 }
 
-.hero-subdivision-detail h1 { color: #343A40;
-    font-weight: 700;}
-.hero-subdivision-detail p { color: #6c757d;
-    font-size: 1.1rem;}
+.list-item {
+    font-size: 0.95rem;
+    color: #555;
+    padding: 5px 0;
+    line-height: 1.4;
+    border-left: 3px solid transparent;
+    transition: all 0.2s ease;
+}
 
-/* Адаптивность */
-@media(max-width:768px){ .hero-structure-home, .hero-subdivision-detail{height:250px;} .photo-wrapper{width:100px;height:100px;} }
-@media(max-width:576px){ .photo-wrapper{width:80px;height:80px;} }
+.list-item:hover {
+    background: #ffe0e0;
+    color: #ff6b6b;
+    border-left-color: #ff6b6b;
+    padding-left: 5px;
+}
+
+.list-item .role {
+    font-weight: 500;
+    color: #ff8e72;
+}
+
+/* Заголовки групп */
+.text-lists h3 {
+    font-size: 1.25rem;
+    color: #ff6b6b;
+    margin: 1rem 0;
+}
+
+/* ===== Адаптив ===== */
+@media(max-width:1024px){
+    .text-lists { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media(max-width:768px){
+    .text-lists { grid-template-columns: 1fr; }
+}
