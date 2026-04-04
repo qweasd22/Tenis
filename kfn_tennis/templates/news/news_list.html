@@ -2,18 +2,29 @@
 {% load static %}
 
 {% block title %}Новости{% endblock %}
-
 {% block body_class %}news-page{% endblock %}
 
 {% block content %}
-<div class="container py-5">
+<div class="container my-1">
 
-    <!-- Hero как в проектах -->
-    <div class="news-header mb-5">
+    <!-- Header -->
+    <div class="news-header text-center mb-4">
         <h1 class="fw-bold">Новости</h1>
         <p class="mt-2 text-muted">
             Актуальные события и обновления Курской федерации настольного тенниса
         </p>
+
+        <!-- 🔍 Поиск -->
+        <form method="get" class="mt-4 search-form">
+            <div class="input-group">
+                <input type="text"
+                       name="q"
+                       value="{{ q }}"
+                       class="form-control"
+                       placeholder="Поиск новостей...">
+                <button class="btn btn-search" type="submit">Найти</button>
+            </div>
+        </form>
     </div>
 
     {% if news_list %}
@@ -23,19 +34,18 @@
                     <div class="card h-100 border-0 shadow-sm news-card">
 
                         <div class="ratio ratio-16x9 position-relative">
-    {% if news.image %}
-        <img src="{{ news.image.url }}"
-             class="card-img-top object-fit-cover"
-             alt="{{ news.title }}">
-    {% else %}
-        <div class="news-placeholder d-flex align-items-center justify-content-center">
-            <span class="news-placeholder-text">
-                {{ news.title|truncatechars:40 }}
-            </span>
-        </div>
-    {% endif %}
-</div>
-
+                            {% if news.image %}
+                                <img src="{{ news.image.url }}"
+                                     class="card-img-top object-fit-cover"
+                                     alt="{{ news.title }}">
+                            {% else %}
+                                <div class="news-placeholder d-flex align-items-center justify-content-center">
+                                    <span class="news-placeholder-text">
+                                        {{ news.title|truncatechars:40 }}
+                                    </span>
+                                </div>
+                            {% endif %}
+                        </div>
 
                         <div class="card-body d-flex flex-column">
 
@@ -63,9 +73,37 @@
                 </div>
             {% endfor %}
         </div>
+
+        <!-- 📄 Пагинация -->
+        {% if is_paginated %}
+        <nav class="mt-5">
+            <ul class="pagination justify-content-center">
+
+                {% if page_obj.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link" href="?q={{ q }}&page={{ page_obj.previous_page_number }}">←</a>
+                    </li>
+                {% endif %}
+
+                {% for num in page_obj.paginator.page_range %}
+                    <li class="page-item {% if page_obj.number == num %}active{% endif %}">
+                        <a class="page-link" href="?q={{ q }}&page={{ num }}">{{ num }}</a>
+                    </li>
+                {% endfor %}
+
+                {% if page_obj.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="?q={{ q }}&page={{ page_obj.next_page_number }}">→</a>
+                    </li>
+                {% endif %}
+
+            </ul>
+        </nav>
+        {% endif %}
+
     {% else %}
         <div class="text-center text-muted">
-            Новости пока не добавлены
+            Ничего не найдено 😔
         </div>
     {% endif %}
 

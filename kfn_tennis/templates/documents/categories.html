@@ -1,58 +1,68 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block title %}Документы - Курская федерация настольного тенниса{% endblock %}
+{% block title %}Документы{% endblock %}
+{% block body_class %}documents-page{% endblock %}
+
+{% block content %}
+<div class="container my-1">
+
+    <!-- Header как в новостях -->
+    <div class="documents-header mb-5 text-center">
+        <h1 class="fw-bold">Документы</h1>
+        <p class="text-muted mt-2">
+            Официальные документы Курской федерации настольного тенниса
+        </p>
+    </div>
+
+    <!-- Категории -->
+    <div class="row g-4 mb-5">
+        {% for cat in categories %}
+        <div class="col-lg-3 col-md-4 col-sm-6">
+            <a href="{% url 'documents:category' cat.slug %}" class="text-decoration-none">
+                <div class="document-card h-100">
+
+                    <div class="document-card-body text-center">
+                        <i class="bi bi-folder"></i>
+                        <h5>{{ cat.name }}</h5>
+                        <span>Перейти</span>
+                    </div>
+
+                </div>
+            </a>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Документы -->
+    {% if documents %}
+    <div class="documents-list">
+
+        {% for doc in documents %}
+        <a href="{{ doc.file.url }}"
+           class="document-item d-flex justify-content-between align-items-center text-decoration-none">
+
+            <div>
+                <h6>{{ doc.title }}</h6>
+                <div class="document-meta">
+                    {{ doc.created_at|date:"d.m.Y" }}
+                </div>
+            </div>
+
+            <div class="document-action">
+                <i class="bi bi-download"></i>
+            </div>
+
+        </a>
+        {% endfor %}
+
+    </div>
+    {% endif %}
+
+</div>
 
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'css/documents.css' %}">
 {% endblock %}
 
-{% block content %}
-<div class="container py-5">
-<!-- Hero -->
-<section class="documents-hero text-center mb-5 py-5">
-    <div class="container">
-        <h1 class="fw-bold">Документы Курской федерации</h1>
-        <p class="text-muted mt-2">Официальные документы Курской федерации настольного тенниса</p>
-    </div>
-</section>
-
-<!-- Категории -->
-<section class="mb-5">
-  <div class="container-xl">
-    <div class="row g-5 justify-content-center">
-      {% for cat in categories %}
-      <div class="col-sm-12 col-md-6 col-lg-4 col-xl-3">
-        <a href="{% url 'documents:category' cat.slug %}" class="text-decoration-none">
-          <div class="card-premium h-100">
-            <div class="card-content">
-              <i class="bi bi-folder"></i>
-              <h5>{{ cat.name }}</h5>
-              <p class="small mb-0">Перейти к документам</p>
-            </div>
-          </div>
-        </a>
-      </div>
-      {% endfor %}
-    </div>
-  </div>
-</section>
-
-<!-- Список документов внутри категории -->
-{% if documents %}
-<section class="documents-list mb-5">
-  <div class="container-xl">
-    {% for doc in documents %}
-    <a href="{{ doc.file.url }}" class="document-row d-flex align-items-center justify-content-between text-decoration-none">
-      <div>
-        <h6 class="mb-1">{{ doc.title }}</h6>
-        <div class="document-meta">{{ doc.created_at|date:"d.m.Y" }}</div>
-      </div>
-      <i class="bi bi-download fs-4 text-accent"></i>
-    </a>
-    {% endfor %}
-  </div>
-</section>
-{% endif %}
-</div>
 {% endblock %}

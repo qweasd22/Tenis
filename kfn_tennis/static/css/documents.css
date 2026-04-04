@@ -1,174 +1,119 @@
-/* ===== Hero документов ===== */
-.documents-hero {
-    background: linear-gradient(90deg, rgba(225, 25, 25, 0.15), rgba(32,192,204,0.05));
-    padding: 3rem 1rem;
-    border-radius: 1rem;
-    text-align: center;
-    margin-bottom: 3rem;
-}
-.documents-hero h1 {
-    color: #343A40;
-    font-weight: 700;
-}
-.documents-hero p {
-    color: #6c757d;
-    font-size: 1.1rem;
+/* ===== Фон как в новостях ===== */
+body.documents-page {
+    background: linear-gradient(135deg, #ff6b6b, #ff8e72, #ffb199, #ffe0e0);
+    font-family: 'Inter', sans-serif;
 }
 
-/* ===== Категории документов ===== */
-.card-premium {
-    position: relative;
-    border-radius: 1.2rem;
-    overflow: hidden;
-    height: 220px;
-    cursor: pointer;
-    transition: transform 0.4s, box-shadow 0.4s, background 0.4s;
-    background: linear-gradient(145deg, var(--card-bg), #f1f3f5);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
+/* ===== Header ===== */
+.documents-header {
+    background: linear-gradient(
+        135deg,
+        rgba(255,107,107,0.15),
+        rgba(255,142,114,0.1)
+    );
+    padding: 3rem 1rem;
+    border-radius: 1rem;
 }
-.card-premium:hover {
-    transform: translateY(-6px);
-    box-shadow: 0 20px 35px rgba(0,0,0,0.15);
-    background: linear-gradient(145deg, #e9f5f1, var(--card-bg));
+
+/* ===== Карточки категорий ===== */
+.document-card {
+    background: #fff;
+    border-radius: 1rem;
+    padding: 2rem 1rem;
+    transition: 0.3s;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
 }
-.card-content i {
-    font-size: 3rem;
-    margin-bottom: 0.75rem;
-    color: var(--accent-color);
-    transition: transform 0.3s, color 0.3s;
+
+.document-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 25px rgba(255,107,107,0.25);
 }
-.card-premium:hover i {
-    transform: scale(1.2);
-    color: var(--accent-hover);
+
+.document-card i {
+    font-size: 2.5rem;
+    color: #ff6b6b;
+    margin-bottom: 0.5rem;
 }
-.card-content h5 {
+
+.document-card h5 {
+    color: #343A40;
     font-weight: 600;
-    color: var(--text-color);
 }
-.card-content p {
-    color: var(--accent-color);
-    font-weight: 500;
+
+.document-card span {
+    font-size: 0.9rem;
+    color: #ff6b6b;
 }
 
 /* ===== Список документов ===== */
-.documents-list .document-row {
-    padding: 1.25rem 1.5rem;
+.documents-list {
+    margin-top: 1rem;
+}
+
+/* строка документа */
+.document-item {
+    background: #fff;
     border-radius: 1rem;
-    background: linear-gradient(145deg, #ffffff, #f8f9fa);
+    padding: 1.2rem 1.5rem;
     margin-bottom: 1rem;
-    transition: transform 0.3s, box-shadow 0.3s, background 0.3s;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    color: var(--text-color);
+    transition: 0.3s;
+    color: #343A40;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
 }
-.documents-list .document-row:hover {
+
+.document-item:hover {
     transform: translateY(-3px);
-    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-    background: linear-gradient(145deg, #f1f3f5, #ffffff);
+    box-shadow: 0 10px 20px rgba(255,107,107,0.2);
 }
-.documents-list .document-row h6 {
-    font-size: 1rem;
+
+/* текст */
+.document-item h6 {
     margin: 0;
+    font-size: 1rem;
 }
-.documents-list .document-meta {
-    font-size: 0.875rem;
+
+.document-meta {
+    font-size: 0.85rem;
     color: #6c757d;
 }
-.documents-list .document-row i {
-    color: var(--accent-color);
-    transition: transform 0.3s;
+
+/* иконка */
+.document-action i {
+    font-size: 1.3rem;
+    color: #ff6b6b;
+    transition: 0.3s;
 }
-.documents-list .document-row:hover i {
+
+.document-item:hover .document-action i {
     transform: scale(1.2);
 }
-
-/* ===== Анимация появления ===== */
-.card-premium, .document-row {
-    opacity: 0;
-    transform: translateY(20px);
-    animation: fadeUp 0.6s forwards;
-}
-@keyframes fadeUp {
-    to { opacity: 1; transform: translateY(0); }
+/* Фон страницы */
+body.documents-page {
+    background: linear-gradient(135deg, #ff6b6b, #ff8e72, #ffb199, #ffe0e0);
+    font-family: 'Inter', sans-serif;
 }
 
-/* ===== Responsive ===== */
-@media (max-width: 992px) {
-    .card-premium { height: 200px; }
-}
-@media (max-width: 768px) {
-    .card-premium { height: 180px; }
-}
-@media (max-width: 576px) {
-    .card-premium { height: 160px; }
-}
-/* ====== Hero ====== */
-.documents-hero {
-    background: linear-gradient(90deg, rgba(204, 32, 32, 0.15), rgba(212, 22, 22, 0.05));
+/* Header / Hero */
+.documents-header {
+    background: linear-gradient(135deg, rgba(255,107,107,0.15), rgba(255,142,114,0.1));
     padding: 3rem 1rem;
     border-radius: 1rem;
     text-align: center;
-    margin-bottom: 3rem;
 }
-.documents-hero h1 {
-    color: #343A40;
-    font-weight: 700;
-}
-.documents-hero p {
-    color: #6c757d;
-    font-size: 1.1rem;
-}
-.documents-hero .btn-outline-accent {
-    border: 2px solid var(--accent-color);
-    color: var(--accent-color);
+.documents-header h1 { color: #343A40; font-weight: 700; }
+.documents-header p { color: #6c757d; font-size: 1.1rem; }
+.documents-header .btn-outline-accent {
+    border: 2px solid #ff6b6b;
+    color: #ff6b6b;
     font-weight: 500;
-    transition: background-color 0.3s, color 0.3s;
+    transition: 0.3s;
 }
-.documents-hero .btn-outline-accent:hover {
-    background-color: var(--accent-color);
+.documents-header .btn-outline-accent:hover {
+    background-color: #ff6b6b;
     color: #fff;
 }
 
-/* ====== Карточки ====== */
-.card-section {
-    border-radius: 0.8rem;
-    padding: 1.5rem 1rem;
-    text-align: center;
-    background: linear-gradient(145deg, #ffffff, #f8f9fa);
-    transition: transform 0.3s, box-shadow 0.3s;
-    border-left: 4px solid var(--accent-color);
-    box-shadow: 0 3px 10px rgba(0,0,0,0.05);
-}
-.card-section:hover {
-    transform: translateY(-6px);
-    box-shadow: 0 12px 20px rgba(0,0,0,0.1);
-    background: linear-gradient(145deg, #f1f3f5, #ffffff);
-}
-.card-section i {
-    font-size: 2rem;
-    color: var(--accent-color);
-    margin-bottom: 0.5rem;
-}
-.card-section h5 {
-    font-weight: 600;
-    color: #212529;
-    font-size: 1rem;
-}
-.card-section p {
-    color: #6c757d;
-    font-size: 0.85rem;
-}
-
-/* Кнопка Скачать */
-.btn-accent.btn-sm {
-    font-size: 0.85rem;
-}
-
-/* ====== Поиск ====== */
+/* Поиск */
 #search-docs {
     border-radius: 50px;
     padding: 0.4rem 1rem 0.4rem 2.5rem;
@@ -177,29 +122,38 @@
     background-color: #fff;
     font-size: 0.9rem;
 }
-#search-docs:focus {
-    box-shadow: 0 5px 15px rgba(0,0,0,0.12);
-}
-.search-icon {
-    font-size: 1rem;
-}
-.clear-btn {
-    border-radius: 50%;
-    padding: 0.2rem 0.35rem;
-    opacity: 0;
-}
+#search-docs:focus { box-shadow: 0 5px 15px rgba(0,0,0,0.12); }
+.search-icon { font-size: 1rem; }
+.clear-btn { border-radius: 50%; padding: 0.2rem 0.35rem; opacity: 0; transition: 0.3s; }
 .clear-btn.show { opacity: 1; }
 
-/* ====== Анимация ====== */
-.player-card {
-    opacity: 0;
-    transform: translateY(15px);
-    animation: fadeUp 0.5s forwards;
-}
-@keyframes fadeUp {
-    to { opacity: 1; transform: translateY(0); }
-}
+/* Карточки категорий и документов */
+.document-card-wrapper { opacity: 0; transform: translateY(15px); animation: fadeUp 0.5s forwards; }
+@keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
 
-/* ====== Адаптив ====== */
-@media (max-width: 992px) { .card-section { padding: 1.2rem 1rem; } }
-@media (max-width: 768px) { .card-section { padding: 1rem 0.8rem; } }
+.document-card {
+    background: #fff;
+    border-radius: 1rem;
+    padding: 1.5rem 1rem;
+    text-align: center;
+    transition: 0.3s;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+}
+.document-card i { font-size: 2.5rem; color: #ff6b6b; margin-bottom: 0.5rem; }
+.document-card h5 { color: #343A40; font-weight: 600; margin-bottom: 0.25rem; }
+.document-card span { font-size: 0.9rem; color: #ff6b6b; }
+
+.document-card:hover { transform: translateY(-5px); box-shadow: 0 12px 25px rgba(255,107,107,0.25); }
+
+/* Документы */
+.document-item h6 { margin: 0; font-size: 1rem; }
+.document-meta { font-size: 0.85rem; color: #6c757d; }
+.document-action i { font-size: 1.3rem; color: #ff6b6b; transition: 0.3s; }
+.document-item:hover .document-action i { transform: scale(1.2); }
+
+/* Адаптив */
+@media (max-width: 768px) { .document-card { padding: 1rem 0.8rem; } }

@@ -1,17 +1,20 @@
 {% extends "base.html" %}
 {% load static %}
-{% block extra_css %}
-<link rel="stylesheet" href="{% static 'css/documents.css' %}">
-{% endblock %}
+
 {% block title %}
 {% if category %}{{ category.name }} - Документы{% else %}Документы{% endif %}
 {% endblock %}
+{% block body_class %}documents-page{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/documents.css' %}">
+{% endblock %}
 
 {% block content %}
-<div class="container py-5">
-<!-- Hero / Хедер категории -->
-<section class="documents-hero text-center mb-5 py-5">
-    <div class="container">
+<div class="container my-1">
+
+    <!-- Header / Hero категории -->
+    <div class="documents-header mb-5 text-center">
         {% if category %}
             <h1 class="fw-bold">{{ category.name }}</h1>
             <p class="text-muted mt-2">Официальные документы Курской федерации настольного тенниса</p>
@@ -21,54 +24,56 @@
             <p class="text-muted mt-2">Официальные документы Курской федерации настольного тенниса</p>
         {% endif %}
     </div>
-</section>
 
-<!-- Поиск -->
-<form method="get" class="mb-5 col-md-6 mx-auto position-relative" id="search-form">
-    <input type="text"
-           name="q"
-           id="search-docs"
-           class="form-control ps-5"
-           placeholder="Поиск по документам"
-           value="{{ request.GET.q|default:'' }}"
-           autocomplete="off">
-    <span class="position-absolute top-50 start-0 translate-middle-y ps-3 text-muted search-icon">
-        <i class="bi bi-search"></i>
-    </span>
-    <button type="button" class="btn btn-outline-secondary position-absolute top-50 end-0 translate-middle-y me-2 clear-btn">
-        <i class="bi bi-x-lg"></i>
-    </button>
-</form>
+    <!-- Поиск -->
+    <form method="get" class="mb-5 col-md-6 mx-auto position-relative" id="search-form">
+        <input type="text"
+               name="q"
+               id="search-docs"
+               class="form-control ps-5"
+               placeholder="Поиск по документам"
+               value="{{ request.GET.q|default:'' }}"
+               autocomplete="off">
+        <span class="position-absolute top-50 start-0 translate-middle-y ps-3 text-muted search-icon">
+            <i class="bi bi-search"></i>
+        </span>
+        <button type="button" class="btn btn-outline-secondary position-absolute top-50 end-0 translate-middle-y me-2 clear-btn">
+            <i class="bi bi-x-lg"></i>
+        </button>
+    </form>
 
-<section class="container-xl my-5">
-    {% if not category and not request.GET.q %}
-    <div class="row g-4 justify-content-center">
-        {% for cat in categories %}
-        <div class="col-sm-12 col-md-6 col-lg-4 col-xl-3 player-card">
-            <a href="{% url 'documents:category' cat.slug %}" class="text-decoration-none">
-                <div class="card-section h-100">
-                    <i class="bi bi-folder"></i>
-                    <h5>{{ cat.name }}</h5>
-                    <p class="small mb-0">Перейти к документам</p>
-                </div>
-            </a>
-        </div>
-        {% endfor %}
-    </div>
-    {% else %}
+    <!-- Список категорий или документов -->
     <div class="row g-4 justify-content-center" id="docsContainer">
-        {% for doc in documents %}
-        <div class="col-sm-12 col-md-6 col-lg-4 col-xl-3 player-card" data-title="{{ doc.title|lower }}">
-            <div class="card-section h-100 text-center">
-                <i class="bi bi-file-earmark-text fs-3"></i>
-                <h5>{{ doc.title }}</h5>
-                <p class="text-muted mb-2" style="font-size: 0.85rem;">{{ doc.created_at|date:"d.m.Y" }} · {{ doc.file.size|filesizeformat }}</p>
-                <a href="{{ doc.file.url }}" class="btn btn-accent btn-sm mt-auto px-3 py-1">
-                    <i class="bi bi-download me-1"></i> Скачать
+
+        {% if not category and not request.GET.q %}
+            {% for cat in categories %}
+            <div class="col-sm-12 col-md-6 col-lg-4 col-xl-3 document-card-wrapper player-card">
+                <a href="{% url 'documents:category' cat.slug %}" class="text-decoration-none">
+                    <div class="document-card h-100 text-center">
+                        <i class="bi bi-folder"></i>
+                        <h5>{{ cat.name }}</h5>
+                        <span>Перейти</span>
+                    </div>
                 </a>
             </div>
-        </div>
-        {% endfor %}
+            {% endfor %}
+        {% else %}
+            {% for doc in documents %}
+            <div class="col-sm-12 col-md-6 col-lg-4 col-xl-3 document-card-wrapper player-card" data-title="{{ doc.title|lower }}">
+                <div class="document-card h-100 text-center d-flex flex-column justify-content-between">
+                    <i class="bi bi-file-earmark-text fs-3 mb-2"></i>
+                    <h5 class="mb-1">{{ doc.title }}</h5>
+                    <p class="text-muted mb-2" style="font-size: 0.85rem;">
+                        {{ doc.created_at|date:"d.m.Y" }} · {{ doc.file.size|filesizeformat }}
+                    </p>
+                    <a href="{{ doc.file.url }}" class="btn btn-accent btn-sm mt-auto px-3 py-1">
+                        <i class="bi bi-download me-1"></i> Скачать
+                    </a>
+                </div>
+            </div>
+            {% endfor %}
+        {% endif %}
+
     </div>
 
     <p id="no-docs" class="text-muted text-center mt-4" style="display: none;">Документы не найдены.</p>
@@ -84,10 +89,8 @@
         </ul>
     </nav>
     {% endif %}
-    {% endif %}
-</section>
-</div>
 
+</div>
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {

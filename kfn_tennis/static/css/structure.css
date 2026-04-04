@@ -2,11 +2,16 @@
    Основной фон секции
    ======================= */
 .hero-structure-home-simple {
-    background: linear-gradient(135deg, #ff6b6b, #ff8e72, #ffb199, #ffe0e0);
+    background: linear-gradient(
+        135deg,
+        rgba(255,107,107,0.15),
+        rgba(255,142,114,0.1)
+    );
     padding: 2rem 1rem;
     border-radius: 1rem;
     text-align: center;
-    color: #fff;
+    font-family: 'Inter', sans-serif;
+    color: #343A40;
     margin-bottom: 2rem;
 }
 
