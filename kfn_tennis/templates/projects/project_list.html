@@ -2,46 +2,196 @@
 {% load static %}
 
 {% block title %}Проекты{% endblock %}
-
 {% block body_class %}projects-page{% endblock %}
 
-{% block content %}
-<div class="container py-5">
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/project.css' %}">
+<style>
+/* Фон и шрифт */
+body.projects-page {
+    background: linear-gradient(135deg, #ff6b6b, #ff8e72, #ffb199, #ffe0e0);
+    font-family: 'Inter', sans-serif;
+    color: #343A40;
+}
 
-    <!-- Заголовок с градиентом -->
+/* Заголовок секции */
+.projects-header {
+    background: linear-gradient(135deg, rgba(255,107,107,0.15), rgba(255,142,114,0.1));
+    padding: 3rem 1rem;
+    border-radius: 1rem;
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.projects-header h1 {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #2c2c2c;
+}
+
+.projects-header p {
+    color: #6c757d;
+    font-size: 1.1rem;
+}
+
+/* Карточки проектов */
+.project-card {
+    background: #fff;
+    border-radius: 1rem;
+    overflow: hidden;
+    padding: 2rem;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    position: relative;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeUp 0.6s forwards;
+}
+
+.project-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 25px rgba(255,107,107,0.3);
+}
+
+/* Изображение */
+.project-main-image {
+    position: relative;
+    overflow: hidden;
+    border-radius: 1rem;
+    margin-bottom: 1rem;
+}
+
+.project-main-image img {
+    width: 100%;
+    height: 280px; /* фиксированная высота */
+    object-fit: cover; /* центрирование и обрезка */
+    transition: transform 0.4s ease;
+    border-radius: 1rem;
+}
+
+.project-main-image:hover img {
+    transform: scale(1.05);
+}
+
+.project-main-image::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(0,0,0,0.15), rgba(0,0,0,0));
+    border-radius: 1rem;
+}
+
+/* Категория */
+.project-card .badge {
+    background: var(--accent-color);
+    color: #fff;
+    font-weight: 500;
+}
+
+/* Название проекта */
+.project-card .card-title {
+    color: #2c2c2c;
+    font-weight: 600;
+}
+
+/* Краткое описание */
+.project-card .card-text {
+    color: #6c757d;
+    font-size: 0.9rem;
+    line-height: 1.4;
+}
+
+/* Кнопка Подробнее */
+.btn-project {
+    background: linear-gradient(135deg, #ff6b6b, #ff8e72, #ffb199, #ffe0e0);
+    color: #fff;
+    border: none;
+    padding: 0.6rem 1.2rem;
+    transition: transform 0.2s ease, background 0.3s ease;
+    width: 100%;
+    text-align: center;
+    font-weight: 500;
+    border-radius: 0.6rem;
+}
+
+.btn-project:hover {
+    background: linear-gradient(135deg, #ff8e72, #ff6b6b, #ffb199, #ffe0e0);
+    transform: translateY(-2px);
+}
+
+/* Анимация появления карточек */
+@keyframes fadeUp {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Пагинация */
+.pagination-wrapper .pagination .page-link {
+    border: none;
+    color: #ff6b6b;
+    background: #fff;
+    padding: 0.5rem 0.75rem;
+    border-radius: 0.5rem;
+    margin: 0 0.25rem;
+    transition: background 0.3s ease, color 0.3s ease;
+}
+
+.pagination-wrapper .pagination .page-item.active .page-link {
+    background: linear-gradient(135deg, #ff6b6b, #ff8e72, #ffb199, #ffe0e0);
+    color: #fff;
+    font-weight: 600;
+}
+
+.pagination-wrapper .pagination .page-link:hover {
+    background: linear-gradient(135deg, #ff8e72, #ff6b6b, #ffb199, #ffe0e0);
+    color: #fff;
+}
+
+.pagination-wrapper .pagination .page-item.disabled .page-link {
+    color: #ccc;
+    cursor: not-allowed;
+}
+
+/* Мобильная адаптация */
+@media (max-width: 576px) {
+    .projects-header h1 { font-size: 1.5rem; }
+    .project-card .card-text { font-size: 0.85rem; }
+    .btn-project { padding: 0.5rem 1rem; font-size: 0.85rem; }
+    .project-main-image img { height: 200px; }
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container my-1">
+
+    <!-- Заголовок -->
     <div class="projects-header mb-5">
-        <h1 class="fw-bold">Проекты</h1>
-        <p class="mt-2 text-muted">
-            Реализуемые и завершённые проекты, программы и инициативы
-        </p>
+        <h1>Проекты</h1>
+        <p>Реализуемые и завершённые проекты, программы и инициативы</p>
     </div>
 
     {% if projects %}
         <div class="row g-4">
             {% for project in projects %}
                 <div class="col-lg-4 col-md-6">
-                    <div class="card h-100 border-0 shadow-sm project-card">
+                    <div class="project-card h-100">
 
                         <!-- Изображение -->
-                        <div class="ratio ratio-16x9 project-main-image">
-                            <img src="{{ project.main_image.url }}"
-                                 class="card-img-top object-fit-cover"
-                                 alt="{{ project.title }}">
+                        <div class="project-main-image ratio ratio-16x9">
+                            <img src="{{ project.main_image.url }}" alt="{{ project.title }}">
                         </div>
 
                         <div class="card-body d-flex flex-column">
 
                             <!-- Категория -->
                             <div class="mb-2">
-                                <span class="badge">
-                                    {{ project.category.title }}
-                                </span>
+                                <span class="badge">{{ project.category.title }}</span>
                             </div>
 
                             <!-- Название -->
-                            <h5 class="card-title fw-semibold">
-                                {{ project.title }}
-                            </h5>
+                            <h5 class="card-title">{{ project.title }}</h5>
 
                             <!-- Даты -->
                             {% if project.start_date %}
@@ -56,14 +206,13 @@
                             {% endif %}
 
                             <!-- Краткое описание -->
-                            <p class="card-text text-muted small mb-4">
+                            <p class="card-text mb-4">
                                 {{ project.short_description|truncatechars:120 }}
                             </p>
 
                             <!-- Кнопка Подробнее -->
                             <div class="mt-auto">
-                                <a href="{{ project.get_absolute_url }}"
-                                   class="btn w-100">
+                                <a href="{{ project.get_absolute_url }}" class="btn-project">
                                     Подробнее
                                 </a>
                             </div>
@@ -73,6 +222,46 @@
                 </div>
             {% endfor %}
         </div>
+
+        <!-- Пагинация -->
+        {% if is_paginated %}
+        <div class="pagination-wrapper mt-5 text-center">
+            <ul class="pagination justify-content-center">
+                {% if page_obj.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Назад</a>
+                    </li>
+                {% else %}
+                    <li class="page-item disabled">
+                        <span class="page-link">Назад</span>
+                    </li>
+                {% endif %}
+
+                {% for num in paginator.page_range %}
+                    {% if page_obj.number == num %}
+                        <li class="page-item active">
+                            <span class="page-link">{{ num }}</span>
+                        </li>
+                    {% else %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+                        </li>
+                    {% endif %}
+                {% endfor %}
+
+                {% if page_obj.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.next_page_number }}">Вперёд</a>
+                    </li>
+                {% else %}
+                    <li class="page-item disabled">
+                        <span class="page-link">Вперёд</span>
+                    </li>
+                {% endif %}
+            </ul>
+        </div>
+        {% endif %}
+
     {% else %}
         <div class="text-center text-muted">
             Проекты пока не добавлены
@@ -80,10 +269,4 @@
     {% endif %}
 
 </div>
-
-{% block extra_css %}
-<!-- Подключаем стили проектов -->
-<link rel="stylesheet" href="{% static 'css/project.css' %}">
-{% endblock %}
-
 {% endblock %}

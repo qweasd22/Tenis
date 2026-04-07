@@ -1,29 +1,39 @@
-from django.shortcuts import render, get_object_or_404
-from .models import Player, Season
+from django.core.paginator import Paginator
+from django.shortcuts import render
+from .models import TeamMember, Coach, Judge, Season
 
 def teams_view(request):
-    seasons = Season.objects.all().order_by('-year')
-    
-    season_id = request.GET.get('season')
-    search_query = request.GET.get('q', '').strip()
+    tab = request.GET.get('tab', 'teams')
+    selected_season = request.GET.get('season', '')
+    search_query = request.GET.get('search', '')
 
-    if season_id:
-        season = get_object_or_404(Season, id=season_id)
-        players = season.players.all()
-        team_pdf = season.team_list_pdf.url if season.team_list_pdf else None
-    else:
-        season = None
-        players = Player.objects.all()
-        team_pdf = None
-
+    # --- Сборные ---
+    members_qs = TeamMember.objects.all()
+    if selected_season:
+        members_qs = members_qs.filter(season_id=selected_season)
     if search_query:
-        players = players.filter(full_name__icontains=search_query)
+        members_qs = members_qs.filter(full_name__icontains=search_query)
+    members_paginator = Paginator(members_qs, 12)
+    teams_page = members_paginator.get_page(request.GET.get('teams_page', 1))
 
-    context = {
-        'seasons': seasons,
-        'players': players,
-        'selected_season': season_id,
-        'team_pdf': team_pdf,
+    # --- Тренера ---
+    coaches_qs = Coach.objects.all()
+    coaches_paginator = Paginator(coaches_qs, 12)
+    coaches_page = coaches_paginator.get_page(request.GET.get('coaches_page', 1))
+
+    # --- Судьи ---
+    judges_qs = Judge.objects.all()
+    judges_paginator = Paginator(judges_qs, 12)
+    judges_page = judges_paginator.get_page(request.GET.get('judges_page', 1))
+
+    seasons = Season.objects.all().order_by('-year')
+
+    return render(request, 'teams/teams.html', {
+        'active_tab': tab,
+        'selected_season': selected_season,
         'search_query': search_query,
-    }
-    return render(request, 'teams/teams.html', context)
+        'seasons': seasons,
+        'teams_page': teams_page,
+        'coaches_page': coaches_page,
+        'judges_page': judges_page,
+    })

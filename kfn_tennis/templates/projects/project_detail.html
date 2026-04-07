@@ -4,23 +4,226 @@
 {% block title %}{{ project.title }}{% endblock %}
 {% block body_class %}project-page{% endblock %}
 
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/project.css' %}">
+<style>
+/* Фон и шрифт */
+body.project-page {
+    background: linear-gradient(135deg, #ff6b6b, #ff8e72, #ffb199, #ffe0e0);
+    font-family: 'Inter', sans-serif;
+    color: #343A40;
+}
+
+/* Хлебные крошки */
+.breadcrumb {
+    background: transparent;
+    padding: 0;
+    margin-bottom: 1rem;
+}
+
+.breadcrumb a {
+    color: #ff6b6b;
+    text-decoration: none;
+}
+.breadcrumb a:hover {
+    text-decoration: underline;
+}
+
+/* Кнопка назад */
+.btn-back {
+    background: linear-gradient(135deg, #ff6b6b, #ff8e72, #ffb199, #ffe0e0);
+    color: #fff;
+    border-radius: 0.5rem;
+    padding: 0.5rem 1rem;
+    text-decoration: none;
+    transition: 0.3s ease;
+}
+
+.btn-back:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(255,107,107,0.3);
+}
+
+/* Заголовок проекта */
+.project-header h1 {
+    font-weight: 700;
+    font-size: 2rem;
+    color: #2c2c2c;
+    margin-bottom: 0.5rem;
+}
+
+.category-badge {
+    background: var(--accent-color);
+    color: #fff;
+    font-weight: 500;
+    padding: 0.25rem 0.75rem;
+    border-radius: 0.5rem;
+    font-size: 0.85rem;
+}
+
+/* Главное изображение */
+.project-main-image {
+    position: relative;
+    overflow: hidden;
+    border-radius: 1rem;
+    margin-bottom: 3rem;
+}
+
+.project-main-image img {
+    width: 100%;
+    height: auto;
+    max-height: 500px; /* ограничиваем слишком большие фото */
+    object-fit: cover; /* центрируем и обрезаем */
+    border-radius: 1rem;
+    transition: transform 0.4s ease;
+}
+
+.project-main-image:hover img {
+    transform: scale(1.05);
+}
+
+.project-main-image::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(0,0,0,0.1), rgba(0,0,0,0));
+    border-radius: 1rem;
+}
+
+/* Контент проекта */
+.project-content p {
+    margin-bottom: 1.25rem;
+    line-height: 1.7;
+}
+
+.project-content img {
+    max-width: 100%;
+    border-radius: 0.75rem;
+    margin: 1.5rem 0;
+    object-fit: cover;
+}
+
+/* Таблицы */
+.project-content table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 2rem 0;
+}
+
+.project-content table td,
+.project-content table th {
+    padding: 8px;
+    border: 1px solid #dee2e6;
+}
+
+.project-content table tr:hover {
+    background-color: rgba(255,107,107,0.05);
+}
+
+/* Кнопки проекта */
+.btn-project {
+    background: linear-gradient(135deg, #ff6b6b, #ff8e72, #ffb199, #ffe0e0);
+    color: #fff;
+    border: none;
+    padding: 0.6rem 1.2rem;
+    transition: transform 0.2s ease, background 0.3s ease;
+    border-radius: 0.6rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+}
+
+.btn-project:hover {
+    background: linear-gradient(135deg, #ff8e72, #ff6b6b, #ffb199, #ffe0e0);
+    transform: translateY(-2px);
+}
+
+/* Боковая панель */
+.project-sidebar {
+    background: #fff;
+    border-radius: 1rem;
+    padding: 2rem;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeUp 0.6s forwards;
+}
+
+.project-sidebar h5 {
+    border-bottom: 2px solid var(--accent-color);
+    padding-bottom: 0.5rem;
+    margin-bottom: 1rem;
+    display: inline-block;
+}
+
+/* Анимация появления */
+.project-content, .project-sidebar {
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeUp 0.6s forwards;
+    animation-delay: 0.2s;
+}
+
+@keyframes fadeUp {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Похожие проекты */
+.related-projects h3 {
+    color: #2c2c2c;
+    margin-bottom: 2rem;
+}
+
+.related-projects .project-card {
+    background: #fff;
+    border-radius: 1rem;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.related-projects .project-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 25px rgba(255,107,107,0.3);
+}
+
+.related-projects .project-card img {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+    transition: transform 0.4s ease;
+}
+
+.related-projects .project-card:hover img {
+    transform: scale(1.05);
+}
+
+.related-projects .badge {
+    background: var(--accent-color);
+    color: #fff;
+    font-weight: 500;
+}
+
+.related-projects .btn-project {
+    font-size: 0.9rem;
+}
+</style>
+{% endblock %}
+
 {% block content %}
 <div class="container py-5">
 
-    <!-- Хлебные крошки -->
-    <nav aria-label="breadcrumb" class="mb-4">
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="/">Главная</a></li>
-            <li class="breadcrumb-item"><a href="{% url 'projects:list' %}">Проекты</a></li>
-            <li class="breadcrumb-item active" aria-current="page">{{ project.title }}</li>
-        </ol>
-    </nav>
+    
+
     <!-- Кнопка назад -->
-<div class="mb-3">
-    <a href="{% url 'projects:list' %}" class="btn btn-project btn-back">
-        ← Назад к проектам
-    </a>
-</div>
+    <div class="mb-3">
+        <a href="{% url 'projects:list' %}" class="btn-project btn-back">
+            ← Назад к проектам
+        </a>
+    </div>
+
     <!-- Заголовок -->
     <div class="mb-4 project-header">
         <h1 class="fw-bold">{{ project.title }}</h1>
@@ -30,7 +233,7 @@
     <!-- Главное изображение -->
     {% if project.main_image %}
     <div class="project-main-image mb-5">
-        <img src="{{ project.main_image.url }}" class="img-fluid w-100" alt="{{ project.title }}">
+        <img src="{{ project.main_image.url }}" alt="{{ project.title }}">
     </div>
     {% endif %}
 
@@ -38,8 +241,6 @@
 
         <!-- Основной контент -->
         <div class="col-lg-8">
-
-            <!-- Описание -->
             <div class="project-content">
                 {{ project.full_description|safe }}
             </div>
@@ -47,29 +248,27 @@
             <!-- Кнопки -->
             <div class="d-flex flex-wrap gap-3 mt-5">
                 {% if project.attachment %}
-                <a href="{{ project.attachment.url }}" class="btn btn-project" target="_blank">
+                <a href="{{ project.attachment.url }}" class="btn-project" target="_blank">
                     📄 Положение соревнований
                 </a>
                 {% endif %}
                 {% if project.external_link %}
-                <a href="{{ project.external_link }}" class="btn btn-project" target="_blank">
+                <a href="{{ project.external_link }}" class="btn-project" target="_blank">
                     🏆 Результаты
                 </a>
                 {% endif %}
                 {% if project.gallery_link %}
-                <a href="{{ project.gallery_link }}" class="btn btn-project" target="_blank">
+                <a href="{{ project.gallery_link }}" class="btn-project" target="_blank">
                     📸 Фотогалерея
                 </a>
                 {% endif %}
             </div>
-
         </div>
 
         <!-- Боковая информация -->
         <div class="col-lg-4">
-            <div class="project-sidebar p-4 rounded shadow-sm">
+            <div class="project-sidebar">
                 <h5 class="fw-semibold mb-3">Информация о проекте</h5>
-
                 {% if project.start_date %}
                 <div class="mb-2">
                     <strong>Даты:</strong><br>
@@ -80,19 +279,16 @@
                     {% endif %}
                 </div>
                 {% endif %}
-
                 {% if project.location %}
                 <div class="mb-2">
                     <strong>Место проведения:</strong><br>{{ project.location }}
                 </div>
                 {% endif %}
-
                 {% if project.prize_fund %}
                 <div class="mb-2">
                     <strong>Призовой фонд:</strong><br>{{ project.prize_fund }}
                 </div>
                 {% endif %}
-
                 {% if project.contacts %}
                 <div class="mb-2">
                     <strong>Контакты:</strong><br>{{ project.contacts|linebreaks }}
@@ -110,32 +306,18 @@
         <div class="row g-4">
             {% for rp in related_projects %}
             <div class="col-lg-4 col-md-6">
-                <div class="card h-100 project-card">
-
-                    <!-- Изображение -->
-                    <div class="ratio ratio-16x9 project-main-image">
-                        <img src="{{ rp.main_image.url }}" class="card-img-top object-fit-cover" alt="{{ rp.title }}">
+                <div class="project-card h-100">
+                    <div class="project-main-image ratio ratio-16x9">
+                        <img src="{{ rp.main_image.url }}" alt="{{ rp.title }}">
                     </div>
-
                     <div class="card-body d-flex flex-column">
-                        <!-- Категория -->
                         <div class="mb-2">
                             <span class="badge">{{ rp.category.title }}</span>
                         </div>
-
-                        <!-- Название -->
                         <h5 class="card-title fw-semibold">{{ rp.title }}</h5>
-
-                        <!-- Краткое описание -->
-                        <p class="card-text text-muted small mb-4">
-                            {{ rp.short_description|truncatechars:100 }}
-                        </p>
-
-                        <!-- Кнопка -->
+                        <p class="card-text text-muted small mb-4">{{ rp.short_description|truncatechars:100 }}</p>
                         <div class="mt-auto">
-                            <a href="{{ rp.get_absolute_url }}" class="btn btn-project w-100">
-                                Подробнее
-                            </a>
+                            <a href="{{ rp.get_absolute_url }}" class="btn-project w-100">Подробнее</a>
                         </div>
                     </div>
                 </div>
@@ -146,9 +328,4 @@
     {% endif %}
 
 </div>
-
-{% block extra_css %}
-<link rel="stylesheet" href="{% static 'css/project.css' %}">
-{% endblock %}
-
 {% endblock %}

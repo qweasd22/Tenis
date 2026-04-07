@@ -4,21 +4,118 @@
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'css/calendar.css' %}">
 <link href='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/main.min.css' rel='stylesheet' />
+
+<style>
+body.calendar-page {
+    background: linear-gradient(135deg, #ff6b6b, #ff8e72, #ffb199, #ffe0e0);
+    font-family: 'Inter', sans-serif;
+    color: #343A40;
+}
+
+/* Hero календаря */
+.calendar-hero {
+    background: linear-gradient(
+        135deg,
+        rgba(255,107,107,0.15),
+        rgba(255,142,114,0.1)
+    );
+    padding: 3rem 1rem;
+    border-radius: 1rem;
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.calendar-hero h1 {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #2c2c2c;
+}
+
+.calendar-hero p {
+    color: #6c757d;
+    font-size: 1.1rem;
+}
+
+/* Карточка календаря */
+.calendar-card {
+    background: #fff;
+    border-radius: 1rem;
+    padding: 25px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.06);
+}
+
+/* FullCalendar стили */
+.fc {
+    font-family: 'Inter', sans-serif;
+}
+
+.fc-toolbar-title {
+    font-weight: 600;
+    color: #343A40;
+}
+
+.fc .fc-button {
+    background: var(--accent-color);
+    color: #fff;
+    border: none;
+    border-radius: 0.5rem;
+}
+
+.fc .fc-button:hover {
+    background: linear-gradient(90deg, #ff8e72, #ff6b6b);
+}
+
+/* Кастомные события */
+.fc-custom-event {
+    background: linear-gradient(90deg, #ff6b6b, #ff8e72);
+    color: #fff;
+    border-radius: 0.75rem;
+    padding: 4px 8px;
+    font-size: 0.85rem;
+    line-height: 1.2;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.fc-custom-event:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+}
+
+.fc .fc-event-time {
+    font-size: 0.8rem;
+    opacity: 0.9;
+}
+
+/* Мобильные адаптации */
+@media (max-width: 992px) {
+    .fc-toolbar-title { font-size: 1.5rem; }
+    .fc-custom-event { font-size: 0.75rem; padding: 3px 6px; }
+}
+
+@media (max-width: 576px) {
+    .fc-toolbar { flex-direction: column; gap: 0.5rem; }
+    .fc-custom-event { font-size: 0.65rem; padding: 2px 4px; }
+}
+</style>
 {% endblock %}
 
 {% block content %}
-<div class="container calendar-container my-1">
-    <section class="hero-calendar text-center mb-4">
+<div class="container calendar-page my-1">
+
+    <!-- Hero календаря -->
+    <section class="calendar-hero">
         <h1>Календарь событий</h1>
         <p>Просматривайте все турниры и мероприятия федерации</p>
     </section>
 
-    <div id='calendar'></div>
+    <!-- Карточка календаря -->
+    <div class="calendar-card">
+        <div id="calendar"></div>
+    </div>
+
 </div>
 {% endblock %}
-
-
-
 
 {% block extra_js %}
 <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
@@ -26,97 +123,43 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-
     const calendar = new FullCalendar.Calendar(
         document.getElementById('calendar'),
         {
             initialView: 'dayGridMonth',
             locale: 'ru',
             height: 'auto',
-
             headerToolbar: {
                 left: 'prev,next today',
                 center: 'title',
                 right: 'dayGridMonth,listMonth'
             },
-
-            buttonText: {
-                today: 'Сегодня',
-                month: 'Месяц',
-                list: 'Список'
-            },
-
+            buttonText: { today: 'Сегодня', month: 'Месяц', list: 'Список' },
             events: '{% url "calendar:calendar_events_json" %}',
-
             noEventsContent: 'Нет событий',
-
+            
             eventContent: function(arg) {
-
-                const start = arg.event.start;
-                const end = arg.event.end;
-                const allDay = arg.event.allDay;
-
-                const formatTime = (date) =>
-                    date.toLocaleTimeString('ru-RU', {
-                        hour: '2-digit',
-                        minute: '2-digit'
-                    });
-
-                const formatDate = (date) =>
-                    date.toLocaleDateString('ru-RU');
-
-                let timeText = '';
-
-                if (!allDay) {
-                    if (end) {
-                        if (start.toDateString() !== end.toDateString()) {
-                            timeText =
-                                formatDate(start) + ' ' + formatTime(start) +
-                                ' — ' +
-                                formatDate(end) + ' ' + formatTime(end);
-                        } else {
-                            timeText =
-                                formatTime(start) + ' — ' + formatTime(end);
-                        }
-                    } else {
-                        timeText = formatTime(start);
-                    }
-                } else {
-                    if (end) {
-                        const realEnd = new Date(end);
-                        realEnd.setDate(realEnd.getDate() - 1);
-
-                        if (start.toDateString() !== realEnd.toDateString()) {
-                            timeText =
-                                formatDate(start) + ' — ' + formatDate(realEnd);
-                        }
-                    }
-                }
-
-                return {
+                // Кастомная карточка события
+                let timeText = arg.event.allDay ? '' : arg.timeText;
+                return { 
                     html: `
                         <div class="fc-custom-event">
-                            ${timeText ? `<div class="fc-custom-time">${timeText}</div>` : ''}
-                            <div class="fc-custom-title">${arg.event.title}</div>
+                            ${timeText ? `<div class="fc-event-time">${timeText}</div>` : ''}
+                            <div class="fc-event-title">${arg.event.title}</div>
                         </div>
-                    `
+                    ` 
                 };
             },
-
-            eventColor: 'var(--accent-color)',
-            eventTextColor: '#ffffff',
 
             eventClick: function(info) {
                 if (info.event.url) {
                     window.open(info.event.url, '_blank');
                     info.jsEvent.preventDefault();
                 }
-            }
+            },
         }
     );
-
     calendar.render();
 });
-
 </script>
 {% endblock %}

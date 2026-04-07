@@ -1,0 +1,151 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Медиа{% endblock %}
+{% block body_class %}news-page{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/media.css' %}">
+<style>
+/* Hero / Заголовок */
+.news-header {
+    background: linear-gradient(135deg, rgba(255,107,107,0.12), rgba(255,142,114,0.08));
+    padding: 2rem 1.5rem;
+    border-radius: 1rem;
+    text-align: center;
+    margin-bottom: 2rem;
+}
+.news-header h1 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #2c2c2c;
+}
+.news-header p {
+    font-size: 1.1rem;
+    color: #555;
+    margin-top: 0.5rem;
+}
+
+/* Карточки мероприятий */
+.news-card {
+    background: #fff;
+    border-radius: 1rem;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.news-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 25px rgba(255,107,107,0.3);
+}
+.news-card img {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+}
+.news-placeholder {
+    background: linear-gradient(135deg, #ff6b6b, #ff8e72, #ffb199, #ffe0e0);
+    color: #fff;
+    text-align: center;
+    padding: 3rem 0;
+    border-radius: 1rem;
+}
+
+/* Кнопки */
+.btn-news {
+    background: linear-gradient(135deg, #ff6b6b, #ff8e72);
+    color: #fff;
+    border: none;
+    padding: 0.6rem 1.2rem;
+    border-radius: 0.6rem;
+    transition: 0.3s ease;
+}
+.btn-news:hover {
+    background: linear-gradient(135deg, #ff8e72, #ff6b6b);
+}
+
+/* Пагинация */
+.pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 3rem;
+    gap: 0.5rem;
+}
+.pagination a,
+.pagination span {
+    display: inline-block;
+    padding: 0.5rem 0.8rem;
+    border-radius: 0.5rem;
+    background: #fff;
+    color: #ff6b6b;
+    font-weight: 500;
+    border: 1px solid #ff6b6b;
+    text-decoration: none;
+    transition: 0.3s;
+}
+.pagination a:hover { background: #ff6b6b; color: #fff; }
+.pagination .current { background: #ff6b6b; color: #fff; }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container my-1">
+
+    <!-- Hero -->
+    <div class="news-header">
+        <h1 class="fw-bold">Медиа мероприятия</h1>
+        <p>Фотографии и материалы с наших соревнований и проектов</p>
+    </div>
+
+    <!-- Карточки мероприятий -->
+    <div class="row g-4">
+        {% for event in page_obj %}
+        <div class="col-lg-4 col-md-6 col-12">
+            <div class="news-card h-100">
+                {% if event.cover %}
+                <div class="news-image-full">
+                    <img src="{{ event.cover.url }}" alt="{{ event.title }}">
+                </div>
+                {% else %}
+                <div class="news-placeholder">Нет изображения</div>
+                {% endif %}
+                <div class="p-3">
+                    <h5 class="fw-semibold">{{ event.title }}</h5>
+                    {% if event.date %}
+                    <p class="news-date">{{ event.date|date:"d.m.Y" }}</p>
+                    {% endif %}
+                    <a href="{{ event.get_absolute_url }}" class="btn-news mt-2 w-100">Посмотреть галерею</a>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <p>Мероприятия не найдены.</p>
+        {% endfor %}
+    </div>
+
+    <!-- Пагинация -->
+    {% if page_obj.has_other_pages %}
+    <div class="pagination">
+        {% if page_obj.has_previous %}
+        <a href="?page={{ page_obj.previous_page_number }}">&laquo; Назад</a>
+        {% else %}
+        <span>&laquo; Назад</span>
+        {% endif %}
+
+        {% for num in page_obj.paginator.page_range %}
+            {% if num == page_obj.number %}
+                <span class="current">{{ num }}</span>
+            {% elif num > page_obj.number|add:"-3" and num < page_obj.number|add:"3" %}
+                <a href="?page={{ num }}">{{ num }}</a>
+            {% endif %}
+        {% endfor %}
+
+        {% if page_obj.has_next %}
+        <a href="?page={{ page_obj.next_page_number }}">Вперед &raquo;</a>
+        {% else %}
+        <span>Вперед &raquo;</span>
+        {% endif %}
+    </div>
+    {% endif %}
+
+</div>
+{% endblock %}

@@ -13,6 +13,7 @@ urlpatterns = [
     path('ckeditor5/', include('django_ckeditor_5.urls')),
     path('teams/', include('teams.urls')),
     path('eventcalendar/', include('eventcalendar.urls')),
+    path('media/', include('MediaPhoto.urls')),
 
 ]
 

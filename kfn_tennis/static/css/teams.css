@@ -1,172 +1,133 @@
 body.teams-page {
-    background: linear-gradient(180deg, #f0f3f5 0%, #e6e9ec 100%);
     font-family: 'Inter', sans-serif;
     color: #343A40;
+    background: linear-gradient(135deg, #ff6b6b, #ff8e72, #ffb199, #ffe0e0);
 }
 
-/* Заголовок */
-/* ======= Хедер сборных ======= */
-/* ======= Hero хедер сборных ======= */
+/* Header */
 .teams-hero {
-    background: linear-gradient(90deg, rgba(32,192,204,0.15), rgba(32,192,204,0.05));
+    background: linear-gradient(135deg, rgba(255,107,107,0.15), rgba(255,142,114,0.1));
     padding: 3rem 1rem;
     border-radius: 1rem;
     text-align: center;
-    margin-bottom: 3rem;
 }
 
-.teams-hero h1 {
-    color: #343A40;
-    font-weight: 700;
+/* Вкладки */
+.nav-tabs .nav-link {
+    font-weight: 600;
+    color: #555;
+    border: none;
+    border-bottom: 3px solid transparent;
+    border-radius: 0;
+    padding: 0.75rem 1.5rem;
+    transition: all 0.3s;
+}
+.nav-tabs .nav-link.active {
+    color: #ff6b6b;
+    border-bottom: 3px solid #ff6b6b;
+}
+.nav-tabs .nav-link:hover {
+    color: #ff6b6b;
 }
 
-.teams-hero p {
-    color: #6c757d;
-    font-size: 1.1rem;
+/* Поиск */
+.search-wrapper { position: relative; display: flex; align-items: center; }
+#search-players {
+    width: 100%;
+    border-radius: 50px;
+    padding: 0.5rem 1rem 0.5rem 2.5rem;
+    height: 48px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    transition: box-shadow 0.3s;
 }
+#search-players:focus { box-shadow: 0 6px 18px rgba(0,0,0,0.1); outline: none; }
+.search-icon { position: absolute; left: 1rem; color: #ff6b6b; pointer-events: none; font-size: 1.2rem; }
+.clear-btn { position: absolute; right: 0.5rem; border: none; background-color: #dee2e6; width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; opacity: 0; cursor: pointer; transition: opacity 0.3s ease; z-index: 10; }
+.clear-btn.show { opacity: 1; }
+.clear-btn:hover { background-color: #ced4da; }
+.clear-btn i { pointer-events: none; font-size: 1rem; }
 
-
-/* Карточки игроков */
+/* Карточки */
 .document-card {
     background: #fff;
-    border-radius: 1rem;
+    border-radius: 1.2rem;
     overflow: hidden;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    display: flex;
-    flex-direction: column;
-    height: 100%;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+    transition: transform 0.3s, box-shadow 0.3s;
+    text-align: center;
 }
 .document-card:hover {
     transform: translateY(-5px);
-    box-shadow: 0 12px 25px rgba(32,192,204,0.3);
+    box-shadow: 0 15px 35px rgba(255,107,107,0.2);
 }
-.document-card img {
+
+/* Фото */
+.document-card img.card-img-top {
     width: 100%;
     height: 220px;
     object-fit: cover;
-    border-top-left-radius: 1rem;
-    border-top-right-radius: 1rem;
+    border-bottom: 2px solid #ff6b6b;
 }
 
 /* Placeholder */
 .player-placeholder {
+    width: 100%;
     height: 220px;
+    background: linear-gradient(135deg, #ff6b6b, #ff8e72, #ffb199, #ffe0e0);
     display: flex;
     align-items: center;
     justify-content: center;
-    background: linear-gradient(135deg, #20C1CC 0%, #17a2b8 100%);
     color: #fff;
-    font-size: 3rem;
+    font-size: 2.5rem;
     font-weight: 700;
 }
 
-/* Тело карточки */
+/* Карточка тело */
 .card-body {
-    padding: 1rem;
+    padding: 1rem 1rem 1.5rem 1rem;
 }
 .card-title {
-    font-weight: 600;
-    font-size: 1rem;
-    text-align: center;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #ff6b6b;
+    margin-bottom: 0.5rem;
 }
 .card-text {
-    font-size: 0.875rem;
-    color: #6c757d;
-    text-align: center;
+    font-size: 0.95rem;
+    color: #555;
+    line-height: 1.5;
 }
 
-/* Поиск */
-#search-players {
-    width: 100%;
-    border-radius: 50px;
-    padding: 0.5rem 3rem 0.5rem 2.5rem;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-    background-color: #fff;
-    color: #343A40;
-}
-#search-players:focus {
-    outline: none;
-    box-shadow: 0 6px 18px rgba(0,0,0,0.12);
-}
-/* Контейнер для input с иконками */
-#search-docs {
-    width: 100%;
-    border-radius: 50px;
-    padding: 0.5rem 1rem 0.5rem 2.5rem;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-}
-
-/* Иконка поиска */
-.search-icon {
-    top: 50%;
-    left: 1rem;
-    transform: translateY(-50%);
-    font-size: 1.2rem;
-    color: var(--accent-color);
-    pointer-events: none;
-}
-
-/* Кнопка сброса */
-.clear-btn {
-    top: 50%;
-    right: 0.5rem;
-    transform: translateY(-50%);
-    border: none;
-    background-color: #dee2e6;
-    padding: 0.25rem 0.35rem;
-    border-radius: 50%;
-    opacity: 0;                /* Скрыта по умолчанию */
-    cursor: pointer;
-    transition: opacity 0.3s ease;
-}
-.clear-btn.show {
-    opacity: 1;                /* Показывается при вводе текста */
-}
-.clear-btn i {
-    pointer-events: none;
-}
-
-/* Селект сезона */
-.form-select {
-    border-radius: 50px;
-    padding: 0.5rem 1rem;
-    border: 1px solid #ced4da;
-}
-
-/* Кнопка скачать список */
-.btn-project {
-    background: linear-gradient(90deg, var(--accent-color), #17a2b8);
+/* Кнопка рейтинга */
+.badge-rating {
+    display: inline-block;
+    background: linear-gradient(90deg, #ff6b6b, #ff8e72);
     color: #fff;
-    border: none;
-    padding: 0.6rem 1.2rem;
-    border-radius: 0.6rem;
+    padding: 4px 10px;
+    border-radius: 999px;
     font-weight: 600;
-    transition: background 0.3s ease, transform 0.2s ease;
-}
-.btn-project:hover {
-    background: linear-gradient(90deg, #17a2b8, var(--accent-color));
-    transform: translateY(-2px);
+    margin-top: 0.5rem;
 }
 
-/* Анимация появления карточек */
-.player-card {
-    opacity: 0;
-    transform: translateY(20px);
-    animation: fadeUp 0.6s forwards;
-}
-@keyframes fadeUp {
-    to { opacity: 1; transform: translateY(0); }
+/* Адаптив */
+@media (max-width: 767px) {
+    .document-card img.card-img-top, .player-placeholder { height: 180px; }
 }
 
-/* Респонсив */
-@media (max-width: 992px) {
-    .document-card img, .player-placeholder { height: 200px; }
+.pagination .page-link {
+    border: none;
+    color: #ff6b6b;
+    border-radius: 0.5rem;
+    margin: 0 2px;
+    transition: all 0.3s;
 }
-@media (max-width: 768px) {
-    .document-card img, .player-placeholder { height: 180px; }
-    .card-title { font-size: 0.95rem; }
+.pagination .page-item.active .page-link {
+    background: linear-gradient(90deg, #ff6b6b, #ff8e72);
+    color: #fff;
 }
-@media (max-width: 576px) {
-    .document-card img, .player-placeholder { height: 160px; }
-    .card-title { font-size: 0.9rem; }
+.pagination .page-link:hover {
+    background: rgba(255,107,107,0.1);
+}
+.pagination .page-item.disabled .page-link {
+    color: #adb5bd;
 }

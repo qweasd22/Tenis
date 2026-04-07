@@ -8,189 +8,250 @@
 {% endblock %}
 
 {% block content %}
-<div class="container py-5">
-<!-- Хедер сборных -->
-
-    <div class="teams-hero mb-5">
+<div class="container my-1">
+    <!-- Хедер -->
+    <div class="teams-hero mb-5 text-center">
         <h1 class="fw-bold">Сборные Курской федерации</h1>
-        <p class="text-muted mt-2">Выберите сезон и найдите игрока по имени.</p>
+        <p class="text-muted mt-2">Выберите вкладку, сезон и найдите нужного человека по имени.</p>
     </div>
 
+    <!-- Вкладки -->
+    <ul class="nav nav-tabs mb-4" id="teamsTabs" role="tablist">
+        <li class="nav-item" role="presentation">
+            <button class="nav-link {% if active_tab == 'teams' %}active{% endif %}" id="teams-tab" data-bs-toggle="tab" data-bs-target="#teams" type="button">Сборные</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link {% if active_tab == 'coaches' %}active{% endif %}" id="coaches-tab" data-bs-toggle="tab" data-bs-target="#coaches" type="button">Тренера</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link {% if active_tab == 'judges' %}active{% endif %}" id="judges-tab" data-bs-toggle="tab" data-bs-target="#judges" type="button">Судьи</button>
+        </li>
+    </ul>
 
-<!-- Фильтр + поиск -->
-<div class="col-md-6 mx-auto mb-5">
-  <!-- Отдельный блок для селекта -->
-  <select name="season" id="season-select" class="form-select mb-3">
-      <option value="">Все сезоны</option>
-      {% for season in seasons %}
-      <option value="{{ season.id }}">{{ season.year }}</option>
-      {% endfor %}
-  </select>
-
-  <!-- Блок для поиска + кнопки -->
-  <div class="search-wrapper position-relative">
-      <input type="text"
-             id="search-players"
-             class="form-control ps-5"
-             placeholder="Поиск по имени игрока"
-             autocomplete="off">
-
-      <!-- Иконка поиска -->
-      <span class="search-icon">
-        <i class="bi bi-search"></i>
-      </span>
-
-      <!-- Кнопка сброса -->
-      <button type="button" class="clear-btn">
-        <i class="bi bi-x-lg"></i>
-      </button>
-  </div>
-</div>
-
-<section class="container-xl my-5">
-    <div class="row g-4 justify-content-center" id="playersContainer">
-        {% for player in players %}
-        <div class="col-sm-12 col-md-6 col-lg-4 col-xl-3 player-card"
-             data-name="{{ player.full_name|lower }}"
-             data-season="{{ player.season.id }}">
-            <div class="document-card h-100 text-center">
-                {% if player.photo %}
-                <img src="{{ player.photo.url }}" alt="{{ player.full_name }}" class="card-img-top">
-                {% else %}
-                <div class="player-placeholder">
-                    <span class="placeholder-initials">{{ player.full_name|slice:":1" }}</span>
-                </div>
-                {% endif %}
-                <div class="card-body">
-                    <h5 class="card-title">{{ player.full_name }}</h5>
-                    <p class="card-text">
-                        Дата рождения: {{ player.birth_date|date:"d.m.Y" }}<br>
-                        Разряд: {{ player.rank }}<br>
-                        Организация: {{ player.organization }}
-                    </p>
-                </div>
+    <div class="tab-content">
+        <!-- Вкладка Сборные -->
+        <div class="tab-pane fade {% if active_tab == 'teams' %}show active{% endif %}" id="teams">
+            <div class="col-md-6 mx-auto mb-4">
+                <form method="get" id="filterFormTeams">
+                    <input type="hidden" name="tab" value="teams">
+                    <input type="hidden" name="teams_page" value="1">
+                    <select name="season" class="form-select mb-3" onchange="this.form.submit();">
+                        <option value="">Все сезоны</option>
+                        {% for season in seasons %}
+                            <option value="{{ season.id }}" {% if selected_season == season.id|stringformat:"s" %}selected{% endif %}>{{ season.year }}</option>
+                        {% endfor %}
+                    </select>
+                    <div class="search-wrapper position-relative">
+                        <input type="text" name="search" class="form-control ps-5" placeholder="Поиск по имени игрока" value="{{ search_query }}">
+                        <span class="search-icon"><i class="bi bi-search"></i></span>
+                        <button type="submit" class="clear-btn"><i class="bi bi-search"></i></button>
+                    </div>
+                </form>
             </div>
+
+            <div class="row g-4 justify-content-center">
+                {% for member in teams_page %}
+                    <div class="col-sm-12 col-md-6 col-lg-4 col-xl-3 player-card">
+                        <div class="document-card h-100 text-center shadow-sm rounded">
+                            {% if member.photo %}
+                                <img src="{{ member.photo.url }}" alt="{{ member.full_name }}" class="card-img-top rounded-top">
+                            {% else %}
+                                <div class="player-placeholder d-flex align-items-center justify-content-center">
+                                    <span class="placeholder-initials">{{ member.full_name|slice:":1" }}</span>
+                                </div>
+                            {% endif %}
+                            <div class="card-body">
+                                <h5 class="card-title">{{ member.full_name }}</h5>
+                                <p class="card-text mb-0">
+                                    {% if member.birth_date %}Дата рождения: {{ member.birth_date|date:"d.m.Y" }}<br>{% endif %}
+                                    Разряд: {{ member.rank|default:"-" }}<br>
+                                    Тренер: {{ member.coach|default:"-" }}<br>
+                                    Рейтинг: {{ member.rating|default:"-" }}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                {% empty %}
+                    <p class="text-muted text-center">Игроки не найдены.</p>
+                {% endfor %}
+            </div>
+
+            <!-- Пагинация Сборных -->
+            {% if teams_page.has_other_pages %}
+            <nav class="mt-4">
+                <ul class="pagination justify-content-center">
+                    {% if teams_page.has_previous %}
+                        <li class="page-item">
+                            <a class="page-link" href="?tab=teams&teams_page={{ teams_page.previous_page_number }}{% if selected_season %}&season={{ selected_season }}{% endif %}{% if search_query %}&search={{ search_query }}{% endif %}">&laquo;</a>
+                        </li>
+                    {% else %}
+                        <li class="page-item disabled"><span class="page-link">&laquo;</span></li>
+                    {% endif %}
+                    {% for num in teams_page.paginator.page_range %}
+                        {% if num >= teams_page.number|add:"-2" and num <= teams_page.number|add:"2" %}
+                            {% if num == teams_page.number %}
+                                <li class="page-item active"><span class="page-link">{{ num }}</span></li>
+                            {% else %}
+                                <li class="page-item">
+                                    <a class="page-link" href="?tab=teams&teams_page={{ num }}{% if selected_season %}&season={{ selected_season }}{% endif %}{% if search_query %}&search={{ search_query }}{% endif %}">{{ num }}</a>
+                                </li>
+                            {% endif %}
+                        {% endif %}
+                    {% endfor %}
+                    {% if teams_page.has_next %}
+                        <li class="page-item">
+                            <a class="page-link" href="?tab=teams&teams_page={{ teams_page.next_page_number }}{% if selected_season %}&season={{ selected_season }}{% endif %}{% if search_query %}&search={{ search_query }}{% endif %}">&raquo;</a>
+                        </li>
+                    {% else %}
+                        <li class="page-item disabled"><span class="page-link">&raquo;</span></li>
+                    {% endif %}
+                </ul>
+            </nav>
+            {% endif %}
         </div>
-        {% endfor %}
+
+        <!-- Вкладка Тренера -->
+        <div class="tab-pane fade {% if active_tab == 'coaches' %}show active{% endif %}" id="coaches">
+            <div class="row g-4 justify-content-center">
+                {% for coach in coaches_page %}
+                    <div class="col-sm-12 col-md-6 col-lg-4 col-xl-3 text-center">
+                        <div class="document-card h-100 text-center shadow-sm rounded">
+                            {% if coach.photo %}
+                                <img src="{{ coach.photo.url }}" alt="{{ coach.full_name }}" class="card-img-top rounded-top">
+                            {% else %}
+                                <div class="player-placeholder d-flex align-items-center justify-content-center">
+                                    <span class="placeholder-initials">{{ coach.full_name|slice:":1" }}</span>
+                                </div>
+                            {% endif %}
+                            <div class="card-body">
+                                <h5 class="card-title">{{ coach.full_name }}</h5>
+                                <p class="card-text mb-0">Категория: {{ coach.category }}</p>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+
+            <!-- Пагинация Тренеров -->
+            {% if coaches_page.has_other_pages %}
+            <nav class="mt-4">
+                <ul class="pagination justify-content-center">
+                    {% if coaches_page.has_previous %}
+                        <li class="page-item">
+                            <a class="page-link" href="?tab=coaches&coaches_page={{ coaches_page.previous_page_number }}">&laquo;</a>
+                        </li>
+                    {% else %}
+                        <li class="page-item disabled"><span class="page-link">&laquo;</span></li>
+                    {% endif %}
+                    {% for num in coaches_page.paginator.page_range %}
+                        {% if num >= coaches_page.number|add:"-2" and num <= coaches_page.number|add:"2" %}
+                            {% if num == coaches_page.number %}
+                                <li class="page-item active"><span class="page-link">{{ num }}</span></li>
+                            {% else %}
+                                <li class="page-item">
+                                    <a class="page-link" href="?tab=coaches&coaches_page={{ num }}">{{ num }}</a>
+                                </li>
+                            {% endif %}
+                        {% endif %}
+                    {% endfor %}
+                    {% if coaches_page.has_next %}
+                        <li class="page-item">
+                            <a class="page-link" href="?tab=coaches&coaches_page={{ coaches_page.next_page_number }}">&raquo;</a>
+                        </li>
+                    {% else %}
+                        <li class="page-item disabled"><span class="page-link">&raquo;</span></li>
+                    {% endif %}
+                </ul>
+            </nav>
+            {% endif %}
+        </div>
+
+        <!-- Вкладка Судьи -->
+        <div class="tab-pane fade {% if active_tab == 'judges' %}show active{% endif %}" id="judges">
+            <div class="row g-4 justify-content-center">
+                {% for judge in judges_page %}
+                    <div class="col-sm-12 col-md-6 col-lg-4 col-xl-3 text-center">
+                        <div class="document-card h-100 text-center shadow-sm rounded">
+                            {% if judge.photo %}
+                                <img src="{{ judge.photo.url }}" alt="{{ judge.full_name }}" class="card-img-top rounded-top">
+                            {% else %}
+                                <div class="player-placeholder d-flex align-items-center justify-content-center">
+                                    <span class="placeholder-initials">{{ judge.full_name|slice:":1" }}</span>
+                                </div>
+                            {% endif %}
+                            <div class="card-body">
+                                <h5 class="card-title">{{ judge.full_name }}</h5>
+                                <p class="card-text mb-0">Категория: {{ judge.category }}</p>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+
+            <!-- Пагинация Судей -->
+            {% if judges_page.has_other_pages %}
+            <nav class="mt-4">
+                <ul class="pagination justify-content-center">
+                    {% if judges_page.has_previous %}
+                        <li class="page-item">
+                            <a class="page-link" href="?tab=judges&judges_page={{ judges_page.previous_page_number }}">&laquo;</a>
+                        </li>
+                    {% else %}
+                        <li class="page-item disabled"><span class="page-link">&raquo;</span></li>
+                    {% endif %}
+                    {% for num in judges_page.paginator.page_range %}
+                        {% if num >= judges_page.number|add:"-2" and num <= judges_page.number|add:"2" %}
+                            {% if num == judges_page.number %}
+                                <li class="page-item active"><span class="page-link">{{ num }}</span></li>
+                            {% else %}
+                                <li class="page-item">
+                                    <a class="page-link" href="?tab=judges&judges_page={{ num }}">{{ num }}</a>
+                                </li>
+                            {% endif %}
+                        {% endif %}
+                    {% endfor %}
+                    {% if judges_page.has_next %}
+                        <li class="page-item">
+                            <a class="page-link" href="?tab=judges&judges_page={{ judges_page.next_page_number }}">&raquo;</a>
+                        </li>
+                    {% else %}
+                        <li class="page-item disabled"><span class="page-link">&raquo;</span></li>
+                    {% endif %}
+                </ul>
+            </nav>
+            {% endif %}
+        </div>
     </div>
-    <p id="no-results" class="text-muted text-center mt-4" style="display: none;">Игроки не найдены.</p>
-</section>
 </div>
+
+<!-- Стили -->
 <style>
-.search-wrapper {
-    position: relative;
-    display: flex;
-    align-items: center; /* Центрируем по вертикали */
-}
-
-#search-players {
-    width: 100%;
-    border-radius: 50px;
-    padding: 0.5rem 1rem 0.5rem 2.5rem;
-    height: 48px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-}
-
-/* Иконка поиска */
-.search-icon {
-    position: absolute;
-    left: 1rem;
-    color: var(--accent-color);
-    pointer-events: none;
-    font-size: 1.2rem;
-}
-
-/* Кнопка сброса */
-.clear-btn {
-    position: absolute;
-    right: 0.5rem;
-    border: none;
-    background-color: #dee2e6;
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
+.player-placeholder {
+    background: linear-gradient(135deg,#ff6b6b,#ff8e72,#ffb199,#ffe0e0);
+    color: #fff;
+    font-size: 2rem;
+    height: 180px;
     display: flex;
     align-items: center;
     justify-content: center;
-    opacity: 0;
-    cursor: pointer;
-    transition: opacity 0.3s ease;
-    z-index: 10;
+    border-radius: 0.5rem;
 }
-
-.clear-btn.show {
-    opacity: 1;
+.document-card {
+    background: #fff;
+    border-radius: 0.8rem;
+    transition: transform 0.3s, box-shadow 0.3s;
 }
-
-.clear-btn i {
-    pointer-events: none;
-    font-size: 1rem;
+.document-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 25px rgba(255,107,107,0.3);
 }
-
+.card-img-top {
+    height: 180px;
+    object-fit: cover;
+}
+.search-wrapper { position: relative; display: flex; align-items: center; }
+.search-wrapper input { width: 100%; border-radius: 50px; padding: 0.5rem 1rem 0.5rem 2.5rem; height: 48px; box-shadow: 0 4px 12px rgba(0,0,0,0.05);}
+.search-icon { position: absolute; left: 1rem; color: var(--accent-color); pointer-events: none; font-size: 1.2rem; }
+.clear-btn { position: absolute; right: 0.5rem; border: none; background-color: #dee2e6; width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; }
 </style>
-
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    const searchInput = document.getElementById('search-players');
-    const seasonSelect = document.getElementById('season-select');
-    const clearBtn = document.querySelector('.clear-btn');
-    const searchIcon = document.querySelector('.search-icon');
-    const playerCards = document.querySelectorAll('.player-card');
-    const noResults = document.getElementById('no-results');
-
-    function toggleIcons() {
-        if (searchInput.value.trim() || seasonSelect.value) {
-            clearBtn.classList.add('show');
-            searchIcon.style.display = 'none';
-        } else {
-            clearBtn.classList.remove('show');
-            searchIcon.style.display = 'block';
-        }
-    }
-
-    function filterPlayers() {
-        const query = searchInput.value.toLowerCase().trim();
-        const season = seasonSelect.value;
-        let visibleCount = 0;
-
-        playerCards.forEach(card => {
-            const matchesName = !query || card.dataset.name.includes(query);
-            const matchesSeason = !season || card.dataset.season === season;
-
-            if (matchesName && matchesSeason) {
-                card.style.display = 'block';
-                visibleCount++;
-            } else {
-                card.style.display = 'none';
-            }
-        });
-
-        noResults.style.display = visibleCount === 0 ? 'block' : 'none';
-    }
-
-    // Инициализация
-    toggleIcons();
-    filterPlayers();
-
-    // Обработчики
-    searchInput.addEventListener('input', function() {
-        toggleIcons();
-        filterPlayers();
-    });
-
-    seasonSelect.addEventListener('change', function() {
-        toggleIcons();
-        filterPlayers();
-    });
-
-    clearBtn.addEventListener('click', function() {
-        searchInput.value = '';
-        seasonSelect.value = '';
-        toggleIcons();
-        filterPlayers();
-        searchInput.focus();
-    });
-});
-</script>
-
 {% endblock %}
