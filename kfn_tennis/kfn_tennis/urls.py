@@ -14,6 +14,7 @@ urlpatterns = [
     path('teams/', include('teams.urls')),
     path('eventcalendar/', include('eventcalendar.urls')),
     path('media/', include('MediaPhoto.urls')),
+    path('qa/', include('qa.urls')),
 
 ]
 

@@ -47,6 +47,8 @@ INSTALLED_APPS = [
     'teams',
     'eventcalendar',
     'MediaPhoto',
+    'qa',
+    'dashboard',
     
 ]
 

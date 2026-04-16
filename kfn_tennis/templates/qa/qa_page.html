@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Вопрос-ответ</title>
+</head>
+<body>
+    <h1>Вопрос-ответ по сайту</h1>
+
+    <form method="get">
+        <input
+            type="text"
+            name="q"
+            value="{{ query }}"
+            placeholder="Введите вопрос"
+            style="width: 420px;"
+        >
+        <button type="submit">Найти</button>
+    </form>
+
+    {% if answer_data %}
+        <h2>Ответ</h2>
+        <p>{{ answer_data.text }}</p>
+
+        {% if answer_data.top_result %}
+            <p>
+                <a href="{{ answer_data.top_result.url }}">
+                    Перейти к материалу: {{ answer_data.top_result.title }}
+                </a>
+            </p>
+            <p>{{ answer_data.top_result.summary }}</p>
+        {% endif %}
+    {% endif %}
+
+    {% if results %}
+        <h3>Другие подходящие материалы</h3>
+        <ul>
+            {% for item in results %}
+                <li>
+                    <a href="{{ item.url }}">{{ item.title }}</a>
+                    — {{ item.get_source_type_display }}<br>
+                    <small>{{ item.summary }}</small>
+                </li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+</body>
+</html>
