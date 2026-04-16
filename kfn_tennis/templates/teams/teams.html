@@ -41,6 +41,11 @@
                             <option value="{{ season.id }}" {% if selected_season == season.id|stringformat:"s" %}selected{% endif %}>{{ season.year }}</option>
                         {% endfor %}
                     </select>
+                    <select name="gender" class="form-select mb-3" onchange="this.form.submit();">
+                        <option value="">Все</option>
+                        <option value="male" {% if selected_gender == 'male' %}selected{% endif %}>Мужской</option>
+                        <option value="female" {% if selected_gender == 'female' %}selected{% endif %}>Женский</option>
+                    </select>
                     <div class="search-wrapper position-relative">
                         <input type="text" name="search" class="form-control ps-5" placeholder="Поиск по имени игрока" value="{{ search_query }}">
                         <span class="search-icon"><i class="bi bi-search"></i></span>
@@ -64,6 +69,7 @@
                                 <h5 class="card-title">{{ member.full_name }}</h5>
                                 <p class="card-text mb-0">
                                     {% if member.birth_date %}Дата рождения: {{ member.birth_date|date:"d.m.Y" }}<br>{% endif %}
+                                    Пол: {{ member.get_gender_display|default:"-" }}<br>
                                     Разряд: {{ member.rank|default:"-" }}<br>
                                     Тренер: {{ member.coach|default:"-" }}<br>
                                     Рейтинг: {{ member.rating|default:"-" }}
@@ -82,7 +88,7 @@
                 <ul class="pagination justify-content-center">
                     {% if teams_page.has_previous %}
                         <li class="page-item">
-                            <a class="page-link" href="?tab=teams&teams_page={{ teams_page.previous_page_number }}{% if selected_season %}&season={{ selected_season }}{% endif %}{% if search_query %}&search={{ search_query }}{% endif %}">&laquo;</a>
+                            <a class="page-link" href="?tab=teams&teams_page={{ teams_page.previous_page_number }}{% if selected_season %}&season={{ selected_season }}{% endif %}{% if selected_gender %}&gender={{ selected_gender }}{% endif %}{% if search_query %}&search={{ search_query }}{% endif %}">&laquo;</a>
                         </li>
                     {% else %}
                         <li class="page-item disabled"><span class="page-link">&laquo;</span></li>
@@ -93,14 +99,14 @@
                                 <li class="page-item active"><span class="page-link">{{ num }}</span></li>
                             {% else %}
                                 <li class="page-item">
-                                    <a class="page-link" href="?tab=teams&teams_page={{ num }}{% if selected_season %}&season={{ selected_season }}{% endif %}{% if search_query %}&search={{ search_query }}{% endif %}">{{ num }}</a>
+                                    <a class="page-link" href="?tab=teams&teams_page={{ num }}{% if selected_season %}&season={{ selected_season }}{% endif %}{% if selected_gender %}&gender={{ selected_gender }}{% endif %}{% if search_query %}&search={{ search_query }}{% endif %}">{{ num }}</a>
                                 </li>
                             {% endif %}
                         {% endif %}
                     {% endfor %}
                     {% if teams_page.has_next %}
                         <li class="page-item">
-                            <a class="page-link" href="?tab=teams&teams_page={{ teams_page.next_page_number }}{% if selected_season %}&season={{ selected_season }}{% endif %}{% if search_query %}&search={{ search_query }}{% endif %}">&raquo;</a>
+                            <a class="page-link" href="?tab=teams&teams_page={{ teams_page.next_page_number }}{% if selected_season %}&season={{ selected_season }}{% endif %}{% if selected_gender %}&gender={{ selected_gender }}{% endif %}{% if search_query %}&search={{ search_query }}{% endif %}">&raquo;</a>
                         </li>
                     {% else %}
                         <li class="page-item disabled"><span class="page-link">&raquo;</span></li>

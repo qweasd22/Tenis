@@ -9,8 +9,8 @@ class SeasonAdmin(admin.ModelAdmin):
 
 @admin.register(TeamMember)
 class TeamMemberAdmin(admin.ModelAdmin):
-    list_display = ('full_name', 'birth_date', 'rank', 'coach', 'rating', 'season')
-    list_filter = ('season', 'rank')
+    list_display = ('full_name', 'gender', 'birth_date', 'rank', 'coach', 'rating', 'season')
+    list_filter = ('season', 'gender', 'rank')
     search_fields = ('full_name', 'coach')
     ordering = ('full_name',)
 

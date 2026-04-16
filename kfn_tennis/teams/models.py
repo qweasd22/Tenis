@@ -13,8 +13,16 @@ class Season(models.Model):
 
 
 class TeamMember(models.Model):
+    MALE = 'male'
+    FEMALE = 'female'
+    GENDER_CHOICES = [
+        (MALE, 'Мужской'),
+        (FEMALE, 'Женский'),
+    ]
+
     full_name = models.CharField(max_length=100, verbose_name='ФИО')
     birth_date = models.DateField(verbose_name='Дата рождения', blank=True, null=True)
+    gender = models.CharField(max_length=10, choices=GENDER_CHOICES, blank=True, null=True, verbose_name='Пол')
     rank = models.CharField(max_length=50, blank=True, verbose_name='Разряд')
     coach = models.CharField(max_length=100, blank=True, verbose_name='Тренер')
     rating = models.IntegerField(blank=True, null=True, verbose_name='Рейтинг')

@@ -87,6 +87,28 @@
         .navbar-nav .nav-link {
             margin-left: 1rem;
         }
+        .navbar-brand {
+            gap: 0.6rem;
+        }
+        .navbar-brand .brand-logo {
+            height: 54px;
+            width: auto;
+        }
+        .navbar-brand .brand-title {
+            color: #fff;
+            font-size: 0.74rem;
+            line-height: 1.15;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+        }
+        @media (max-width: 576px) {
+            .navbar-brand .brand-logo {
+                height: 46px;
+            }
+            .navbar-brand .brand-title {
+                font-size: 0.62rem;
+            }
+        }
 
         .section-title {
             border-bottom: 2px solid var(--accent-color);
@@ -144,8 +166,10 @@
     
     <!-- ЛОГО -->
     <a class="navbar-brand d-flex align-items-center" href="{% url 'core:home' %}">
-        <img src="{% static 'images/base/logo.png' %}" alt="Лого" height="40" class="me-2">
+        <img src="{% static 'images/base/logo-white.png' %}" alt="Лого" class="brand-logo">
+        <span class="brand-title">ФЕДЕРАЦИЯ<br>НАСТОЛЬНОГО ТЕНИСА</span>
     </a>
+    
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
         <span class="navbar-toggler-icon"></span>
