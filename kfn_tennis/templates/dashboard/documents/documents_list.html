@@ -1,0 +1,77 @@
+{% extends "dashboard/base.html" %}
+
+{% block title %}Документы{% endblock %}
+
+{% block content %}
+<div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
+    <div>
+        <h1 class="h3 mb-1">{{ page_title }}</h1>
+        <div class="text-muted">Управление документами</div>
+    </div>
+
+    <a href="{% url 'dashboard:document_create' %}" class="btn btn-accent">
+        <i class="bi bi-plus-lg me-1"></i>Добавить
+    </a>
+</div>
+
+<form method="get" class="row g-2 mb-4">
+    <div class="col-md-8">
+        <input type="text" name="q" value="{{ search_query }}" class="form-control" placeholder="Поиск по названию">
+    </div>
+    <div class="col-md-4 d-flex gap-2">
+        <button type="submit" class="btn btn-outline-secondary w-100">Найти</button>
+        <a href="{% url 'dashboard:document_list' %}" class="btn btn-outline-dark w-100">Сбросить</a>
+    </div>
+</form>
+
+{% if documents %}
+    <div class="table-responsive">
+        <table class="table align-middle">
+            <thead>
+                <tr>
+                    <th>Название</th>
+                    <th>Категория</th>
+                    <th>Файл</th>
+                    
+                    <th>Скачивания</th>
+                    <th>Порядок</th>
+                    <th style="width: 180px;">Действия</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for document in documents %}
+                    <tr>
+                        <td class="fw-semibold">{{ document.title }}</td>
+                        <td>{{ document.category.name }}</td>
+                        <td>
+                            {% if document.file %}
+                                <a href="{{ document.file.url }}" target="_blank">Открыть</a>
+                            {% else %}
+                                <span class="text-muted">—</span>
+                            {% endif %}
+                        </td>
+                        
+                        <td>{{ document.downloads }}</td>
+                        <td>{{ document.order }}</td>
+                        <td>
+                            <div class="d-flex gap-2">
+                                <a href="{% url 'dashboard:document_update' document.pk %}" class="btn btn-sm btn-outline-primary">
+                                    <i class="bi bi-pencil-square"></i>
+                                </a>
+                                <a href="{% url 'dashboard:document_delete' document.pk %}" class="btn btn-sm btn-outline-danger">
+                                    <i class="bi bi-trash"></i>
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% else %}
+    <div class="text-center py-5">
+        <div class="mb-3 text-muted">Документы ещё не добавлены.</div>
+        <a href="{% url 'dashboard:document_create' %}" class="btn btn-accent">Создать первый</a>
+    </div>
+{% endif %}
+{% endblock %}

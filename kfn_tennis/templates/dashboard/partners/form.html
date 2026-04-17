@@ -1,0 +1,52 @@
+{% extends "dashboard/base.html" %}
+
+{% block title %}{{ page_title }}{% endblock %}
+
+{% block content %}
+<h1 class="h3 mb-4">{{ page_title }}</h1>
+
+<form method="post" enctype="multipart/form-data" novalidate>
+    {% csrf_token %}
+
+    {% if form.non_field_errors %}
+        <div class="alert alert-danger">
+            {{ form.non_field_errors }}
+        </div>
+    {% endif %}
+
+    <div class="mb-3">
+        <label class="form-label" for="{{ form.name.id_for_label }}">Название</label>
+        {{ form.name }}
+        {% if form.name.errors %}
+            <div class="text-danger small mt-1">{{ form.name.errors }}</div>
+        {% endif %}
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label" for="{{ form.logo.id_for_label }}">Логотип</label>
+        {{ form.logo }}
+        {% if object and object.logo %}
+            <div class="mt-2">
+                <div class="small text-muted mb-1">Текущее изображение:</div>
+                <img src="{{ object.logo.url }}" alt="{{ object.name }}" class="preview-image">
+            </div>
+        {% endif %}
+        {% if form.logo.errors %}
+            <div class="text-danger small mt-1">{{ form.logo.errors }}</div>
+        {% endif %}
+    </div>
+
+    <div class="mb-4">
+        <label class="form-label" for="{{ form.url.id_for_label }}">Ссылка</label>
+        {{ form.url }}
+        {% if form.url.errors %}
+            <div class="text-danger small mt-1">{{ form.url.errors }}</div>
+        {% endif %}
+    </div>
+
+    <div class="d-flex gap-2">
+        <button type="submit" class="btn btn-accent">{{ submit_text }}</button>
+        <a href="{{ cancel_url }}" class="btn btn-outline-secondary">Отмена</a>
+    </div>
+</form>
+{% endblock %}

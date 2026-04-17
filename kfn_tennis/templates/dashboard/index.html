@@ -1,0 +1,21 @@
+{% extends "dashboard/base.html" %}
+
+{% block title %}Панель управления{% endblock %}
+
+{% block content %}
+<h1 class="h3 mb-3">Панель управления</h1>
+<p class="text-muted mb-4">Кастомная админка сайта федерации.</p>
+
+<div class="row g-3">
+    <div class="col-md-6">
+        <div class="border rounded-4 p-4 h-100">
+            <div class="d-flex align-items-center justify-content-between mb-3">
+                <div class="fw-semibold">Партнёры</div>
+                <i class="bi bi-people fs-4 text-danger"></i>
+            </div>
+            <p class="text-muted">Управление логотипами, названиями и ссылками партнёров.</p>
+            <a href="{% url 'dashboard:partner_list' %}" class="btn btn-accent">Открыть</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

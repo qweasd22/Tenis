@@ -1,0 +1,65 @@
+{% extends "dashboard/base.html" %}
+
+{% block title %}Категории документов{% endblock %}
+
+{% block content %}
+<div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
+    <div>
+        <h1 class="h3 mb-1">{{ page_title }}</h1>
+        <div class="text-muted">Управление категориями документов</div>
+    </div>
+
+    <a href="{% url 'dashboard:category_create' %}" class="btn btn-accent">
+        <i class="bi bi-plus-lg me-1"></i>Добавить
+    </a>
+</div>
+
+<form method="get" class="row g-2 mb-4">
+    <div class="col-md-8">
+        <input type="text" name="q" value="{{ search_query }}" class="form-control" placeholder="Поиск по названию">
+    </div>
+    <div class="col-md-4 d-flex gap-2">
+        <button type="submit" class="btn btn-outline-secondary w-100">Найти</button>
+        <a href="{% url 'dashboard:category_list' %}" class="btn btn-outline-dark w-100">Сбросить</a>
+    </div>
+</form>
+
+{% if categories %}
+    <div class="table-responsive">
+        <table class="table align-middle">
+            <thead>
+                <tr>
+                    <th>Название</th>
+                    <th>Slug</th>
+                    <th>Порядок</th>
+                    <th style="width: 180px;">Действия</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for category in categories %}
+                    <tr>
+                        <td class="fw-semibold">{{ category.name }}</td>
+                        <td>{{ category.slug }}</td>
+                        <td>{{ category.order }}</td>
+                        <td>
+                            <div class="d-flex gap-2">
+                                <a href="{% url 'dashboard:category_update' category.pk %}" class="btn btn-sm btn-outline-primary">
+                                    <i class="bi bi-pencil-square"></i>
+                                </a>
+                                <a href="{% url 'dashboard:category_delete' category.pk %}" class="btn btn-sm btn-outline-danger">
+                                    <i class="bi bi-trash"></i>
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% else %}
+    <div class="text-center py-5">
+        <div class="mb-3 text-muted">Категории ещё не добавлены.</div>
+        <a href="{% url 'dashboard:category_create' %}" class="btn btn-accent">Создать первую</a>
+    </div>
+{% endif %}
+{% endblock %}

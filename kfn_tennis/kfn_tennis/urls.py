@@ -4,7 +4,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    path('django-admin/', admin.site.urls),
     path('', include('core.urls')),  # подключаем core
     path('news/', include('news.urls')),
     path('structure/', include('structure.urls')),
@@ -15,6 +15,7 @@ urlpatterns = [
     path('eventcalendar/', include('eventcalendar.urls')),
     path('media/', include('MediaPhoto.urls')),
     path('qa/', include('qa.urls')),
+    path('admin/', include('dashboard.urls', namespace='dashboard')),
 
 ]
 

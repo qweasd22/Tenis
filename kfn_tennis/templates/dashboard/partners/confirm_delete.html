@@ -1,0 +1,25 @@
+{% extends "dashboard/base.html" %}
+
+{% block title %}{{ page_title }}{% endblock %}
+
+{% block content %}
+<h1 class="h3 mb-3">{{ page_title }}</h1>
+
+<div class="alert alert-warning">
+    Вы действительно хотите удалить партнёра <strong>{{ object.name }}</strong>?
+</div>
+
+{% if object.logo %}
+    <div class="mb-4">
+        <img src="{{ object.logo.url }}" alt="{{ object.name }}" class="preview-image">
+    </div>
+{% endif %}
+
+<form method="post">
+    {% csrf_token %}
+    <div class="d-flex gap-2">
+        <button type="submit" class="btn btn-danger">Удалить</button>
+        <a href="{{ cancel_url }}" class="btn btn-outline-secondary">Отмена</a>
+    </div>
+</form>
+{% endblock %}
