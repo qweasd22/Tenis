@@ -19,6 +19,10 @@
             --body-bg: #F8F9FA;
         }
 
+        html {
+            scrollbar-gutter: stable;
+        }
+
         body {
             background-color: var(--body-bg);
             color: var(--text-color);
@@ -27,6 +31,10 @@
 
         .dashboard-header {
             background-color: var(--main-bg);
+        }
+
+        .dashboard-header .navbar {
+            min-height: 86px;
         }
 
         .brand-title {
@@ -47,6 +55,43 @@
             border-radius: 1rem;
             box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
             border: none;
+        }
+
+        .dashboard-page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            min-height: 74px;
+        }
+
+        .dashboard-page-header-main {
+            min-width: 0;
+        }
+
+        .dashboard-page-title {
+            margin: 0;
+            line-height: 1.2;
+        }
+
+        .dashboard-page-subtitle {
+            color: #6c757d;
+            margin-top: 0.35rem;
+            line-height: 1.35;
+            min-height: 1.25rem;
+        }
+
+        .dashboard-page-subtitle:empty {
+            visibility: hidden;
+        }
+
+        .dashboard-page-actions {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-left: auto;
+            flex-shrink: 0;
         }
 
         .btn-accent {
@@ -88,6 +133,23 @@
             object-fit: contain;
             background: #fff;
             padding: 0.25rem;
+        }
+
+        @media (max-width: 767.98px) {
+            .dashboard-header .navbar {
+                min-height: 76px;
+            }
+
+            .dashboard-page-header {
+                flex-direction: column;
+                align-items: stretch;
+                min-height: 0;
+            }
+
+            .dashboard-page-actions {
+                margin-left: 0;
+                justify-content: flex-start;
+            }
         }
     </style>
 

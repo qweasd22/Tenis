@@ -3,7 +3,12 @@
 {% block title %}{{ page_title }}{% endblock %}
 
 {% block content %}
-<h1 class="h3 mb-4">{{ page_title }}</h1>
+<div class="dashboard-page-header">
+    <div class="dashboard-page-header-main">
+        <h1 class="h3 dashboard-page-title">{{ page_title }}</h1>
+        <div class="dashboard-page-subtitle">Создание и редактирование календарного события</div>
+    </div>
+</div>
 
 <form method="post" enctype="multipart/form-data" novalidate>
     {% csrf_token %}

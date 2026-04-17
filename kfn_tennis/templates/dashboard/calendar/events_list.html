@@ -3,15 +3,17 @@
 {% block title %}Календарь{% endblock %}
 
 {% block content %}
-<div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
-    <div>
-        <h1 class="h3 mb-1">{{ page_title }}</h1>
-        <div class="text-muted">Управление событиями календаря</div>
+<div class="dashboard-page-header">
+    <div class="dashboard-page-header-main">
+        <h1 class="h3 dashboard-page-title">{{ page_title }}</h1>
+        <div class="dashboard-page-subtitle">Управление событиями календаря</div>
     </div>
 
-    <a href="{% url 'dashboard:event_create' %}" class="btn btn-accent">
-        <i class="bi bi-plus-lg me-1"></i>Добавить
-    </a>
+    <div class="dashboard-page-actions">
+        <a href="{% url 'dashboard:event_create' %}" class="btn btn-accent">
+            <i class="bi bi-plus-lg me-1"></i>Добавить
+        </a>
+    </div>
 </div>
 
 <form method="get" class="row g-2 mb-4">

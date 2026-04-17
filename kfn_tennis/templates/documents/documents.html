@@ -16,7 +16,7 @@
     <!-- Header / Hero категории -->
     <div class="documents-header mb-5 text-center">
         {% if category %}
-            <h1 class="fw-bold">{{ category.name }}</h1>
+            <h1 class="fw-bold ">{{ category.name }}</h1>
             <p class="text-muted mt-2">Официальные документы Курской федерации настольного тенниса</p>
             <a href="{% url 'documents:categories' %}" class="btn btn-outline-accent mt-3 px-4 py-2">← Все категории</a>
         {% else %}

@@ -185,8 +185,8 @@ body.project-page {
 
 /* Заголовок и категория */
 .project-header h1 {
+    color: #343A40;
     font-weight: 700;
-    margin-bottom: 0.5rem;
 }
 
 .category-badge {

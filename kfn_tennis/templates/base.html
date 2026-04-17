@@ -24,14 +24,22 @@
             --font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
+        html {
+            scrollbar-gutter: stable;
+        }
+
         body {
             background-color: var(--body-bg);
             color: var(--text-color);
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
-        header {
+        .site-header {
             background-color: var(--main-bg);
+        }
+
+        .site-header .navbar {
+            min-height: 86px;
         }
 
         /* Футер */
@@ -84,17 +92,19 @@
             box-shadow: 0 10px 20px rgba(0,0,0,0.1);
         }
 
-        .navbar-nav .nav-link {
+        .site-header .navbar-nav .nav-link {
             margin-left: 1rem;
+            white-space: nowrap;
+            line-height: 1.2;
         }
-        .navbar-brand {
+        .site-header .navbar-brand {
             gap: 0.6rem;
         }
-        .navbar-brand .brand-logo {
+        .site-header .navbar-brand .brand-logo {
             height: 54px;
             width: auto;
         }
-        .navbar-brand .brand-title {
+        .site-header .navbar-brand .brand-title {
             color: #fff;
             font-size: 0.74rem;
             line-height: 1.15;
@@ -102,10 +112,14 @@
             letter-spacing: 0.05em;
         }
         @media (max-width: 576px) {
-            .navbar-brand .brand-logo {
+            .site-header .navbar {
+                min-height: 76px;
+            }
+
+            .site-header .navbar-brand .brand-logo {
                 height: 46px;
             }
-            .navbar-brand .brand-title {
+            .site-header .navbar-brand .brand-title {
                 font-size: 0.62rem;
             }
         }
@@ -140,7 +154,7 @@
 .card-section p {
     color: #495057;
 }
-.navbar-nav .nav-link:first-child {
+.site-header .navbar-nav .nav-link:first-child {
     color: #ffffff;
     font-weight: 500;
 }
@@ -283,7 +297,7 @@
 <body class="d-flex flex-column min-vh-100">
 
     <!-- Header / Навигация -->
-    <header>
+    <header class="site-header">
         <nav class="navbar navbar-expand-lg navbar-dark container py-3">
     
     <!-- ЛОГО -->

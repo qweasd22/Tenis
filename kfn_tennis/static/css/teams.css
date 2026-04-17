@@ -11,6 +11,14 @@ body.teams-page {
     border-radius: 1rem;
     text-align: center;
 }
+.teams-hero h1 {
+    color: #343A40;
+    font-weight: 700;
+}
+.teams-hero p {
+        color: #6c757d;
+        font-size: 1.1rem;
+}
 
 /* Вкладки */
 .nav-tabs .nav-link {

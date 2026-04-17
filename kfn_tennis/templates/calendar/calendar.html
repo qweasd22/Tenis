@@ -10,26 +10,22 @@
         color: var(--text-color);
     }
 
-    .calendar-hero {
-        background: linear-gradient(135deg, rgba(228, 13, 13, 0.08), rgba(228, 13, 13, 0.03));
+    .projects-header {
+        background: linear-gradient(135deg, rgba(255,107,107,0.15), rgba(255,142,114,0.1));
+        padding: 3rem 1rem;
         border-radius: 1rem;
-        padding: 2.5rem 1.5rem;
         text-align: center;
-        margin-bottom: 2rem;
-        border: 1px solid rgba(228, 13, 13, 0.08);
+        margin-bottom: 3rem;
     }
 
-    .calendar-hero h1 {
-        font-size: 2rem;
+    .projects-header h1 {
+        color: #343A40;
         font-weight: 700;
-        margin-bottom: 0.75rem;
-        color: var(--text-color);
     }
 
-    .calendar-hero p {
-        margin-bottom: 0;
+    .projects-header p {
         color: #6c757d;
-        font-size: 1.05rem;
+        font-size: 1.1rem;
     }
 
     .calendar-layout-card {
@@ -285,14 +281,6 @@
             padding: 1rem;
         }
 
-        .calendar-hero {
-            padding: 2rem 1rem;
-        }
-
-        .calendar-hero h1 {
-            font-size: 1.65rem;
-        }
-
         .event-card-head {
             flex-direction: column;
             align-items: flex-start;
@@ -313,6 +301,10 @@
             flex: 1;
         }
 
+        .projects-header h1 {
+            font-size: 1.5rem;
+        }
+
         .calendar-chip-title {
             font-size: 0.72rem;
         }
@@ -321,10 +313,10 @@
 {% endblock %}
 
 {% block content %}
-<div class="container calendar-page my-3">
-    <section class="calendar-hero">
-        <h1>Календарь событий</h1>
-        <p>Следите за турнирами, соревнованиями и другими мероприятиями федерации</p>
+<div class="container calendar-page my-1">
+    <section class="projects-header">
+        <h1 class="fw-bold">Календарь событий</h1>
+        <p class="text-muted mt-2">Следите за турнирами, соревнованиями и другими мероприятиями федерации</p>
     </section>
 
     <div class="calendar-layout-card">
