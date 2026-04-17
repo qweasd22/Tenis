@@ -9,7 +9,7 @@ from documents.models import Category, Document
 from core.models import Partner
 from .forms import PartnerForm, CategoryForm, DocumentForm
 from .mixins import SuperuserRequiredMixin
-
+from django.utils import timezone
 
 class DashboardLoginView(FormView):
     template_name = "dashboard/login.html"
@@ -50,6 +50,42 @@ def dashboard_logout_view(request):
 
 class DashboardHomeView(SuperuserRequiredMixin, TemplateView):
     template_name = "dashboard/index.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        today = timezone.localdate()
+
+        context["news_total"] = News.objects.count()
+        context["news_published"] = News.objects.filter(published=True).count()
+        context["news_drafts"] = News.objects.filter(published=False).count()
+
+        context["documents_total"] = Document.objects.count()
+        context["document_categories_total"] = Category.objects.count()
+
+        context["projects_total"] = Project.objects.count()
+        context["projects_active"] = Project.objects.filter(is_active=True).count()
+
+        context["events_total"] = Event.objects.count()
+        context["events_current"] = Event.objects.filter(is_current=True).count()
+
+        context["media_events_total"] = MediaEvent.objects.count()
+        context["media_photos_total"] = MediaPhoto.objects.count()
+
+        context["persons_total"] = Person.objects.count()
+        context["persons_active"] = Person.objects.filter(is_active=True).count()
+
+        context["partners_total"] = Partner.objects.count()
+
+        context["seasons_total"] = Season.objects.count()
+        context["team_members_total"] = TeamMember.objects.count()
+        context["coaches_total"] = Coach.objects.count()
+        context["judges_total"] = Judge.objects.count()
+
+        context["recent_news"] = News.objects.order_by("-created_at")[:5]
+        context["recent_projects"] = Project.objects.order_by("-updated_at")[:5]
+        context["upcoming_events"] = Event.objects.filter(start_date__gte=today).order_by("start_date")[:5]
+
+        return context
 
 
 class PartnerListView(SuperuserRequiredMixin, ListView):
@@ -695,4 +731,387 @@ class DashboardProjectDeleteView(SuperuserRequiredMixin, DeleteView):
         context = super().get_context_data(**kwargs)
         context["page_title"] = f"Удаление: {self.object.title}"
         context["cancel_url"] = reverse_lazy("dashboard:project_list")
+        return context
+
+from structure.models import Person
+from .forms import PersonForm
+
+class PersonListView(SuperuserRequiredMixin, ListView):
+    model = Person
+    template_name = "dashboard/structure/persons_list.html"
+    context_object_name = "persons"
+    paginate_by = 10
+
+    def get_queryset(self):
+        queryset = Person.objects.all().order_by("group", "full_name")
+        search = self.request.GET.get("q", "").strip()
+        if search:
+            queryset = queryset.filter(
+                Q(full_name__icontains=search) |
+                Q(role__icontains=search)
+            ).distinct()
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["page_title"] = "Структура федерации"
+        context["search_query"] = self.request.GET.get("q", "").strip()
+        return context
+
+
+class PersonCreateView(SuperuserRequiredMixin, CreateView):
+    model = Person
+    form_class = PersonForm
+    template_name = "dashboard/structure/person_form.html"
+    success_url = reverse_lazy("dashboard:person_list")
+
+    def form_valid(self, form):
+        messages.success(self.request, "Запись успешно создана.")
+        return super().form_valid(form)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["page_title"] = "Добавить участника структуры"
+        context["submit_text"] = "Создать"
+        context["cancel_url"] = reverse_lazy("dashboard:person_list")
+        return context
+
+
+class PersonUpdateView(SuperuserRequiredMixin, UpdateView):
+    model = Person
+    form_class = PersonForm
+    template_name = "dashboard/structure/person_form.html"
+    success_url = reverse_lazy("dashboard:person_list")
+
+    def form_valid(self, form):
+        messages.success(self.request, "Запись успешно обновлена.")
+        return super().form_valid(form)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["page_title"] = f"Редактирование: {self.object.full_name}"
+        context["submit_text"] = "Сохранить"
+        context["cancel_url"] = reverse_lazy("dashboard:person_list")
+        return context
+
+
+class PersonDeleteView(SuperuserRequiredMixin, DeleteView):
+    model = Person
+    template_name = "dashboard/structure/person_confirm_delete.html"
+    success_url = reverse_lazy("dashboard:person_list")
+
+    def form_valid(self, form):
+        messages.success(self.request, "Запись успешно удалена.")
+        return super().form_valid(form)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["page_title"] = f"Удаление: {self.object.full_name}"
+        context["cancel_url"] = reverse_lazy("dashboard:person_list")
+        return context
+
+from teams.models import Season, TeamMember, Coach, Judge
+from .forms import SeasonForm, TeamMemberForm, CoachForm, JudgeForm
+
+class SeasonListView(SuperuserRequiredMixin, ListView):
+    model = Season
+    template_name = "dashboard/teams/seasons_list.html"
+    context_object_name = "seasons"
+    paginate_by = 10
+
+    def get_queryset(self):
+        return Season.objects.all().order_by("-year")
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["page_title"] = "Сезоны"
+        return context
+
+
+class SeasonCreateView(SuperuserRequiredMixin, CreateView):
+    model = Season
+    form_class = SeasonForm
+    template_name = "dashboard/teams/season_form.html"
+    success_url = reverse_lazy("dashboard:season_list")
+
+    def form_valid(self, form):
+        messages.success(self.request, "Сезон успешно создан.")
+        return super().form_valid(form)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["page_title"] = "Добавить сезон"
+        context["submit_text"] = "Создать"
+        context["cancel_url"] = reverse_lazy("dashboard:season_list")
+        return context
+
+
+class SeasonUpdateView(SuperuserRequiredMixin, UpdateView):
+    model = Season
+    form_class = SeasonForm
+    template_name = "dashboard/teams/season_form.html"
+    success_url = reverse_lazy("dashboard:season_list")
+
+    def form_valid(self, form):
+        messages.success(self.request, "Сезон успешно обновлён.")
+        return super().form_valid(form)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["page_title"] = f"Редактирование сезона: {self.object.year}"
+        context["submit_text"] = "Сохранить"
+        context["cancel_url"] = reverse_lazy("dashboard:season_list")
+        return context
+
+
+class SeasonDeleteView(SuperuserRequiredMixin, DeleteView):
+    model = Season
+    template_name = "dashboard/teams/season_confirm_delete.html"
+    success_url = reverse_lazy("dashboard:season_list")
+
+    def form_valid(self, form):
+        messages.success(self.request, "Сезон успешно удалён.")
+        return super().form_valid(form)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["page_title"] = f"Удаление сезона: {self.object.year}"
+        context["cancel_url"] = reverse_lazy("dashboard:season_list")
+        return context
+
+class TeamMemberListView(SuperuserRequiredMixin, ListView):
+    model = TeamMember
+    template_name = "dashboard/teams/members_list.html"
+    context_object_name = "members"
+    paginate_by = 12
+
+    def get_queryset(self):
+        queryset = TeamMember.objects.select_related("season").all().order_by("-season__year", "full_name")
+
+        search = self.request.GET.get("q", "").strip()
+        season_id = self.request.GET.get("season", "").strip()
+        gender = self.request.GET.get("gender", "").strip()
+
+        if search:
+            queryset = queryset.filter(
+                Q(full_name__icontains=search) |
+                Q(coach__icontains=search) |
+                Q(rank__icontains=search)
+            ).distinct()
+
+        if season_id:
+            queryset = queryset.filter(season_id=season_id)
+
+        if gender in {TeamMember.MALE, TeamMember.FEMALE}:
+            queryset = queryset.filter(gender=gender)
+
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["page_title"] = "Сборные игроки"
+        context["search_query"] = self.request.GET.get("q", "").strip()
+        context["selected_season"] = self.request.GET.get("season", "").strip()
+        context["selected_gender"] = self.request.GET.get("gender", "").strip()
+        context["seasons"] = Season.objects.all().order_by("-year")
+        return context
+
+
+class TeamMemberCreateView(SuperuserRequiredMixin, CreateView):
+    model = TeamMember
+    form_class = TeamMemberForm
+    template_name = "dashboard/teams/member_form.html"
+    success_url = reverse_lazy("dashboard:team_member_list")
+
+    def form_valid(self, form):
+        messages.success(self.request, "Игрок успешно создан.")
+        return super().form_valid(form)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["page_title"] = "Добавить игрока сборной"
+        context["submit_text"] = "Создать"
+        context["cancel_url"] = reverse_lazy("dashboard:team_member_list")
+        return context
+
+
+class TeamMemberUpdateView(SuperuserRequiredMixin, UpdateView):
+    model = TeamMember
+    form_class = TeamMemberForm
+    template_name = "dashboard/teams/member_form.html"
+    success_url = reverse_lazy("dashboard:team_member_list")
+
+    def form_valid(self, form):
+        messages.success(self.request, "Игрок успешно обновлён.")
+        return super().form_valid(form)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["page_title"] = f"Редактирование: {self.object.full_name}"
+        context["submit_text"] = "Сохранить"
+        context["cancel_url"] = reverse_lazy("dashboard:team_member_list")
+        return context
+
+
+class TeamMemberDeleteView(SuperuserRequiredMixin, DeleteView):
+    model = TeamMember
+    template_name = "dashboard/teams/member_confirm_delete.html"
+    success_url = reverse_lazy("dashboard:team_member_list")
+
+    def form_valid(self, form):
+        messages.success(self.request, "Игрок успешно удалён.")
+        return super().form_valid(form)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["page_title"] = f"Удаление: {self.object.full_name}"
+        context["cancel_url"] = reverse_lazy("dashboard:team_member_list")
+        return context
+
+class CoachListView(SuperuserRequiredMixin, ListView):
+    model = Coach
+    template_name = "dashboard/teams/coaches_list.html"
+    context_object_name = "coaches"
+    paginate_by = 12
+
+    def get_queryset(self):
+        queryset = Coach.objects.all().order_by("full_name")
+        search = self.request.GET.get("q", "").strip()
+        if search:
+            queryset = queryset.filter(
+                Q(full_name__icontains=search) |
+                Q(category__icontains=search)
+            ).distinct()
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["page_title"] = "Тренеры"
+        context["search_query"] = self.request.GET.get("q", "").strip()
+        return context
+
+
+class CoachCreateView(SuperuserRequiredMixin, CreateView):
+    model = Coach
+    form_class = CoachForm
+    template_name = "dashboard/teams/coach_form.html"
+    success_url = reverse_lazy("dashboard:coach_list")
+
+    def form_valid(self, form):
+        messages.success(self.request, "Тренер успешно создан.")
+        return super().form_valid(form)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["page_title"] = "Добавить тренера"
+        context["submit_text"] = "Создать"
+        context["cancel_url"] = reverse_lazy("dashboard:coach_list")
+        return context
+
+
+class CoachUpdateView(SuperuserRequiredMixin, UpdateView):
+    model = Coach
+    form_class = CoachForm
+    template_name = "dashboard/teams/coach_form.html"
+    success_url = reverse_lazy("dashboard:coach_list")
+
+    def form_valid(self, form):
+        messages.success(self.request, "Тренер успешно обновлён.")
+        return super().form_valid(form)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["page_title"] = f"Редактирование: {self.object.full_name}"
+        context["submit_text"] = "Сохранить"
+        context["cancel_url"] = reverse_lazy("dashboard:coach_list")
+        return context
+
+
+class CoachDeleteView(SuperuserRequiredMixin, DeleteView):
+    model = Coach
+    template_name = "dashboard/teams/coach_confirm_delete.html"
+    success_url = reverse_lazy("dashboard:coach_list")
+
+    def form_valid(self, form):
+        messages.success(self.request, "Тренер успешно удалён.")
+        return super().form_valid(form)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["page_title"] = f"Удаление: {self.object.full_name}"
+        context["cancel_url"] = reverse_lazy("dashboard:coach_list")
+        return context
+
+class JudgeListView(SuperuserRequiredMixin, ListView):
+    model = Judge
+    template_name = "dashboard/teams/judges_list.html"
+    context_object_name = "judges"
+    paginate_by = 12
+
+    def get_queryset(self):
+        queryset = Judge.objects.all().order_by("full_name")
+        search = self.request.GET.get("q", "").strip()
+        if search:
+            queryset = queryset.filter(
+                Q(full_name__icontains=search) |
+                Q(category__icontains=search)
+            ).distinct()
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["page_title"] = "Судьи"
+        context["search_query"] = self.request.GET.get("q", "").strip()
+        return context
+
+
+class JudgeCreateView(SuperuserRequiredMixin, CreateView):
+    model = Judge
+    form_class = JudgeForm
+    template_name = "dashboard/teams/judge_form.html"
+    success_url = reverse_lazy("dashboard:judge_list")
+
+    def form_valid(self, form):
+        messages.success(self.request, "Судья успешно создан.")
+        return super().form_valid(form)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["page_title"] = "Добавить судью"
+        context["submit_text"] = "Создать"
+        context["cancel_url"] = reverse_lazy("dashboard:judge_list")
+        return context
+
+
+class JudgeUpdateView(SuperuserRequiredMixin, UpdateView):
+    model = Judge
+    form_class = JudgeForm
+    template_name = "dashboard/teams/judge_form.html"
+    success_url = reverse_lazy("dashboard:judge_list")
+
+    def form_valid(self, form):
+        messages.success(self.request, "Судья успешно обновлён.")
+        return super().form_valid(form)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["page_title"] = f"Редактирование: {self.object.full_name}"
+        context["submit_text"] = "Сохранить"
+        context["cancel_url"] = reverse_lazy("dashboard:judge_list")
+        return context
+
+
+class JudgeDeleteView(SuperuserRequiredMixin, DeleteView):
+    model = Judge
+    template_name = "dashboard/teams/judge_confirm_delete.html"
+    success_url = reverse_lazy("dashboard:judge_list")
+
+    def form_valid(self, form):
+        messages.success(self.request, "Судья успешно удалён.")
+        return super().form_valid(form)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["page_title"] = f"Удаление: {self.object.full_name}"
+        context["cancel_url"] = reverse_lazy("dashboard:judge_list")
         return context

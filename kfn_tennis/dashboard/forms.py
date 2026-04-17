@@ -180,3 +180,88 @@ class ProjectForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         self.fields["main_image"].widget.attrs.update({"class": "form-control"})
         self.fields["attachment"].widget.attrs.update({"class": "form-control"})
+
+from structure.models import Person
+class PersonForm(forms.ModelForm):
+    class Meta:
+        model = Person
+        fields = ["full_name", "role", "photo", "is_active", "group"]
+        widgets = {
+            "full_name": forms.TextInput(attrs={"class": "form-control"}),
+            "role": forms.TextInput(attrs={"class": "form-control"}),
+            "group": forms.Select(attrs={"class": "form-select"}),
+            "is_active": forms.CheckboxInput(attrs={"class": "form-check-input"}),
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["photo"].widget.attrs.update({"class": "form-control"})
+
+from teams.models import Season, TeamMember, Coach, Judge
+class SeasonForm(forms.ModelForm):
+    class Meta:
+        model = Season
+        fields = ["year", "team_list_pdf"]
+        widgets = {
+            "year": forms.NumberInput(attrs={"class": "form-control"}),
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["team_list_pdf"].widget.attrs.update({"class": "form-control"})
+
+
+class TeamMemberForm(forms.ModelForm):
+    class Meta:
+        model = TeamMember
+        fields = [
+            "full_name",
+            "birth_date",
+            "gender",
+            "rank",
+            "coach",
+            "rating",
+            "photo",
+            "season",
+        ]
+        widgets = {
+            "full_name": forms.TextInput(attrs={"class": "form-control"}),
+            "birth_date": forms.DateInput(attrs={"class": "form-control", "type": "date"}),
+            "gender": forms.Select(attrs={"class": "form-select"}),
+            "rank": forms.TextInput(attrs={"class": "form-control"}),
+            "coach": forms.TextInput(attrs={"class": "form-control"}),
+            "rating": forms.NumberInput(attrs={"class": "form-control"}),
+            "season": forms.Select(attrs={"class": "form-select"}),
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["photo"].widget.attrs.update({"class": "form-control"})
+
+
+class CoachForm(forms.ModelForm):
+    class Meta:
+        model = Coach
+        fields = ["full_name", "category", "photo"]
+        widgets = {
+            "full_name": forms.TextInput(attrs={"class": "form-control"}),
+            "category": forms.TextInput(attrs={"class": "form-control"}),
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["photo"].widget.attrs.update({"class": "form-control"})
+
+
+class JudgeForm(forms.ModelForm):
+    class Meta:
+        model = Judge
+        fields = ["full_name", "category", "photo"]
+        widgets = {
+            "full_name": forms.TextInput(attrs={"class": "form-control"}),
+            "category": forms.TextInput(attrs={"class": "form-control"}),
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["photo"].widget.attrs.update({"class": "form-control"})

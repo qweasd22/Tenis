@@ -190,30 +190,48 @@
                         <i class="bi bi-house-door me-2"></i>Главная
                     </a>
 
-                    <a href="{% url 'dashboard:partner_list' %}" class="dashboard-sidebar-link {% if 'partner' in request.resolver_match.url_name %}active{% endif %}">
+                    <a href="{% url 'dashboard:partner_list' %}" class="dashboard-sidebar-link {% if request.resolver_match.url_name == 'partner_list' or request.resolver_match.url_name == 'partner_create' or request.resolver_match.url_name == 'partner_update' or request.resolver_match.url_name == 'partner_delete' %}active{% endif %}">
                         <i class="bi bi-people me-2"></i>Партнёры
                     </a>
-                    <a href="{% url 'dashboard:category_list' %}" class="dashboard-sidebar-link {% if 'category' in request.resolver_match.url_name %}active{% endif %}">
+                    <a href="{% url 'dashboard:category_list' %}" class="dashboard-sidebar-link {% if request.resolver_match.url_name == 'category_list' or request.resolver_match.url_name == 'category_create' or request.resolver_match.url_name == 'category_update' or request.resolver_match.url_name == 'category_delete' %}active{% endif %}">
                         <i class="bi bi-folder me-2"></i>Категории документов
                     </a>
-                    <a href="{% url 'dashboard:document_list' %}" class="dashboard-sidebar-link {% if 'document' in request.resolver_match.url_name %}active{% endif %}">
+                    <a href="{% url 'dashboard:document_list' %}" class="dashboard-sidebar-link {% if request.resolver_match.url_name == 'document_list' or request.resolver_match.url_name == 'document_create' or request.resolver_match.url_name == 'document_update' or request.resolver_match.url_name == 'document_delete' %}active{% endif %}">
                         <i class="bi bi-file-earmark-text me-2"></i>Документы
                     </a>
-                    <a href="{% url 'dashboard:event_list' %}" class="dashboard-sidebar-link {% if 'event_' in request.resolver_match.url_name %}active{% endif %}">
+                    <a href="{% url 'dashboard:event_list' %}" class="dashboard-sidebar-link {% if request.resolver_match.url_name == 'event_list' or request.resolver_match.url_name == 'event_create' or request.resolver_match.url_name == 'event_update' or request.resolver_match.url_name == 'event_delete' %}active{% endif %}">
                         <i class="bi bi-calendar-event me-2"></i>Календарь
                     </a>
-                    <a href="{% url 'dashboard:media_event_list' %}" class="dashboard-sidebar-link {% if 'media_' in request.resolver_match.url_name %}active{% endif %}">
+                    <a href="{% url 'dashboard:media_event_list' %}" class="dashboard-sidebar-link {% if request.resolver_match.url_name == 'media_event_list' or request.resolver_match.url_name == 'media_event_create' or request.resolver_match.url_name == 'media_event_update' or request.resolver_match.url_name == 'media_event_delete' or request.resolver_match.url_name == 'media_event_photos' or request.resolver_match.url_name == 'media_photo_upload' or request.resolver_match.url_name == 'media_photo_delete' %}active{% endif %}">
                         <i class="bi bi-images me-2"></i>Медиа
                     </a>
-                    <a href="{% url 'dashboard:news_list' %}" class="dashboard-sidebar-link {% if 'news_' in request.resolver_match.url_name or request.resolver_match.url_name == 'news_list' %}active{% endif %}">
+                    <a href="{% url 'dashboard:news_list' %}" class="dashboard-sidebar-link {% if request.resolver_match.url_name == 'news_list' or request.resolver_match.url_name == 'news_create' or request.resolver_match.url_name == 'news_update' or request.resolver_match.url_name == 'news_delete' %}active{% endif %}">
                         <i class="bi bi-newspaper me-2"></i>Новости
                     </a>
-                    <a href="{% url 'dashboard:project_category_list' %}" class="dashboard-sidebar-link {% if 'project_category' in request.resolver_match.url_name %}active{% endif %}">
+                    <a href="{% url 'dashboard:project_category_list' %}" class="dashboard-sidebar-link {% if request.resolver_match.url_name == 'project_category_list' or request.resolver_match.url_name == 'project_category_create' or request.resolver_match.url_name == 'project_category_update' or request.resolver_match.url_name == 'project_category_delete' %}active{% endif %}">
                         <i class="bi bi-diagram-3 me-2"></i>Категории проектов
                     </a>
 
                     <a href="{% url 'dashboard:project_list' %}" class="dashboard-sidebar-link {% if request.resolver_match.url_name == 'project_list' or request.resolver_match.url_name == 'project_create' or request.resolver_match.url_name == 'project_update' or request.resolver_match.url_name == 'project_delete' %}active{% endif %}">
                         <i class="bi bi-kanban me-2"></i>Проекты
+                    </a>
+                    <a href="{% url 'dashboard:person_list' %}" class="dashboard-sidebar-link {% if 'person_' in request.resolver_match.url_name or request.resolver_match.url_name == 'person_list' %}active{% endif %}">
+                        <i class="bi bi-person-badge me-2"></i>Структура
+                    </a>
+                    <a href="{% url 'dashboard:season_list' %}" class="dashboard-sidebar-link {% if 'season_' in request.resolver_match.url_name %}active{% endif %}">
+                        <i class="bi bi-calendar-range me-2"></i>Сезоны
+                    </a>
+
+                    <a href="{% url 'dashboard:team_member_list' %}" class="dashboard-sidebar-link {% if 'team_member' in request.resolver_match.url_name %}active{% endif %}">
+                        <i class="bi bi-people me-2"></i>Сборные игроки
+                    </a>
+
+                    <a href="{% url 'dashboard:coach_list' %}" class="dashboard-sidebar-link {% if 'coach_' in request.resolver_match.url_name %}active{% endif %}">
+                        <i class="bi bi-person-workspace me-2"></i>Тренеры
+                    </a>
+
+                    <a href="{% url 'dashboard:judge_list' %}" class="dashboard-sidebar-link {% if 'judge_' in request.resolver_match.url_name %}active{% endif %}">
+                        <i class="bi bi-person-check me-2"></i>Судьи
                     </a>
                 </div>
             </div>

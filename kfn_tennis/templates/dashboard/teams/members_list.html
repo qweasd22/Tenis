@@ -1,0 +1,95 @@
+{% extends "dashboard/base.html" %}
+
+{% block title %}Сборные игроки{% endblock %}
+
+{% block content %}
+<div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
+    <div>
+        <h1 class="h3 mb-1">{{ page_title }}</h1>
+        <div class="text-muted">Управление игроками сборной</div>
+    </div>
+
+    <a href="{% url 'dashboard:team_member_create' %}" class="btn btn-accent">
+        <i class="bi bi-plus-lg me-1"></i>Добавить
+    </a>
+</div>
+
+<form method="get" class="row g-2 mb-4">
+    <div class="col-md-5">
+        <input type="text" name="q" value="{{ search_query }}" class="form-control" placeholder="Поиск по ФИО, тренеру или разряду">
+    </div>
+    <div class="col-md-3">
+        <select name="season" class="form-select">
+            <option value="">Все сезоны</option>
+            {% for season in seasons %}
+                <option value="{{ season.pk }}" {% if selected_season == season.pk|stringformat:"s" %}selected{% endif %}>
+                    {{ season.year }}
+                </option>
+            {% endfor %}
+        </select>
+    </div>
+    <div class="col-md-2">
+        <select name="gender" class="form-select">
+            <option value="">Любой пол</option>
+            <option value="male" {% if selected_gender == "male" %}selected{% endif %}>Мужской</option>
+            <option value="female" {% if selected_gender == "female" %}selected{% endif %}>Женский</option>
+        </select>
+    </div>
+    <div class="col-md-2 d-flex gap-2">
+        <button type="submit" class="btn btn-outline-secondary w-100">Найти</button>
+    </div>
+</form>
+
+{% if members %}
+    <div class="table-responsive">
+        <table class="table align-middle">
+            <thead>
+                <tr>
+                    <th style="width: 90px;">Фото</th>
+                    <th>ФИО</th>
+                    <th>Сезон</th>
+                    <th>Пол</th>
+                    <th>Разряд</th>
+                    <th>Тренер</th>
+                    <th>Рейтинг</th>
+                    <th style="width: 180px;">Действия</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for member in members %}
+                    <tr>
+                        <td>
+                            {% if member.photo %}
+                                <img src="{{ member.photo.url }}" alt="{{ member.full_name }}" class="preview-image">
+                            {% else %}
+                                <span class="text-muted">Нет</span>
+                            {% endif %}
+                        </td>
+                        <td class="fw-semibold">{{ member.full_name }}</td>
+                        <td>{{ member.season.year }}</td>
+                        <td>{{ member.get_gender_display|default:"—" }}</td>
+                        <td>{{ member.rank|default:"—" }}</td>
+                        <td>{{ member.coach|default:"—" }}</td>
+                        <td>{{ member.rating|default:"—" }}</td>
+                        <td>
+                            <div class="d-flex gap-2">
+                                <a href="{% url 'dashboard:team_member_update' member.pk %}" class="btn btn-sm btn-outline-primary">
+                                    <i class="bi bi-pencil-square"></i>
+                                </a>
+                                <a href="{% url 'dashboard:team_member_delete' member.pk %}" class="btn btn-sm btn-outline-danger">
+                                    <i class="bi bi-trash"></i>
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% else %}
+    <div class="text-center py-5">
+        <div class="mb-3 text-muted">Игроки ещё не добавлены.</div>
+        <a href="{% url 'dashboard:team_member_create' %}" class="btn btn-accent">Создать первого</a>
+    </div>
+{% endif %}
+{% endblock %}

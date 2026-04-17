@@ -1,0 +1,71 @@
+{% extends "dashboard/base.html" %}
+
+{% block title %}Тренеры{% endblock %}
+
+{% block content %}
+<div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
+    <div>
+        <h1 class="h3 mb-1">{{ page_title }}</h1>
+        <div class="text-muted">Управление тренерами</div>
+    </div>
+
+    <a href="{% url 'dashboard:coach_create' %}" class="btn btn-accent">
+        <i class="bi bi-plus-lg me-1"></i>Добавить
+    </a>
+</div>
+
+<form method="get" class="row g-2 mb-4">
+    <div class="col-md-8">
+        <input type="text" name="q" value="{{ search_query }}" class="form-control" placeholder="Поиск по ФИО или категории">
+    </div>
+    <div class="col-md-4 d-flex gap-2">
+        <button type="submit" class="btn btn-outline-secondary w-100">Найти</button>
+        <a href="{% url 'dashboard:coach_list' %}" class="btn btn-outline-dark w-100">Сбросить</a>
+    </div>
+</form>
+
+{% if coaches %}
+    <div class="table-responsive">
+        <table class="table align-middle">
+            <thead>
+                <tr>
+                    <th style="width: 90px;">Фото</th>
+                    <th>ФИО</th>
+                    <th>Категория</th>
+                    <th style="width: 180px;">Действия</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for coach in coaches %}
+                    <tr>
+                        <td>
+                            {% if coach.photo %}
+                                <img src="{{ coach.photo.url }}" alt="{{ coach.full_name }}" class="preview-image">
+                            {% else %}
+                                <span class="text-muted">Нет</span>
+                            {% endif %}
+                        </td>
+                        <td class="fw-semibold">{{ coach.full_name }}</td>
+                        <td>{{ coach.category }}</td>
+                        <td>
+                            <div class="d-flex gap-2">
+                                <a href="{% url 'dashboard:coach_update' coach.pk %}" class="btn btn-sm btn-outline-primary">
+                                    <i class="bi bi-pencil-square"></i>
+                                </a>
+                                <a href="{% url 'dashboard:coach_delete' coach.pk %}" class="btn btn-sm btn-outline-danger">
+                                    <i class="bi bi-trash"></i>
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% else %}
+    <div class="text-center py-5">
+        <div class="mb-3 text-muted">Тренеры ещё не добавлены.</div>
+        <a href="{% url 'dashboard:coach_create' %}" class="btn btn-accent">Создать первого</a>
+    </div>
+{% endif %}
+{% endblock %}

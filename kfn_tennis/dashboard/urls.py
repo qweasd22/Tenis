@@ -38,6 +38,26 @@ from .views import (
     DashboardProjectCreateView,
     DashboardProjectUpdateView,
     DashboardProjectDeleteView,
+    PersonListView,
+    PersonCreateView,
+    PersonUpdateView,
+    PersonDeleteView,
+    SeasonListView,
+    SeasonCreateView,
+    SeasonUpdateView,
+    SeasonDeleteView,
+    TeamMemberListView,
+    TeamMemberCreateView,
+    TeamMemberUpdateView,
+    TeamMemberDeleteView,
+    CoachListView,
+    CoachCreateView,
+    CoachUpdateView,
+    CoachDeleteView,
+    JudgeListView,
+    JudgeCreateView,
+    JudgeUpdateView,
+    JudgeDeleteView,
 )
 
 app_name = "dashboard"
@@ -88,4 +108,29 @@ urlpatterns = [
     path("projects/create/", DashboardProjectCreateView.as_view(), name="project_create"),
     path("projects/<int:pk>/edit/", DashboardProjectUpdateView.as_view(), name="project_update"),
     path("projects/<int:pk>/delete/", DashboardProjectDeleteView.as_view(), name="project_delete"),
+
+    path("structure/", PersonListView.as_view(), name="person_list"),
+    path("structure/create/", PersonCreateView.as_view(), name="person_create"),
+    path("structure/<int:pk>/edit/", PersonUpdateView.as_view(), name="person_update"),
+    path("structure/<int:pk>/delete/", PersonDeleteView.as_view(), name="person_delete"),
+
+    path("teams/seasons/", SeasonListView.as_view(), name="season_list"),
+    path("teams/seasons/create/", SeasonCreateView.as_view(), name="season_create"),
+    path("teams/seasons/<int:pk>/edit/", SeasonUpdateView.as_view(), name="season_update"),
+    path("teams/seasons/<int:pk>/delete/", SeasonDeleteView.as_view(), name="season_delete"),
+
+    path("teams/members/", TeamMemberListView.as_view(), name="team_member_list"),
+    path("teams/members/create/", TeamMemberCreateView.as_view(), name="team_member_create"),
+    path("teams/members/<int:pk>/edit/", TeamMemberUpdateView.as_view(), name="team_member_update"),
+    path("teams/members/<int:pk>/delete/", TeamMemberDeleteView.as_view(), name="team_member_delete"),
+
+    path("teams/coaches/", CoachListView.as_view(), name="coach_list"),
+    path("teams/coaches/create/", CoachCreateView.as_view(), name="coach_create"),
+    path("teams/coaches/<int:pk>/edit/", CoachUpdateView.as_view(), name="coach_update"),
+    path("teams/coaches/<int:pk>/delete/", CoachDeleteView.as_view(), name="coach_delete"),
+
+    path("teams/judges/", JudgeListView.as_view(), name="judge_list"),
+    path("teams/judges/create/", JudgeCreateView.as_view(), name="judge_create"),
+    path("teams/judges/<int:pk>/edit/", JudgeUpdateView.as_view(), name="judge_update"),
+    path("teams/judges/<int:pk>/delete/", JudgeDeleteView.as_view(), name="judge_delete"),
 ]

@@ -1,0 +1,48 @@
+{% extends "dashboard/base.html" %}
+
+{% block title %}{{ page_title }}{% endblock %}
+
+{% block content %}
+<h1 class="h3 mb-4">{{ page_title }}</h1>
+
+<form method="post" enctype="multipart/form-data" novalidate>
+    {% csrf_token %}
+
+    <div class="mb-3">
+        <label class="form-label" for="{{ form.full_name.id_for_label }}">ФИО</label>
+        {{ form.full_name }}
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label" for="{{ form.role.id_for_label }}">Должность</label>
+        {{ form.role }}
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label" for="{{ form.group.id_for_label }}">Группа</label>
+        {{ form.group }}
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label" for="{{ form.photo.id_for_label }}">Фото</label>
+        {{ form.photo }}
+        {% if object and object.photo %}
+            <div class="mt-2">
+                <img src="{{ object.photo.url }}" alt="{{ object.full_name }}" class="preview-image">
+            </div>
+        {% endif %}
+    </div>
+
+    <div class="form-check mb-4">
+        {{ form.is_active }}
+        <label class="form-check-label" for="{{ form.is_active.id_for_label }}">
+            Активен
+        </label>
+    </div>
+
+    <div class="d-flex gap-2">
+        <button type="submit" class="btn btn-accent">{{ submit_text }}</button>
+        <a href="{{ cancel_url }}" class="btn btn-outline-secondary">Отмена</a>
+    </div>
+</form>
+{% endblock %}

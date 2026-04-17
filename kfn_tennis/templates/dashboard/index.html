@@ -1,20 +1,342 @@
 {% extends "dashboard/base.html" %}
 
 {% block title %}Панель управления{% endblock %}
+{% block extra_css %}
+<style>
+    .dashboard-overview-grid {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+    }
 
+    .dashboard-stat-card {
+        border: 1px solid #eceff3;
+        border-radius: 1rem;
+        padding: 1rem 1.1rem;
+        background: #fff;
+        height: 100%;
+    }
+
+    .dashboard-stat-value {
+        font-size: 1.75rem;
+        font-weight: 700;
+        line-height: 1;
+        margin-bottom: 0.35rem;
+    }
+
+    .dashboard-stat-label {
+        font-weight: 600;
+        margin-bottom: 0.2rem;
+    }
+
+    .dashboard-stat-meta {
+        color: #6c757d;
+        font-size: 0.9rem;
+        line-height: 1.35;
+    }
+
+    .dashboard-main-grid {
+        display: grid;
+        grid-template-columns: minmax(0, 2fr) minmax(300px, 1fr);
+        gap: 1.25rem;
+    }
+
+    .dashboard-sections-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 1rem;
+    }
+
+    .dashboard-section-card {
+        border: 1px solid #eceff3;
+        border-radius: 1rem;
+        padding: 1.15rem;
+        background: #fff;
+        height: 100%;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .dashboard-section-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 24px rgba(0, 0, 0, 0.06);
+    }
+
+    .dashboard-section-icon {
+        width: 44px;
+        height: 44px;
+        border-radius: 0.85rem;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(228, 13, 13, 0.08);
+        color: var(--accent-color);
+        font-size: 1.2rem;
+        margin-bottom: 0.8rem;
+    }
+
+    .dashboard-section-title {
+        font-weight: 700;
+        margin-bottom: 0.35rem;
+    }
+
+    .dashboard-section-text {
+        color: #6c757d;
+        font-size: 0.92rem;
+        margin-bottom: 0.85rem;
+        min-height: 2.6rem;
+    }
+
+    .dashboard-section-meta {
+        color: #6c757d;
+        font-size: 0.88rem;
+        margin-bottom: 0.2rem;
+    }
+
+    .dashboard-side-card {
+        border: 1px solid #eceff3;
+        border-radius: 1rem;
+        padding: 1.1rem;
+        background: #fff;
+    }
+
+    .dashboard-side-card + .dashboard-side-card {
+        margin-top: 1rem;
+    }
+
+    .dashboard-side-title {
+        font-weight: 700;
+        margin-bottom: 0.9rem;
+    }
+
+    .dashboard-mini-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .dashboard-mini-list li + li {
+        margin-top: 0.75rem;
+        padding-top: 0.75rem;
+        border-top: 1px solid #f1f3f5;
+    }
+
+    .dashboard-mini-title {
+        font-weight: 600;
+        line-height: 1.35;
+    }
+
+    .dashboard-mini-meta {
+        color: #6c757d;
+        font-size: 0.87rem;
+        margin-top: 0.15rem;
+    }
+
+    @media (max-width: 1199.98px) {
+        .dashboard-overview-grid {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        .dashboard-main-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    @media (max-width: 767.98px) {
+        .dashboard-overview-grid,
+        .dashboard-sections-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .dashboard-section-text {
+            min-height: 0;
+        }
+    }
+</style>
+{% endblock %}
 {% block content %}
-<h1 class="h3 mb-3">Панель управления</h1>
-<p class="text-muted mb-4">Кастомная админка сайта федерации.</p>
+<div class="dashboard-page-header">
+    <div class="dashboard-page-header-main">
+        <h1 class="dashboard-page-title h3">Панель управления</h1>
+        <div class="dashboard-page-subtitle">
+            Быстрый обзор ключевых разделов сайта и переход к основным действиям.
+        </div>
+    </div>
 
-<div class="row g-3">
-    <div class="col-md-6">
-        <div class="border rounded-4 p-4 h-100">
-            <div class="d-flex align-items-center justify-content-between mb-3">
-                <div class="fw-semibold">Партнёры</div>
-                <i class="bi bi-people fs-4 text-danger"></i>
-            </div>
-            <p class="text-muted">Управление логотипами, названиями и ссылками партнёров.</p>
-            <a href="{% url 'dashboard:partner_list' %}" class="btn btn-accent">Открыть</a>
+    <div class="dashboard-page-actions">
+        <a href="{% url 'dashboard:news_create' %}" class="btn btn-accent btn-sm">Добавить новость</a>
+        <a href="{% url 'dashboard:event_create' %}" class="btn btn-outline-secondary btn-sm">Добавить событие</a>
+        <a href="{% url 'dashboard:document_create' %}" class="btn btn-outline-secondary btn-sm">Добавить документ</a>
+    </div>
+</div>
+
+<div class="dashboard-overview-grid">
+    <div class="dashboard-stat-card">
+        <div class="dashboard-stat-value">{{ news_total }}</div>
+        <div class="dashboard-stat-label">Новости</div>
+        <div class="dashboard-stat-meta">
+            Опубликовано: {{ news_published }}<br>
+            Черновики: {{ news_drafts }}
+        </div>
+    </div>
+
+    <div class="dashboard-stat-card">
+        <div class="dashboard-stat-value">{{ documents_total }}</div>
+        <div class="dashboard-stat-label">Документы</div>
+        <div class="dashboard-stat-meta">
+            Категорий: {{ document_categories_total }}
+        </div>
+    </div>
+
+    <div class="dashboard-stat-card">
+        <div class="dashboard-stat-value">{{ projects_total }}</div>
+        <div class="dashboard-stat-label">Проекты</div>
+        <div class="dashboard-stat-meta">
+            Активных: {{ projects_active }}
+        </div>
+    </div>
+
+    <div class="dashboard-stat-card">
+        <div class="dashboard-stat-value">{{ events_total }}</div>
+        <div class="dashboard-stat-label">Календарь</div>
+        <div class="dashboard-stat-meta">
+            Актуальных: {{ events_current }}
+        </div>
+    </div>
+</div>
+
+<div class="dashboard-main-grid">
+    <div class="dashboard-sections-grid">
+        <div class="dashboard-section-card">
+            <div class="dashboard-section-icon"><i class="bi bi-newspaper"></i></div>
+            <div class="dashboard-section-title">Новости</div>
+            <div class="dashboard-section-text">Публикации, статус публикации и вывод в слайдере.</div>
+            <div class="dashboard-section-meta">Всего: {{ news_total }}</div>
+            <div class="dashboard-section-meta">Опубликовано: {{ news_published }}</div>
+            <a href="{% url 'dashboard:news_list' %}" class="btn btn-accent btn-sm mt-2">Открыть</a>
+        </div>
+
+        <div class="dashboard-section-card">
+            <div class="dashboard-section-icon"><i class="bi bi-file-earmark-text"></i></div>
+            <div class="dashboard-section-title">Документы</div>
+            <div class="dashboard-section-text">Файлы, категории документов и порядок вывода.</div>
+            <div class="dashboard-section-meta">Документов: {{ documents_total }}</div>
+            <div class="dashboard-section-meta">Категорий: {{ document_categories_total }}</div>
+            <a href="{% url 'dashboard:document_list' %}" class="btn btn-accent btn-sm mt-2">Открыть</a>
+        </div>
+
+        <div class="dashboard-section-card">
+            <div class="dashboard-section-icon"><i class="bi bi-kanban"></i></div>
+            <div class="dashboard-section-title">Проекты</div>
+            <div class="dashboard-section-text">Категории, статусы, изображения и вложенные файлы.</div>
+            <div class="dashboard-section-meta">Проектов: {{ projects_total }}</div>
+            <div class="dashboard-section-meta">Активных: {{ projects_active }}</div>
+            <a href="{% url 'dashboard:project_list' %}" class="btn btn-accent btn-sm mt-2">Открыть</a>
+        </div>
+
+        <div class="dashboard-section-card">
+            <div class="dashboard-section-icon"><i class="bi bi-calendar-event"></i></div>
+            <div class="dashboard-section-title">Календарь</div>
+            <div class="dashboard-section-text">События, даты проведения и прикреплённые PDF.</div>
+            <div class="dashboard-section-meta">Событий: {{ events_total }}</div>
+            <div class="dashboard-section-meta">Актуальных: {{ events_current }}</div>
+            <a href="{% url 'dashboard:event_list' %}" class="btn btn-accent btn-sm mt-2">Открыть</a>
+        </div>
+
+        <div class="dashboard-section-card">
+            <div class="dashboard-section-icon"><i class="bi bi-images"></i></div>
+            <div class="dashboard-section-title">Медиа</div>
+            <div class="dashboard-section-text">Медиа-мероприятия, обложки и фотографии.</div>
+            <div class="dashboard-section-meta">Мероприятий: {{ media_events_total }}</div>
+            <div class="dashboard-section-meta">Фотографий: {{ media_photos_total }}</div>
+            <a href="{% url 'dashboard:media_event_list' %}" class="btn btn-accent btn-sm mt-2">Открыть</a>
+        </div>
+
+        <div class="dashboard-section-card">
+            <div class="dashboard-section-icon"><i class="bi bi-person-badge"></i></div>
+            <div class="dashboard-section-title">Структура</div>
+            <div class="dashboard-section-text">Участники федерации, группы, должности и фото.</div>
+            <div class="dashboard-section-meta">Всего: {{ persons_total }}</div>
+            <div class="dashboard-section-meta">Активных: {{ persons_active }}</div>
+            <a href="{% url 'dashboard:person_list' %}" class="btn btn-accent btn-sm mt-2">Открыть</a>
+        </div>
+
+        <div class="dashboard-section-card">
+            <div class="dashboard-section-icon"><i class="bi bi-trophy"></i></div>
+            <div class="dashboard-section-title">Сборные</div>
+            <div class="dashboard-section-text">Игроки, сезоны, тренеры и судьи.</div>
+            <div class="dashboard-section-meta">Игроков: {{ team_members_total }}</div>
+            <div class="dashboard-section-meta">Сезонов: {{ seasons_total }}</div>
+            <a href="{% url 'dashboard:team_member_list' %}" class="btn btn-accent btn-sm mt-2">Открыть</a>
+        </div>
+
+        <div class="dashboard-section-card">
+            <div class="dashboard-section-icon"><i class="bi bi-people"></i></div>
+            <div class="dashboard-section-title">Партнёры</div>
+            <div class="dashboard-section-text">Логотипы, названия и внешние ссылки партнёров.</div>
+            <div class="dashboard-section-meta">Всего: {{ partners_total }}</div>
+            <div class="dashboard-section-meta">&nbsp;</div>
+            <a href="{% url 'dashboard:partner_list' %}" class="btn btn-accent btn-sm mt-2">Открыть</a>
+        </div>
+    </div>
+
+    <div>
+        <div class="dashboard-side-card">
+            <div class="dashboard-side-title">Последние новости</div>
+
+            {% if recent_news %}
+                <ul class="dashboard-mini-list">
+                    {% for item in recent_news %}
+                        <li>
+                            <div class="dashboard-mini-title">{{ item.title }}</div>
+                            <div class="dashboard-mini-meta">{{ item.created_at|date:"d.m.Y H:i" }}</div>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <div class="text-muted">Новостей пока нет.</div>
+            {% endif %}
+        </div>
+
+        <div class="dashboard-side-card">
+            <div class="dashboard-side-title">Ближайшие события</div>
+
+            {% if upcoming_events %}
+                <ul class="dashboard-mini-list">
+                    {% for item in upcoming_events %}
+                        <li>
+                            <div class="dashboard-mini-title">{{ item.title }}</div>
+                            <div class="dashboard-mini-meta">
+                                {{ item.start_date|date:"d.m.Y" }}
+                                {% if item.end_date and item.end_date != item.start_date %}
+                                    — {{ item.end_date|date:"d.m.Y" }}
+                                {% endif %}
+                            </div>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <div class="text-muted">Предстоящих событий нет.</div>
+            {% endif %}
+        </div>
+
+        <div class="dashboard-side-card">
+            <div class="dashboard-side-title">Командный блок</div>
+
+            <ul class="dashboard-mini-list">
+                <li>
+                    <div class="dashboard-mini-title">Игроки сборной</div>
+                    <div class="dashboard-mini-meta">Всего: {{ team_members_total }}</div>
+                </li>
+                <li>
+                    <div class="dashboard-mini-title">Тренеры</div>
+                    <div class="dashboard-mini-meta">Всего: {{ coaches_total }}</div>
+                </li>
+                <li>
+                    <div class="dashboard-mini-title">Судьи</div>
+                    <div class="dashboard-mini-meta">Всего: {{ judges_total }}</div>
+                </li>
+            </ul>
         </div>
     </div>
 </div>
