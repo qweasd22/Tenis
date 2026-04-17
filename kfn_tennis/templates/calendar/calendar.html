@@ -3,117 +3,355 @@
 
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'css/calendar.css' %}">
-<link href='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/main.min.css' rel='stylesheet' />
+<link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/main.min.css" rel="stylesheet" />
 
 <style>
-body.calendar-page {
-    background: linear-gradient(135deg, #ff6b6b, #ff8e72, #ffb199, #ffe0e0);
-    font-family: 'Inter', sans-serif;
-    color: #343A40;
-}
+    .calendar-page {
+        color: var(--text-color);
+    }
 
-/* Hero календаря */
-.calendar-hero {
-    background: linear-gradient(
-        135deg,
-        rgba(255,107,107,0.15),
-        rgba(255,142,114,0.1)
-    );
-    padding: 3rem 1rem;
-    border-radius: 1rem;
-    text-align: center;
-    margin-bottom: 3rem;
-}
+    .calendar-hero {
+        background: linear-gradient(135deg, rgba(228, 13, 13, 0.08), rgba(228, 13, 13, 0.03));
+        border-radius: 1rem;
+        padding: 2.5rem 1.5rem;
+        text-align: center;
+        margin-bottom: 2rem;
+        border: 1px solid rgba(228, 13, 13, 0.08);
+    }
 
-.calendar-hero h1 {
-    font-size: 2rem;
-    font-weight: 700;
-    color: #2c2c2c;
-}
+    .calendar-hero h1 {
+        font-size: 2rem;
+        font-weight: 700;
+        margin-bottom: 0.75rem;
+        color: var(--text-color);
+    }
 
-.calendar-hero p {
-    color: #6c757d;
-    font-size: 1.1rem;
-}
+    .calendar-hero p {
+        margin-bottom: 0;
+        color: #6c757d;
+        font-size: 1.05rem;
+    }
 
-/* Карточка календаря */
-.calendar-card {
-    background: #fff;
-    border-radius: 1rem;
-    padding: 25px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.06);
-}
+    .calendar-layout-card {
+        background: #fff;
+        border-radius: 1rem;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
+        padding: 1.5rem;
+    }
 
-/* FullCalendar стили */
-.fc {
-    font-family: 'Inter', sans-serif;
-}
+    .calendar-topbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 1rem;
+        flex-wrap: wrap;
+        margin-bottom: 1.5rem;
+    }
 
-.fc-toolbar-title {
-    font-weight: 600;
-    color: #343A40;
-}
+    .calendar-topbar-title {
+        font-size: 1.1rem;
+        font-weight: 700;
+        margin: 0;
+    }
 
-.fc .fc-button {
-    background: var(--accent-color);
-    color: #fff;
-    border: none;
-    border-radius: 0.5rem;
-}
+    .calendar-view-switcher {
+        display: inline-flex;
+        background: #f1f3f5;
+        border-radius: 999px;
+        padding: 0.25rem;
+        gap: 0.25rem;
+    }
 
-.fc .fc-button:hover {
-    background: linear-gradient(90deg, #ff8e72, #ff6b6b);
-}
+    .calendar-view-btn {
+        border: none;
+        background: transparent;
+        color: #495057;
+        border-radius: 999px;
+        padding: 0.6rem 1rem;
+        font-weight: 600;
+        transition: 0.2s ease;
+    }
 
-/* Кастомные события */
-.fc-custom-event {
-    background: linear-gradient(90deg, #ff6b6b, #ff8e72);
-    color: #fff;
-    border-radius: 0.75rem;
-    padding: 4px 8px;
-    font-size: 0.85rem;
-    line-height: 1.2;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    transition: transform 0.2s, box-shadow 0.2s;
-}
+    .calendar-view-btn.active {
+        background: var(--accent-color);
+        color: #fff;
+        box-shadow: 0 6px 14px rgba(228, 13, 13, 0.18);
+    }
 
-.fc-custom-event:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 16px rgba(0,0,0,0.15);
-}
+    .calendar-panel {
+        display: none;
+    }
 
-.fc .fc-event-time {
-    font-size: 0.8rem;
-    opacity: 0.9;
-}
+    .calendar-panel.active {
+        display: block;
+    }
 
-/* Мобильные адаптации */
-@media (max-width: 992px) {
-    .fc-toolbar-title { font-size: 1.5rem; }
-    .fc-custom-event { font-size: 0.75rem; padding: 3px 6px; }
-}
+    /* FullCalendar */
+    .fc {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
 
-@media (max-width: 576px) {
-    .fc-toolbar { flex-direction: column; gap: 0.5rem; }
-    .fc-custom-event { font-size: 0.65rem; padding: 2px 4px; }
-}
+    .fc-toolbar-title {
+        font-size: 1.35rem !important;
+        font-weight: 700;
+        color: var(--text-color);
+    }
+
+    .fc .fc-button {
+        background: var(--accent-color);
+        color: #fff;
+        border: none;
+        border-radius: 0.6rem;
+        padding: 0.45rem 0.85rem;
+        box-shadow: none;
+    }
+
+    .fc .fc-button:hover,
+    .fc .fc-button:focus {
+        background: var(--accent-hover);
+        color: #fff;
+    }
+
+    .fc .fc-button-primary:not(:disabled).fc-button-active {
+        background: var(--main-bg);
+        color: #fff;
+    }
+
+    .fc-theme-standard td,
+    .fc-theme-standard th,
+    .fc-theme-standard .fc-scrollgrid {
+        border-color: #e9ecef;
+    }
+
+    .fc-col-header-cell {
+        background: #f8f9fa;
+    }
+
+    .fc-daygrid-day-number {
+        color: var(--text-color);
+        font-weight: 600;
+    }
+
+    .fc-day-today {
+        background: rgba(228, 13, 13, 0.04) !important;
+    }
+
+    .fc-daygrid-event {
+        border: none !important;
+        background: transparent !important;
+        margin-top: 0.2rem !important;
+    }
+
+    .calendar-chip {
+        display: block;
+        background: #fff5f5;
+        border-left: 4px solid var(--accent-color);
+        border-radius: 0.6rem;
+        padding: 0.4rem 0.55rem;
+        color: var(--text-color);
+        line-height: 1.2;
+        box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+    }
+
+    .calendar-chip-time {
+        font-size: 0.72rem;
+        color: var(--accent-color);
+        font-weight: 700;
+        margin-bottom: 0.15rem;
+    }
+
+    .calendar-chip-title {
+        font-size: 0.8rem;
+        font-weight: 600;
+        white-space: normal;
+        word-break: break-word;
+    }
+
+    .fc .fc-daygrid-more-link {
+        color: var(--accent-color);
+        font-weight: 700;
+    }
+
+    /* Список мероприятий */
+    .events-list {
+        display: grid;
+        gap: 1rem;
+    }
+
+    .event-card {
+        background: #fff;
+        border: 1px solid #e9ecef;
+        border-radius: 1rem;
+        padding: 1.2rem 1.2rem;
+        transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+    }
+
+    .event-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 24px rgba(0, 0, 0, 0.07);
+        border-color: rgba(228, 13, 13, 0.18);
+    }
+
+    .event-card-head {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 1rem;
+        margin-bottom: 0.75rem;
+    }
+
+    .event-card-title {
+        font-size: 1.05rem;
+        font-weight: 700;
+        margin: 0;
+        color: var(--text-color);
+    }
+
+    .event-badge {
+        display: inline-flex;
+        align-items: center;
+        white-space: nowrap;
+        border-radius: 999px;
+        padding: 0.35rem 0.7rem;
+        background: rgba(228, 13, 13, 0.08);
+        color: var(--accent-color);
+        font-size: 0.8rem;
+        font-weight: 700;
+    }
+
+    .event-meta {
+        display: grid;
+        gap: 0.55rem;
+        margin-bottom: 0.9rem;
+    }
+
+    .event-meta-item {
+        display: flex;
+        align-items: center;
+        gap: 0.55rem;
+        color: #495057;
+        font-size: 0.95rem;
+    }
+
+    .event-meta-item i {
+        color: var(--accent-color);
+        font-size: 0.95rem;
+    }
+
+    .event-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.75rem;
+        margin-top: 0.5rem;
+    }
+
+    .event-empty {
+        text-align: center;
+        padding: 2.5rem 1rem;
+        border: 1px dashed #ced4da;
+        border-radius: 1rem;
+        color: #6c757d;
+        background: #fafbfc;
+    }
+
+    .event-empty i {
+        font-size: 2rem;
+        color: var(--accent-color);
+        display: block;
+        margin-bottom: 0.75rem;
+    }
+
+    .calendar-note {
+        margin-top: 1rem;
+        color: #6c757d;
+        font-size: 0.9rem;
+    }
+
+    @media (max-width: 992px) {
+        .fc-toolbar {
+            flex-direction: column;
+            gap: 0.75rem;
+            align-items: stretch !important;
+        }
+
+        .fc-toolbar-chunk {
+            display: flex;
+            justify-content: center;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .calendar-layout-card {
+            padding: 1rem;
+        }
+
+        .calendar-hero {
+            padding: 2rem 1rem;
+        }
+
+        .calendar-hero h1 {
+            font-size: 1.65rem;
+        }
+
+        .event-card-head {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+    }
+
+    @media (max-width: 576px) {
+        .calendar-topbar {
+            flex-direction: column;
+            align-items: stretch;
+        }
+
+        .calendar-view-switcher {
+            width: 100%;
+        }
+
+        .calendar-view-btn {
+            flex: 1;
+        }
+
+        .calendar-chip-title {
+            font-size: 0.72rem;
+        }
+    }
 </style>
 {% endblock %}
 
 {% block content %}
-<div class="container calendar-page my-1">
-
-    <!-- Hero календаря -->
+<div class="container calendar-page my-3">
     <section class="calendar-hero">
         <h1>Календарь событий</h1>
-        <p>Просматривайте все турниры и мероприятия федерации</p>
+        <p>Следите за турнирами, соревнованиями и другими мероприятиями федерации</p>
     </section>
 
-    <!-- Карточка календаря -->
-    <div class="calendar-card">
-        <div id="calendar"></div>
-    </div>
+    <div class="calendar-layout-card">
+        <div class="calendar-topbar">
+            <h2 class="calendar-topbar-title">Расписание мероприятий</h2>
 
+            <div class="calendar-view-switcher">
+                <button type="button" class="calendar-view-btn active" data-target="calendar-panel">
+                    Календарь
+                </button>
+                <button type="button" class="calendar-view-btn" data-target="list-panel">
+                    Список мероприятий
+                </button>
+            </div>
+        </div>
+
+        <div id="calendar-panel" class="calendar-panel active">
+            <div id="calendar"></div>
+            <div class="calendar-note">
+                Нажмите на мероприятие, чтобы открыть прикреплённый PDF, если он добавлен.
+            </div>
+        </div>
+
+        <div id="list-panel" class="calendar-panel">
+            <div id="events-list" class="events-list"></div>
+        </div>
+    </div>
 </div>
 {% endblock %}
 
@@ -122,44 +360,165 @@ body.calendar-page {
 <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/locales-all.global.min.js"></script>
 
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    const calendar = new FullCalendar.Calendar(
-        document.getElementById('calendar'),
-        {
-            initialView: 'dayGridMonth',
-            locale: 'ru',
-            height: 'auto',
-            headerToolbar: {
-                left: 'prev,next today',
-                center: 'title',
-                right: 'dayGridMonth,listMonth'
-            },
-            buttonText: { today: 'Сегодня', month: 'Месяц', list: 'Список' },
-            events: '{% url "calendar:calendar_events_json" %}',
-            noEventsContent: 'Нет событий',
-            
-            eventContent: function(arg) {
-                // Кастомная карточка события
-                let timeText = arg.event.allDay ? '' : arg.timeText;
-                return { 
-                    html: `
-                        <div class="fc-custom-event">
-                            ${timeText ? `<div class="fc-event-time">${timeText}</div>` : ''}
-                            <div class="fc-event-title">${arg.event.title}</div>
-                        </div>
-                    ` 
-                };
-            },
+document.addEventListener('DOMContentLoaded', function () {
+    const calendarEl = document.getElementById('calendar');
+    const listEl = document.getElementById('events-list');
+    const switchButtons = document.querySelectorAll('.calendar-view-btn');
+    const panels = document.querySelectorAll('.calendar-panel');
+    const eventsUrl = '{% url "calendar:calendar_events_json" %}';
 
-            eventClick: function(info) {
-                if (info.event.url) {
-                    window.open(info.event.url, '_blank');
-                    info.jsEvent.preventDefault();
-                }
-            },
+    function formatDateRange(startDate, endDate) {
+        if (!startDate && !endDate) return 'Дата не указана';
+        if (!endDate || startDate === endDate) return startDate;
+        return `${startDate} — ${endDate}`;
+    }
+
+    function formatTimeRange(event) {
+        if (event.allDay) return 'Без указания времени';
+
+        const start = event.start
+            ? new Date(event.start).toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' })
+            : '';
+
+        const end = event.end
+            ? new Date(event.end).toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' })
+            : '';
+
+        if (start && end) return `${start} — ${end}`;
+        if (start) return start;
+        return 'Время не указано';
+    }
+
+    function sortEvents(events) {
+        return [...events].sort((a, b) => {
+            const aDate = new Date(a.start);
+            const bDate = new Date(b.start);
+            return aDate - bDate;
+        });
+    }
+
+    function renderList(events) {
+        listEl.innerHTML = '';
+
+        const sortedEvents = sortEvents(events);
+
+        if (!sortedEvents.length) {
+            listEl.innerHTML = `
+                <div class="event-empty">
+                    <i class="bi bi-calendar-x"></i>
+                    <div class="fw-semibold mb-1">Мероприятия не найдены</div>
+                    <div>На данный момент в календаре нет событий.</div>
+                </div>
+            `;
+            return;
         }
-    );
-    calendar.render();
+
+        sortedEvents.forEach((event) => {
+            const startDate = event.extendedProps?.start_date || '';
+            const endDate = event.extendedProps?.end_date || '';
+            const dateText = formatDateRange(startDate, endDate);
+            const timeText = formatTimeRange(event);
+            const hasPdf = !!event.url;
+
+            const article = document.createElement('article');
+            article.className = 'event-card';
+
+            article.innerHTML = `
+                <div class="event-card-head">
+                    <h3 class="event-card-title">${event.title}</h3>
+                    <span class="event-badge">Мероприятие</span>
+                </div>
+
+                <div class="event-meta">
+                    <div class="event-meta-item">
+                        <i class="bi bi-calendar-event"></i>
+                        <span>${dateText}</span>
+                    </div>
+                    <div class="event-meta-item">
+                        <i class="bi bi-clock"></i>
+                        <span>${timeText}</span>
+                    </div>
+                    <div class="event-meta-item">
+                        <i class="bi bi-file-earmark-pdf"></i>
+                        <span>${hasPdf ? 'PDF-файл прикреплён' : 'PDF-файл не прикреплён'}</span>
+                    </div>
+                </div>
+
+                <div class="event-actions">
+                    ${hasPdf
+                        ? `<a href="${event.url}" target="_blank" class="btn btn-accent btn-sm">Открыть PDF</a>`
+                        : `<span class="btn btn-outline-secondary btn-sm disabled">PDF отсутствует</span>`
+                    }
+                </div>
+            `;
+
+            listEl.appendChild(article);
+        });
+    }
+
+    fetch(eventsUrl)
+        .then(response => response.json())
+        .then(events => {
+            renderList(events);
+
+            const calendar = new FullCalendar.Calendar(calendarEl, {
+                initialView: 'dayGridMonth',
+                locale: 'ru',
+                height: 'auto',
+                dayMaxEventRows: 3,
+                eventDisplay: 'block',
+                headerToolbar: {
+                    left: 'prev,next today',
+                    center: 'title',
+                    right: 'dayGridMonth'
+                },
+                buttonText: {
+                    today: 'Сегодня',
+                    month: 'Месяц'
+                },
+                noEventsContent: 'Нет событий',
+                events: events,
+                eventTimeFormat: {
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    hour12: false
+                },
+
+                eventContent: function(arg) {
+                    const timeText = arg.event.allDay ? '' : arg.timeText;
+
+                    return {
+                        html: `
+                            <div class="calendar-chip">
+                                ${timeText ? `<div class="calendar-chip-time">${timeText}</div>` : ''}
+                                <div class="calendar-chip-title">${arg.event.title}</div>
+                            </div>
+                        `
+                    };
+                },
+
+                eventClick: function(info) {
+                    if (info.event.url) {
+                        info.jsEvent.preventDefault();
+                        window.open(info.event.url, '_blank');
+                    }
+                }
+            });
+
+            calendar.render();
+        });
+
+    switchButtons.forEach((button) => {
+        button.addEventListener('click', function () {
+            const target = this.dataset.target;
+
+            switchButtons.forEach((btn) => btn.classList.remove('active'));
+            this.classList.add('active');
+
+            panels.forEach((panel) => panel.classList.remove('active'));
+            document.getElementById(target).classList.add('active');
+        });
+    });
 });
 </script>
 {% endblock %}
