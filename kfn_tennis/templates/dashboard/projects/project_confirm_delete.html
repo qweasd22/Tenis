@@ -1,0 +1,28 @@
+{% extends "dashboard/base.html" %}
+
+{% block title %}{{ page_title }}{% endblock %}
+
+{% block content %}
+<h1 class="h3 mb-3">{{ page_title }}</h1>
+
+<div class="alert alert-warning">
+    Вы действительно хотите удалить проект <strong>{{ object.title }}</strong>?
+</div>
+
+<ul class="list-group mb-4">
+    <li class="list-group-item"><strong>Категория:</strong> {{ object.category.title }}</li>
+    <li class="list-group-item"><strong>Статус:</strong> {{ object.get_status_display }}</li>
+    <li class="list-group-item">
+        <strong>Показывать на сайте:</strong>
+        {% if object.is_active %}Да{% else %}Нет{% endif %}
+    </li>
+</ul>
+
+<form method="post">
+    {% csrf_token %}
+    <div class="d-flex gap-2">
+        <button type="submit" class="btn btn-danger">Удалить</button>
+        <a href="{{ cancel_url }}" class="btn btn-outline-secondary">Отмена</a>
+    </div>
+</form>
+{% endblock %}

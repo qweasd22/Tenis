@@ -202,6 +202,19 @@
                     <a href="{% url 'dashboard:event_list' %}" class="dashboard-sidebar-link {% if 'event_' in request.resolver_match.url_name %}active{% endif %}">
                         <i class="bi bi-calendar-event me-2"></i>Календарь
                     </a>
+                    <a href="{% url 'dashboard:media_event_list' %}" class="dashboard-sidebar-link {% if 'media_' in request.resolver_match.url_name %}active{% endif %}">
+                        <i class="bi bi-images me-2"></i>Медиа
+                    </a>
+                    <a href="{% url 'dashboard:news_list' %}" class="dashboard-sidebar-link {% if 'news_' in request.resolver_match.url_name or request.resolver_match.url_name == 'news_list' %}active{% endif %}">
+                        <i class="bi bi-newspaper me-2"></i>Новости
+                    </a>
+                    <a href="{% url 'dashboard:project_category_list' %}" class="dashboard-sidebar-link {% if 'project_category' in request.resolver_match.url_name %}active{% endif %}">
+                        <i class="bi bi-diagram-3 me-2"></i>Категории проектов
+                    </a>
+
+                    <a href="{% url 'dashboard:project_list' %}" class="dashboard-sidebar-link {% if request.resolver_match.url_name == 'project_list' or request.resolver_match.url_name == 'project_create' or request.resolver_match.url_name == 'project_update' or request.resolver_match.url_name == 'project_delete' %}active{% endif %}">
+                        <i class="bi bi-kanban me-2"></i>Проекты
+                    </a>
                 </div>
             </div>
 

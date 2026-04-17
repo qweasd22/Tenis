@@ -1,0 +1,66 @@
+{% extends "dashboard/base.html" %}
+
+{% block title %}{{ page_title }}{% endblock %}
+
+{% block content %}
+<div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
+    <div>
+        <h1 class="h3 mb-1">{{ page_title }}</h1>
+        <div class="text-muted">{{ event.date|date:"d.m.Y" }}</div>
+    </div>
+
+    <div class="d-flex gap-2">
+        <a href="{% url 'dashboard:media_event_update' event.pk %}" class="btn btn-outline-primary">Редактировать мероприятие</a>
+        <a href="{% url 'dashboard:media_event_list' %}" class="btn btn-outline-secondary">Назад</a>
+    </div>
+</div>
+
+{% if event.cover %}
+    <div class="mb-4">
+        <div class="small text-muted mb-2">Обложка</div>
+        <img src="{{ event.cover.url }}" alt="{{ event.title }}" class="preview-image">
+    </div>
+{% endif %}
+
+<div class="border rounded-4 p-4 mb-4">
+    <h2 class="h5 mb-3">Загрузка фотографий</h2>
+
+    <form method="post" action="{% url 'dashboard:media_photo_upload' event.pk %}" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="mb-3">
+            {{ upload_form.images.label_tag }}
+            {{ upload_form.images }}
+        </div>
+        <button type="submit" class="btn btn-accent">Загрузить</button>
+    </form>
+</div>
+
+<h2 class="h5 mb-3">Фотографии</h2>
+
+{% if photos %}
+    <div class="row g-3">
+        {% for photo in photos %}
+            <div class="col-md-4 col-sm-6">
+                <div class="border rounded-4 p-3 h-100">
+                    <img src="{{ photo.image.url }}" alt="" class="img-fluid rounded mb-3" style="height: 220px; width: 100%; object-fit: cover;">
+
+                    <div class="small text-muted mb-3">
+                        {{ photo.uploaded_at|date:"d.m.Y H:i" }}
+                    </div>
+
+                    <form method="post" action="{% url 'dashboard:media_photo_delete' event.pk photo.pk %}">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-sm btn-outline-danger w-100">
+                            Удалить фото
+                        </button>
+                    </form>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <div class="text-center py-5 border rounded-4">
+        <div class="text-muted">Фотографии ещё не загружены.</div>
+    </div>
+{% endif %}
+{% endblock %}

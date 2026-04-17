@@ -19,6 +19,25 @@ from .views import (
     EventCreateView,
     EventUpdateView,
     EventDeleteView,
+    MediaEventListView,
+    MediaEventCreateView,
+    MediaEventUpdateView,
+    MediaEventDeleteView,
+    MediaEventPhotosView,
+    MediaPhotoUploadView,
+    MediaPhotoDeleteView,
+    DashboardNewsListView,
+    DashboardNewsCreateView,
+    DashboardNewsUpdateView,
+    DashboardNewsDeleteView,
+    ProjectCategoryListView,
+    ProjectCategoryCreateView,
+    ProjectCategoryUpdateView,
+    ProjectCategoryDeleteView,
+    DashboardProjectListView,
+    DashboardProjectCreateView,
+    DashboardProjectUpdateView,
+    DashboardProjectDeleteView,
 )
 
 app_name = "dashboard"
@@ -46,4 +65,27 @@ urlpatterns = [
     path("calendar/create/", EventCreateView.as_view(), name="event_create"),
     path("calendar/<int:pk>/edit/", EventUpdateView.as_view(), name="event_update"),
     path("calendar/<int:pk>/delete/", EventDeleteView.as_view(), name="event_delete"),
+
+    path("media/", MediaEventListView.as_view(), name="media_event_list"),
+    path("media/create/", MediaEventCreateView.as_view(), name="media_event_create"),
+    path("media/<int:pk>/edit/", MediaEventUpdateView.as_view(), name="media_event_update"),
+    path("media/<int:pk>/delete/", MediaEventDeleteView.as_view(), name="media_event_delete"),
+    path("media/<int:pk>/photos/", MediaEventPhotosView.as_view(), name="media_event_photos"),
+    path("media/<int:pk>/photos/upload/", MediaPhotoUploadView.as_view(), name="media_photo_upload"),
+    path("media/<int:pk>/photos/<int:photo_pk>/delete/", MediaPhotoDeleteView.as_view(), name="media_photo_delete"),
+
+    path("news/", DashboardNewsListView.as_view(), name="news_list"),
+    path("news/create/", DashboardNewsCreateView.as_view(), name="news_create"),
+    path("news/<int:pk>/edit/", DashboardNewsUpdateView.as_view(), name="news_update"),
+    path("news/<int:pk>/delete/", DashboardNewsDeleteView.as_view(), name="news_delete"),
+
+    path("projects/categories/", ProjectCategoryListView.as_view(), name="project_category_list"),
+    path("projects/categories/create/", ProjectCategoryCreateView.as_view(), name="project_category_create"),
+    path("projects/categories/<int:pk>/edit/", ProjectCategoryUpdateView.as_view(), name="project_category_update"),
+    path("projects/categories/<int:pk>/delete/", ProjectCategoryDeleteView.as_view(), name="project_category_delete"),
+
+    path("projects/", DashboardProjectListView.as_view(), name="project_list"),
+    path("projects/create/", DashboardProjectCreateView.as_view(), name="project_create"),
+    path("projects/<int:pk>/edit/", DashboardProjectUpdateView.as_view(), name="project_update"),
+    path("projects/<int:pk>/delete/", DashboardProjectDeleteView.as_view(), name="project_delete"),
 ]

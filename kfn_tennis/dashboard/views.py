@@ -342,3 +342,357 @@ class EventDeleteView(SuperuserRequiredMixin, DeleteView):
         context["page_title"] = f"Удаление события: {self.object.title}"
         context["cancel_url"] = reverse_lazy("dashboard:event_list")
         return context
+    
+from django.views import View
+from django.shortcuts import get_object_or_404, redirect
+from MediaPhoto.models import MediaEvent, MediaPhoto
+from MediaPhoto.forms import MultiUploadForm
+from .forms import PartnerForm, CategoryForm, DocumentForm, EventForm, MediaEventForm
+
+class MediaEventListView(SuperuserRequiredMixin, ListView):
+    model = MediaEvent
+    template_name = "dashboard/media/events_list.html"
+    context_object_name = "events"
+    paginate_by = 10
+
+    def get_queryset(self):
+        queryset = MediaEvent.objects.all().order_by("-date")
+        search = self.request.GET.get("q", "").strip()
+        if search:
+            queryset = queryset.filter(title__icontains=search)
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["page_title"] = "Медиа"
+        context["search_query"] = self.request.GET.get("q", "").strip()
+        return context
+
+
+class MediaEventCreateView(SuperuserRequiredMixin, CreateView):
+    model = MediaEvent
+    form_class = MediaEventForm
+    template_name = "dashboard/media/event_form.html"
+    success_url = reverse_lazy("dashboard:media_event_list")
+
+    def form_valid(self, form):
+        messages.success(self.request, "Медиа-мероприятие успешно создано.")
+        return super().form_valid(form)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["page_title"] = "Добавить медиа-мероприятие"
+        context["submit_text"] = "Создать"
+        context["cancel_url"] = reverse_lazy("dashboard:media_event_list")
+        return context
+
+
+class MediaEventUpdateView(SuperuserRequiredMixin, UpdateView):
+    model = MediaEvent
+    form_class = MediaEventForm
+    template_name = "dashboard/media/event_form.html"
+    success_url = reverse_lazy("dashboard:media_event_list")
+
+    def form_valid(self, form):
+        messages.success(self.request, "Медиа-мероприятие успешно обновлено.")
+        return super().form_valid(form)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["page_title"] = f"Редактирование: {self.object.title}"
+        context["submit_text"] = "Сохранить"
+        context["cancel_url"] = reverse_lazy("dashboard:media_event_list")
+        return context
+
+
+class MediaEventDeleteView(SuperuserRequiredMixin, DeleteView):
+    model = MediaEvent
+    template_name = "dashboard/media/event_confirm_delete.html"
+    success_url = reverse_lazy("dashboard:media_event_list")
+
+    def form_valid(self, form):
+        messages.success(self.request, "Медиа-мероприятие успешно удалено.")
+        return super().form_valid(form)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["page_title"] = f"Удаление: {self.object.title}"
+        context["cancel_url"] = reverse_lazy("dashboard:media_event_list")
+        return context
+
+
+class MediaEventPhotosView(SuperuserRequiredMixin, TemplateView):
+    template_name = "dashboard/media/event_photos.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        event = get_object_or_404(MediaEvent, pk=self.kwargs["pk"])
+        context["event"] = event
+        context["photos"] = event.photos.all().order_by("-uploaded_at")
+        context["upload_form"] = MultiUploadForm()
+        context["page_title"] = f"Фотографии: {event.title}"
+        return context
+
+
+class MediaPhotoUploadView(SuperuserRequiredMixin, View):
+    def post(self, request, pk):
+        event = get_object_or_404(MediaEvent, pk=pk)
+        form = MultiUploadForm(request.POST, request.FILES)
+
+        if form.is_valid():
+            files = request.FILES.getlist("images")
+            for f in files:
+                MediaPhoto.objects.create(event=event, image=f)
+            messages.success(request, f"Загружено файлов: {len(files)}.")
+        else:
+            messages.error(request, "Не удалось загрузить фотографии.")
+
+        return redirect("dashboard:media_event_photos", pk=pk)
+
+
+class MediaPhotoDeleteView(SuperuserRequiredMixin, View):
+    def post(self, request, pk, photo_pk):
+        event = get_object_or_404(MediaEvent, pk=pk)
+        photo = get_object_or_404(MediaPhoto, pk=photo_pk, event=event)
+        photo.delete()
+        messages.success(request, "Фотография удалена.")
+        return redirect("dashboard:media_event_photos", pk=pk)
+
+from news.models import News
+from .forms import  NewsForm
+
+class DashboardNewsListView(SuperuserRequiredMixin, ListView):
+    model = News
+    template_name = "dashboard/news/news_list.html"
+    context_object_name = "news_items"
+    paginate_by = 10
+
+    def get_queryset(self):
+        queryset = News.objects.all().order_by("-created_at")
+        search = self.request.GET.get("q", "").strip()
+        if search:
+            queryset = queryset.filter(
+                title__icontains=search
+            ) | queryset.filter(
+                full_description__icontains=search
+            )
+            queryset = queryset.order_by("-created_at")
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["page_title"] = "Новости"
+        context["search_query"] = self.request.GET.get("q", "").strip()
+        return context
+
+
+class DashboardNewsCreateView(SuperuserRequiredMixin, CreateView):
+    model = News
+    form_class = NewsForm
+    template_name = "dashboard/news/news_form.html"
+    success_url = reverse_lazy("dashboard:news_list")
+
+    def form_valid(self, form):
+        messages.success(self.request, "Новость успешно создана.")
+        return super().form_valid(form)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["page_title"] = "Добавить новость"
+        context["submit_text"] = "Создать"
+        context["cancel_url"] = reverse_lazy("dashboard:news_list")
+        return context
+
+
+class DashboardNewsUpdateView(SuperuserRequiredMixin, UpdateView):
+    model = News
+    form_class = NewsForm
+    template_name = "dashboard/news/news_form.html"
+    success_url = reverse_lazy("dashboard:news_list")
+
+    def form_valid(self, form):
+        messages.success(self.request, "Новость успешно обновлена.")
+        return super().form_valid(form)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["page_title"] = f"Редактирование: {self.object.title}"
+        context["submit_text"] = "Сохранить"
+        context["cancel_url"] = reverse_lazy("dashboard:news_list")
+        return context
+
+
+class DashboardNewsDeleteView(SuperuserRequiredMixin, DeleteView):
+    model = News
+    template_name = "dashboard/news/news_confirm_delete.html"
+    success_url = reverse_lazy("dashboard:news_list")
+
+    def form_valid(self, form):
+        messages.success(self.request, "Новость успешно удалена.")
+        return super().form_valid(form)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["page_title"] = f"Удаление: {self.object.title}"
+        context["cancel_url"] = reverse_lazy("dashboard:news_list")
+        return context
+
+from django.db.models import Q
+from django.db.models.deletion import ProtectedError
+from django.http import HttpResponseRedirect
+from projects.models import ProjectCategory, Project
+from .forms import PartnerForm, CategoryForm, DocumentForm, EventForm, MediaEventForm, NewsForm, ProjectCategoryForm, ProjectForm
+
+class ProjectCategoryListView(SuperuserRequiredMixin, ListView):
+    model = ProjectCategory
+    template_name = "dashboard/projects/categories_list.html"
+    context_object_name = "categories"
+    paginate_by = 10
+
+    def get_queryset(self):
+        queryset = ProjectCategory.objects.all().order_by("order", "title")
+        search = self.request.GET.get("q", "").strip()
+        if search:
+            queryset = queryset.filter(title__icontains=search)
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["page_title"] = "Категории проектов"
+        context["search_query"] = self.request.GET.get("q", "").strip()
+        return context
+
+
+class ProjectCategoryCreateView(SuperuserRequiredMixin, CreateView):
+    model = ProjectCategory
+    form_class = ProjectCategoryForm
+    template_name = "dashboard/projects/category_form.html"
+    success_url = reverse_lazy("dashboard:project_category_list")
+
+    def form_valid(self, form):
+        messages.success(self.request, "Категория проекта успешно создана.")
+        return super().form_valid(form)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["page_title"] = "Добавить категорию проекта"
+        context["submit_text"] = "Создать"
+        context["cancel_url"] = reverse_lazy("dashboard:project_category_list")
+        return context
+
+
+class ProjectCategoryUpdateView(SuperuserRequiredMixin, UpdateView):
+    model = ProjectCategory
+    form_class = ProjectCategoryForm
+    template_name = "dashboard/projects/category_form.html"
+    success_url = reverse_lazy("dashboard:project_category_list")
+
+    def form_valid(self, form):
+        messages.success(self.request, "Категория проекта успешно обновлена.")
+        return super().form_valid(form)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["page_title"] = f"Редактирование категории: {self.object.title}"
+        context["submit_text"] = "Сохранить"
+        context["cancel_url"] = reverse_lazy("dashboard:project_category_list")
+        return context
+
+
+class ProjectCategoryDeleteView(SuperuserRequiredMixin, DeleteView):
+    model = ProjectCategory
+    template_name = "dashboard/projects/category_confirm_delete.html"
+    success_url = reverse_lazy("dashboard:project_category_list")
+
+    def form_valid(self, form):
+        self.object = self.get_object()
+        try:
+            self.object.delete()
+            messages.success(self.request, "Категория проекта успешно удалена.")
+        except ProtectedError:
+            messages.error(
+                self.request,
+                "Нельзя удалить категорию, пока к ней привязаны проекты."
+            )
+        return HttpResponseRedirect(self.get_success_url())
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["page_title"] = f"Удаление категории: {self.object.title}"
+        context["cancel_url"] = reverse_lazy("dashboard:project_category_list")
+        return context
+
+class DashboardProjectListView(SuperuserRequiredMixin, ListView):
+    model = Project
+    template_name = "dashboard/projects/projects_list.html"
+    context_object_name = "projects"
+    paginate_by = 10
+
+    def get_queryset(self):
+        queryset = Project.objects.select_related("category").all().order_by("order", "-start_date")
+        search = self.request.GET.get("q", "").strip()
+        if search:
+            queryset = queryset.filter(
+                Q(title__icontains=search) |
+                Q(short_description__icontains=search) |
+                Q(category__title__icontains=search)
+            ).distinct()
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["page_title"] = "Проекты"
+        context["search_query"] = self.request.GET.get("q", "").strip()
+        return context
+
+
+class DashboardProjectCreateView(SuperuserRequiredMixin, CreateView):
+    model = Project
+    form_class = ProjectForm
+    template_name = "dashboard/projects/project_form.html"
+    success_url = reverse_lazy("dashboard:project_list")
+
+    def form_valid(self, form):
+        messages.success(self.request, "Проект успешно создан.")
+        return super().form_valid(form)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["page_title"] = "Добавить проект"
+        context["submit_text"] = "Создать"
+        context["cancel_url"] = reverse_lazy("dashboard:project_list")
+        return context
+
+
+class DashboardProjectUpdateView(SuperuserRequiredMixin, UpdateView):
+    model = Project
+    form_class = ProjectForm
+    template_name = "dashboard/projects/project_form.html"
+    success_url = reverse_lazy("dashboard:project_list")
+
+    def form_valid(self, form):
+        messages.success(self.request, "Проект успешно обновлён.")
+        return super().form_valid(form)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["page_title"] = f"Редактирование: {self.object.title}"
+        context["submit_text"] = "Сохранить"
+        context["cancel_url"] = reverse_lazy("dashboard:project_list")
+        return context
+
+
+class DashboardProjectDeleteView(SuperuserRequiredMixin, DeleteView):
+    model = Project
+    template_name = "dashboard/projects/project_confirm_delete.html"
+    success_url = reverse_lazy("dashboard:project_list")
+
+    def form_valid(self, form):
+        messages.success(self.request, "Проект успешно удалён.")
+        return super().form_valid(form)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["page_title"] = f"Удаление: {self.object.title}"
+        context["cancel_url"] = reverse_lazy("dashboard:project_list")
+        return context
