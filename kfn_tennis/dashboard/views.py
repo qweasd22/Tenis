@@ -412,12 +412,12 @@ class MediaEventCreateView(SuperuserRequiredMixin, CreateView):
     success_url = reverse_lazy("dashboard:media_event_list")
 
     def form_valid(self, form):
-        messages.success(self.request, "Медиа-мероприятие успешно создано.")
+        messages.success(self.request, "Медиасобытие успешно создано.")
         return super().form_valid(form)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["page_title"] = "Добавить медиа-мероприятие"
+        context["page_title"] = "Добавить медиасобытие"
         context["submit_text"] = "Создать"
         context["cancel_url"] = reverse_lazy("dashboard:media_event_list")
         return context
@@ -430,7 +430,7 @@ class MediaEventUpdateView(SuperuserRequiredMixin, UpdateView):
     success_url = reverse_lazy("dashboard:media_event_list")
 
     def form_valid(self, form):
-        messages.success(self.request, "Медиа-мероприятие успешно обновлено.")
+        messages.success(self.request, "Медиасобытие успешно обновлено.")
         return super().form_valid(form)
 
     def get_context_data(self, **kwargs):
@@ -447,7 +447,7 @@ class MediaEventDeleteView(SuperuserRequiredMixin, DeleteView):
     success_url = reverse_lazy("dashboard:media_event_list")
 
     def form_valid(self, form):
-        messages.success(self.request, "Медиа-мероприятие успешно удалено.")
+        messages.success(self.request, "Медиасобытие успешно удалено.")
         return super().form_valid(form)
 
     def get_context_data(self, **kwargs):

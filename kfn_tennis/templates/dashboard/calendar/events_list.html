@@ -58,7 +58,11 @@
                         </td>
                         <td>
                             {% if event.pdf %}
-                                <a href="{{ event.pdf.url }}" target="_blank">Открыть</a>
+                                {% if event.pdf_exists %}
+                                    <a href="{{ event.pdf_url }}" target="_blank">Открыть</a>
+                                {% else %}
+                                    <span class="text-warning">Файл не найден</span>
+                                {% endif %}
                             {% else %}
                                 <span class="text-muted">—</span>
                             {% endif %}

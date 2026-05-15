@@ -18,7 +18,7 @@
         <div class="event-date">{{ event.date|date:"d F Y" }}</div>
         <div class="event-title">{{ event.title }}</div>
         {% if event.pdf %}
-        <div><a href="{{ event.pdf.url }}">Скачать PDF</a></div>
+        <div><a href="{{ event.pdf_url }}">Скачать PDF</a></div>
         {% endif %}
     </div>
     {% empty %}

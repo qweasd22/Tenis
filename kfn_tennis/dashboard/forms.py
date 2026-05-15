@@ -42,6 +42,12 @@ class DocumentForm(forms.ModelForm):
         self.fields["file"].widget.attrs.update({"class": "form-control"})
 
 class EventForm(forms.ModelForm):
+    remove_pdf = forms.BooleanField(
+        required=False,
+        label="Удалить текущий PDF",
+        widget=forms.CheckboxInput(attrs={"class": "form-check-input"}),
+    )
+
     class Meta:
         model = Event
         fields = [
@@ -59,12 +65,52 @@ class EventForm(forms.ModelForm):
             "end_date": forms.DateInput(attrs={"class": "form-control", "type": "date"}),
             "start_time": forms.TimeInput(attrs={"class": "form-control", "type": "time"}),
             "end_time": forms.TimeInput(attrs={"class": "form-control", "type": "time"}),
+            "pdf": forms.FileInput(attrs={"class": "form-control", "accept": "application/pdf,.pdf"}),
             "is_current": forms.CheckboxInput(attrs={"class": "form-check-input"}),
         }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields["pdf"].widget.attrs.update({"class": "form-control"})
+
+    def clean(self):
+        cleaned_data = super().clean()
+        remove_pdf = cleaned_data.get("remove_pdf")
+        uploaded_pdf = self.files.get(self.add_prefix("pdf"))
+
+        if remove_pdf and uploaded_pdf:
+            self.add_error(
+                "pdf",
+                "Выберите только одно действие: загрузить новый PDF или удалить текущий.",
+            )
+
+        if uploaded_pdf and not uploaded_pdf.name.lower().endswith(".pdf"):
+            self.add_error("pdf", "Загрузите файл в формате PDF.")
+
+        return cleaned_data
+
+    def save(self, commit=True):
+        old_pdf_to_delete = None
+        if self.instance and self.instance.pk:
+            old_event = Event.objects.filter(pk=self.instance.pk).only("pdf").first()
+            if old_event and old_event.pdf:
+                old_pdf_to_delete = old_event.pdf_storage_name() or old_event.pdf.name
+
+        remove_pdf = self.cleaned_data.get("remove_pdf")
+        uploaded_pdf = self.files.get(self.add_prefix("pdf"))
+
+        if remove_pdf:
+            self.instance.pdf = None
+
+        event = super().save(commit=commit)
+
+        should_delete_old_pdf = old_pdf_to_delete and (
+            remove_pdf or (uploaded_pdf and old_pdf_to_delete != event.pdf.name)
+        )
+        if commit and should_delete_old_pdf:
+            Event._meta.get_field("pdf").storage.delete(old_pdf_to_delete)
+
+        return event
 
 from MediaPhoto.models import MediaEvent
 
