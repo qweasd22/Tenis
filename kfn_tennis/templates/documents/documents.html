@@ -78,17 +78,7 @@
 
     <p id="no-docs" class="text-muted text-center mt-4" style="display: none;">Документы не найдены.</p>
 
-    {% if documents.has_other_pages %}
-    <nav class="mt-4 d-flex justify-content-center">
-        <ul class="pagination">
-            {% for p in documents.paginator.page_range %}
-            <li class="page-item {% if documents.number == p %}active{% endif %}">
-                <a class="page-link" href="?page={{ p }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">{{ p }}</a>
-            </li>
-            {% endfor %}
-        </ul>
-    </nav>
-    {% endif %}
+    {% include "includes/public_pagination.html" with pagination_page=documents pagination_page_param="page" %}
 
 </div>
 
