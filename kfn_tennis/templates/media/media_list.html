@@ -26,7 +26,7 @@
     margin-top: 0.5rem;
 }
 
-/* Карточки мероприятий */
+/* Карточки событий */
 .news-card {
     background: #fff;
     border-radius: 1rem;
@@ -63,27 +63,6 @@
     background: linear-gradient(135deg, #ff8e72, #ff6b6b);
 }
 
-/* Пагинация */
-.pagination {
-    display: flex;
-    justify-content: center;
-    margin-top: 3rem;
-    gap: 0.5rem;
-}
-.pagination a,
-.pagination span {
-    display: inline-block;
-    padding: 0.5rem 0.8rem;
-    border-radius: 0.5rem;
-    background: #fff;
-    color: #ff6b6b;
-    font-weight: 500;
-    border: 1px solid #ff6b6b;
-    text-decoration: none;
-    transition: 0.3s;
-}
-.pagination a:hover { background: #ff6b6b; color: #fff; }
-.pagination .current { background: #ff6b6b; color: #fff; }
 </style>
 {% endblock %}
 
@@ -92,11 +71,11 @@
 
     <!-- Hero -->
     <div class="news-header">
-        <h1 class="fw-bold">Медиа мероприятия</h1>
+        <h1 class="fw-bold">Медиасобытия</h1>
         <p>Фотографии и материалы с наших соревнований и проектов</p>
     </div>
 
-    <!-- Карточки мероприятий -->
+    <!-- Карточки событий -->
     <div class="row g-4">
         {% for event in page_obj %}
         <div class="col-lg-4 col-md-6 col-12">
@@ -118,34 +97,11 @@
             </div>
         </div>
         {% empty %}
-        <p>Мероприятия не найдены.</p>
+        <p>События не найдены.</p>
         {% endfor %}
     </div>
 
-    <!-- Пагинация -->
-    {% if page_obj.has_other_pages %}
-    <div class="pagination">
-        {% if page_obj.has_previous %}
-        <a href="?page={{ page_obj.previous_page_number }}">&laquo; Назад</a>
-        {% else %}
-        <span>&laquo; Назад</span>
-        {% endif %}
-
-        {% for num in page_obj.paginator.page_range %}
-            {% if num == page_obj.number %}
-                <span class="current">{{ num }}</span>
-            {% elif num > page_obj.number|add:"-3" and num < page_obj.number|add:"3" %}
-                <a href="?page={{ num }}">{{ num }}</a>
-            {% endif %}
-        {% endfor %}
-
-        {% if page_obj.has_next %}
-        <a href="?page={{ page_obj.next_page_number }}">Вперед &raquo;</a>
-        {% else %}
-        <span>Вперед &raquo;</span>
-        {% endif %}
-    </div>
-    {% endif %}
+    {% include "includes/public_pagination.html" with pagination_page=page_obj pagination_page_param="page" %}
 
 </div>
 {% endblock %}

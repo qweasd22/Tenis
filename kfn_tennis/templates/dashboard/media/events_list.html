@@ -6,7 +6,7 @@
 <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
     <div>
         <h1 class="h3 mb-1">{{ page_title }}</h1>
-        <div class="text-muted">Управление медиа-мероприятиями</div>
+        <div class="text-muted">Управление медиасобытиями</div>
     </div>
 
     <a href="{% url 'dashboard:media_event_create' %}" class="btn btn-accent">
@@ -30,7 +30,7 @@
             <thead>
                 <tr>
                     <th style="width: 90px;">Обложка</th>
-                    <th>Название</th>
+                    <th>Медиасобытие</th>
                     <th>Дата</th>
                     <th>Фото</th>
                     <th style="width: 240px;">Действия</th>
@@ -69,8 +69,9 @@
     </div>
 {% else %}
     <div class="text-center py-5">
-        <div class="mb-3 text-muted">Медиа-мероприятия ещё не добавлены.</div>
+        <div class="mb-3 text-muted">Медиасобытия ещё не добавлены.</div>
         <a href="{% url 'dashboard:media_event_create' %}" class="btn btn-accent">Создать первое</a>
     </div>
 {% endif %}
+{% include "dashboard/includes/pagination.html" %}
 {% endblock %}

@@ -9,7 +9,7 @@ def teams_view(request):
     search_query = request.GET.get('search', '')
 
     # --- Сборные ---
-    members_qs = TeamMember.objects.all()
+    members_qs = TeamMember.objects.select_related('season').order_by('-season__year', 'full_name', 'id')
     if selected_season:
         members_qs = members_qs.filter(season_id=selected_season)
     if selected_gender in {TeamMember.MALE, TeamMember.FEMALE}:
@@ -20,12 +20,12 @@ def teams_view(request):
     teams_page = members_paginator.get_page(request.GET.get('teams_page', 1))
 
     # --- Тренера ---
-    coaches_qs = Coach.objects.all()
+    coaches_qs = Coach.objects.order_by('full_name', 'id')
     coaches_paginator = Paginator(coaches_qs, 12)
     coaches_page = coaches_paginator.get_page(request.GET.get('coaches_page', 1))
 
     # --- Судьи ---
-    judges_qs = Judge.objects.all()
+    judges_qs = Judge.objects.order_by('full_name', 'id')
     judges_paginator = Paginator(judges_qs, 12)
     judges_page = judges_paginator.get_page(request.GET.get('judges_page', 1))
 

@@ -44,11 +44,13 @@ class EventAdmin(admin.ModelAdmin):
     )
 
     def pdf_link(self, obj):
-        if obj.pdf:
+        if obj.pdf_exists():
             return format_html(
                 '<a href="{}" target="_blank">📄 Скачать</a>',
-                obj.pdf.url
+                obj.pdf_url()
             )
+        if obj.pdf:
+            return format_html('<span style="color: #b45309;">Файл не найден</span>')
         return "-"
 
     pdf_link.short_description = "PDF"

@@ -1,5 +1,6 @@
 from django.db import models
 from django.core.exceptions import ValidationError
+from pathlib import PurePosixPath
 
 
 class Event(models.Model):
@@ -42,6 +43,34 @@ class Event(models.Model):
         return f"{self.start_date.strftime('%d.%m.%Y')} - {self.end_date.strftime('%d.%m.%Y')}"
 
     date_range.short_description = "Даты"
+
+    def pdf_storage_name(self):
+        if not self.pdf:
+            return ""
+
+        storage = self.pdf.storage
+        name = self.pdf.name
+
+        if storage.exists(name):
+            return name
+
+        upload_to = self._meta.get_field("pdf").upload_to.strip("/")
+        filename = PurePosixPath(name).name
+        candidate = f"{upload_to}/{filename}" if upload_to else filename
+
+        if candidate != name and storage.exists(candidate):
+            return candidate
+
+        return ""
+
+    def pdf_exists(self):
+        return bool(self.pdf_storage_name())
+
+    def pdf_url(self):
+        storage_name = self.pdf_storage_name()
+        if not storage_name:
+            return ""
+        return self.pdf.storage.url(storage_name)
 
     def __str__(self):
         return self.title

@@ -92,7 +92,7 @@ class PartnerListView(SuperuserRequiredMixin, ListView):
     model = Partner
     template_name = "dashboard/partners/list.html"
     context_object_name = "partners"
-    paginate_by = 10
+    paginate_by = 6
 
     def get_queryset(self):
         queryset = Partner.objects.all().order_by("name")
@@ -163,7 +163,7 @@ class CategoryListView(SuperuserRequiredMixin, ListView):
     model = Category
     template_name = "dashboard/documents/categories_list.html"
     context_object_name = "categories"
-    paginate_by = 10
+    paginate_by = 6
 
     def get_queryset(self):
         queryset = Category.objects.all().order_by("order", "name")
@@ -234,7 +234,7 @@ class DocumentListView(SuperuserRequiredMixin, ListView):
     model = Document
     template_name = "dashboard/documents/documents_list.html"
     context_object_name = "documents"
-    paginate_by = 10
+    paginate_by = 6
 
     def get_queryset(self):
         queryset = (
@@ -312,7 +312,7 @@ class EventListView(SuperuserRequiredMixin, ListView):
     model = Event
     template_name = "dashboard/calendar/events_list.html"
     context_object_name = "events"
-    paginate_by = 10
+    paginate_by = 6
 
     def get_queryset(self):
         queryset = Event.objects.all().order_by("-start_date", "-created_at")
@@ -389,7 +389,7 @@ class MediaEventListView(SuperuserRequiredMixin, ListView):
     model = MediaEvent
     template_name = "dashboard/media/events_list.html"
     context_object_name = "events"
-    paginate_by = 10
+    paginate_by = 6
 
     def get_queryset(self):
         queryset = MediaEvent.objects.all().order_by("-date")
@@ -412,12 +412,12 @@ class MediaEventCreateView(SuperuserRequiredMixin, CreateView):
     success_url = reverse_lazy("dashboard:media_event_list")
 
     def form_valid(self, form):
-        messages.success(self.request, "Медиа-мероприятие успешно создано.")
+        messages.success(self.request, "Медиасобытие успешно создано.")
         return super().form_valid(form)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["page_title"] = "Добавить медиа-мероприятие"
+        context["page_title"] = "Добавить медиасобытие"
         context["submit_text"] = "Создать"
         context["cancel_url"] = reverse_lazy("dashboard:media_event_list")
         return context
@@ -430,7 +430,7 @@ class MediaEventUpdateView(SuperuserRequiredMixin, UpdateView):
     success_url = reverse_lazy("dashboard:media_event_list")
 
     def form_valid(self, form):
-        messages.success(self.request, "Медиа-мероприятие успешно обновлено.")
+        messages.success(self.request, "Медиасобытие успешно обновлено.")
         return super().form_valid(form)
 
     def get_context_data(self, **kwargs):
@@ -447,7 +447,7 @@ class MediaEventDeleteView(SuperuserRequiredMixin, DeleteView):
     success_url = reverse_lazy("dashboard:media_event_list")
 
     def form_valid(self, form):
-        messages.success(self.request, "Медиа-мероприятие успешно удалено.")
+        messages.success(self.request, "Медиасобытие успешно удалено.")
         return super().form_valid(form)
 
     def get_context_data(self, **kwargs):
@@ -501,7 +501,7 @@ class DashboardNewsListView(SuperuserRequiredMixin, ListView):
     model = News
     template_name = "dashboard/news/news_list.html"
     context_object_name = "news_items"
-    paginate_by = 10
+    paginate_by = 6
 
     def get_queryset(self):
         queryset = News.objects.all().order_by("-created_at")
@@ -583,7 +583,7 @@ class ProjectCategoryListView(SuperuserRequiredMixin, ListView):
     model = ProjectCategory
     template_name = "dashboard/projects/categories_list.html"
     context_object_name = "categories"
-    paginate_by = 10
+    paginate_by = 6
 
     def get_queryset(self):
         queryset = ProjectCategory.objects.all().order_by("order", "title")
@@ -662,7 +662,7 @@ class DashboardProjectListView(SuperuserRequiredMixin, ListView):
     model = Project
     template_name = "dashboard/projects/projects_list.html"
     context_object_name = "projects"
-    paginate_by = 10
+    paginate_by = 6
 
     def get_queryset(self):
         queryset = Project.objects.select_related("category").all().order_by("order", "-start_date")
@@ -740,7 +740,7 @@ class PersonListView(SuperuserRequiredMixin, ListView):
     model = Person
     template_name = "dashboard/structure/persons_list.html"
     context_object_name = "persons"
-    paginate_by = 10
+    paginate_by = 6
 
     def get_queryset(self):
         queryset = Person.objects.all().order_by("group", "full_name")
@@ -817,7 +817,7 @@ class SeasonListView(SuperuserRequiredMixin, ListView):
     model = Season
     template_name = "dashboard/teams/seasons_list.html"
     context_object_name = "seasons"
-    paginate_by = 10
+    paginate_by = 6
 
     def get_queryset(self):
         return Season.objects.all().order_by("-year")
@@ -883,7 +883,7 @@ class TeamMemberListView(SuperuserRequiredMixin, ListView):
     model = TeamMember
     template_name = "dashboard/teams/members_list.html"
     context_object_name = "members"
-    paginate_by = 12
+    paginate_by = 6
 
     def get_queryset(self):
         queryset = TeamMember.objects.select_related("season").all().order_by("-season__year", "full_name")
@@ -972,7 +972,7 @@ class CoachListView(SuperuserRequiredMixin, ListView):
     model = Coach
     template_name = "dashboard/teams/coaches_list.html"
     context_object_name = "coaches"
-    paginate_by = 12
+    paginate_by = 6
 
     def get_queryset(self):
         queryset = Coach.objects.all().order_by("full_name")
@@ -1046,7 +1046,7 @@ class JudgeListView(SuperuserRequiredMixin, ListView):
     model = Judge
     template_name = "dashboard/teams/judges_list.html"
     context_object_name = "judges"
-    paginate_by = 12
+    paginate_by = 6
 
     def get_queryset(self):
         queryset = Judge.objects.all().order_by("full_name")

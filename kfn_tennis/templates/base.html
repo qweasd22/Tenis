@@ -81,6 +81,22 @@
             color: #fff;
         }
 
+        .public-pagination .page-link {
+            border: none;
+            color: #ff6b6b;
+        }
+
+        .public-pagination .page-item.active .page-link,
+        .public-pagination .page-item.active .page-link:hover {
+            background: linear-gradient(90deg, #ff6b6b, #ff8e72);
+            color: #fff;
+        }
+
+        .public-pagination .page-link:hover {
+            background: rgba(255,107,107,0.1);
+            color: #ff6b6b;
+        }
+
         .card {
             background-color: var(--card-bg);
             border: none;
@@ -192,11 +208,14 @@
     bottom: 86px;
     width: 380px;
     max-width: calc(100vw - 32px);
+    max-height: calc(100vh - 118px);
     background: #fff;
     border-radius: 1rem;
     box-shadow: 0 18px 45px rgba(0, 0, 0, 0.18);
     z-index: 1051;
     overflow: hidden;
+    display: flex;
+    flex-direction: column;
 }
 
 .qa-panel-header {
@@ -223,6 +242,8 @@
 
 .qa-panel-body {
     padding: 1rem;
+    overflow-y: auto;
+    min-height: 0;
 }
 
 .qa-hint {
@@ -241,6 +262,7 @@
 
 .qa-answer {
     margin-top: 1rem;
+    overflow-wrap: anywhere;
 }
 
 .qa-answer-title,
@@ -267,6 +289,7 @@
 
 .qa-results-list li {
     margin-bottom: 0.75rem;
+    overflow-wrap: anywhere;
 }
 
 @media (max-width: 576px) {
@@ -280,6 +303,7 @@
         right: 16px;
         bottom: 76px;
         width: calc(100vw - 32px);
+        max-height: calc(100vh - 100px);
     }
 
     .qa-toggle-btn span {
@@ -394,7 +418,7 @@
      <div id="qa-widget">
     <button id="qa-toggle" type="button" class="qa-toggle-btn">
         <i class="bi bi-chat-dots-fill"></i>
-        <span>Задать вопрос</span>
+    
     </button>
 
     <div id="qa-panel" class="qa-panel d-none">

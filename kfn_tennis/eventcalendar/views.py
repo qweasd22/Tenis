@@ -38,7 +38,7 @@ def calendar_events_json(request):
                     "start_date": event.start_date.strftime("%d.%m.%Y"),
                     "end_date": event.end_date.strftime("%d.%m.%Y") if event.end_date else "",
                 },
-                "url": event.pdf.url if event.pdf else "",
+                "url": event.pdf_url(),
             })
 
         # Если времени нет — это многодневное allDay
@@ -54,7 +54,7 @@ def calendar_events_json(request):
                     "start_date": event.start_date.strftime("%d.%m.%Y"),
                     "end_date": end_date.strftime("%d.%m.%Y"),
                 },
-                "url": event.pdf.url if event.pdf else "",
+                "url": event.pdf_url(),
             })
 
     return JsonResponse(data, safe=False)

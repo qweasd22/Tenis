@@ -168,7 +168,7 @@
         font-weight: 700;
     }
 
-    /* Список мероприятий */
+    /* Список событий */
     .events-list {
         display: grid;
         gap: 1rem;
@@ -316,19 +316,19 @@
 <div class="container calendar-page my-1">
     <section class="projects-header">
         <h1 class="fw-bold">Календарь событий</h1>
-        <p class="text-muted mt-2">Следите за турнирами, соревнованиями и другими мероприятиями федерации</p>
+        <p class="text-muted mt-2">Следите за турнирами, соревнованиями и другими событиями федерации</p>
     </section>
 
     <div class="calendar-layout-card">
         <div class="calendar-topbar">
-            <h2 class="calendar-topbar-title">Расписание мероприятий</h2>
+            <h2 class="calendar-topbar-title">Расписание событий</h2>
 
             <div class="calendar-view-switcher">
                 <button type="button" class="calendar-view-btn active" data-target="calendar-panel">
                     Календарь
                 </button>
                 <button type="button" class="calendar-view-btn" data-target="list-panel">
-                    Список мероприятий
+                    Список событий
                 </button>
             </div>
         </div>
@@ -336,7 +336,7 @@
         <div id="calendar-panel" class="calendar-panel active">
             <div id="calendar"></div>
             <div class="calendar-note">
-                Нажмите на мероприятие, чтобы открыть прикреплённый PDF, если он добавлен.
+                Нажмите на событие, чтобы открыть прикреплённый PDF, если он добавлен.
             </div>
         </div>
 
@@ -398,7 +398,7 @@ document.addEventListener('DOMContentLoaded', function () {
             listEl.innerHTML = `
                 <div class="event-empty">
                     <i class="bi bi-calendar-x"></i>
-                    <div class="fw-semibold mb-1">Мероприятия не найдены</div>
+                    <div class="fw-semibold mb-1">События не найдены</div>
                     <div>На данный момент в календаре нет событий.</div>
                 </div>
             `;
@@ -418,7 +418,7 @@ document.addEventListener('DOMContentLoaded', function () {
             article.innerHTML = `
                 <div class="event-card-head">
                     <h3 class="event-card-title">${event.title}</h3>
-                    <span class="event-badge">Мероприятие</span>
+                    <span class="event-badge">Событие</span>
                 </div>
 
                 <div class="event-meta">

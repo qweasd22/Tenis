@@ -48,11 +48,28 @@
 
     <div class="mb-3">
         <label class="form-label" for="{{ form.pdf.id_for_label }}">PDF файл</label>
-        {{ form.pdf }}
+
         {% if object and object.pdf %}
-            <div class="mt-2">
-                <a href="{{ object.pdf.url }}" target="_blank">Текущий PDF</a>
+            {% if object.pdf_exists %}
+                <div class="mb-2">
+                    <a href="{{ object.pdf_url }}" target="_blank">Текущий PDF</a>
+                </div>
+            {% else %}
+                <div class="alert alert-warning py-2 mb-2">
+                    PDF указан в записи, но файл не найден. Можно удалить привязку или загрузить новый файл.
+                </div>
+            {% endif %}
+            <div class="form-check mb-2">
+                {{ form.remove_pdf }}
+                <label class="form-check-label" for="{{ form.remove_pdf.id_for_label }}">
+                    Удалить текущий PDF
+                </label>
             </div>
+        {% endif %}
+
+        {{ form.pdf }}
+        {% if form.pdf.errors %}
+            <div class="invalid-feedback d-block">{{ form.pdf.errors }}</div>
         {% endif %}
     </div>
 

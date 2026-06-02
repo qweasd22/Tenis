@@ -1,0 +1,25 @@
+{% load public_extras %}
+
+{% if pagination_page.has_other_pages %}
+<nav class="public-pagination mt-5">
+    <ul class="pagination justify-content-center">
+        {% if pagination_page.has_previous %}
+            <li class="page-item">
+                <a class="page-link" href="?{% public_pagination_url pagination_page_param pagination_page.previous_page_number pagination_tab %}">&larr;</a>
+            </li>
+        {% endif %}
+
+        {% for num in pagination_page.paginator.page_range %}
+            <li class="page-item {% if pagination_page.number == num %}active{% endif %}">
+                <a class="page-link" href="?{% public_pagination_url pagination_page_param num pagination_tab %}">{{ num }}</a>
+            </li>
+        {% endfor %}
+
+        {% if pagination_page.has_next %}
+            <li class="page-item">
+                <a class="page-link" href="?{% public_pagination_url pagination_page_param pagination_page.next_page_number pagination_tab %}">&rarr;</a>
+            </li>
+        {% endif %}
+    </ul>
+</nav>
+{% endif %}
