@@ -5,6 +5,13 @@ class QaIndex(models.Model):
     SOURCE_TYPES = (
         ("news", "Новость"),
         ("project", "Проект"),
+        ("document", "Документ"),
+        ("document_category", "Раздел документов"),
+        ("event", "Событие"),
+        ("media", "Медиа"),
+        ("person", "Член федерации"),
+        ("partner", "Партнер"),
+        ("season", "Сезон сборной"),
         ("team_member", "Игрок"),
         ("coach", "Тренер"),
         ("judge", "Судья"),

@@ -4,6 +4,9 @@ from qa.models import QaIndex
 from qa.intents import detect_intent
 
 
+SEARCH_LIMIT = 10
+
+
 def normalize_text(text: str) -> str:
     text = (text or "").lower().replace("ё", "е")
     text = re.sub(r"[^a-zа-я0-9\s]", " ", text)
@@ -12,7 +15,12 @@ def normalize_text(text: str) -> str:
 
 
 def tokenize(text: str) -> list[str]:
-    return [w for w in normalize_text(text).split() if len(w) > 1]
+    stop_words = {
+        "где", "как", "что", "кто", "куда", "когда", "какие", "какой", "какая",
+        "найти", "найди", "есть", "про", "по", "на", "в", "и", "или", "для",
+        "мне", "сайт", "сайте", "показать", "покажи",
+    }
+    return [w for w in normalize_text(text).split() if len(w) > 1 and w not in stop_words]
 
 
 def word_variants(word: str) -> set[str]:
@@ -73,6 +81,11 @@ def search_qa(query: str):
     source_priority = {
         "news": {"news": 20},
         "project": {"project": 20},
+        "document": {"document": 22, "document_category": 18, "page": 8},
+        "event": {"event": 22, "page": 8},
+        "media": {"media": 22, "page": 8},
+        "person": {"person": 22, "page": 8},
+        "partner": {"partner": 22, "page": 8},
         "team_member": {"team_member": 20},
         "coach": {"coach": 20},
         "judge": {"judge": 20},
@@ -88,15 +101,17 @@ def search_qa(query: str):
         if score > 0:
             scored.append((score, item))
 
-    if intent == "news":
-        scored.sort(
-            key=lambda x: (x[0], x[1].published_at.timestamp() if x[1].published_at else 0),
-            reverse=True
-        )
-    else:
-        scored.sort(key=lambda x: x[0], reverse=True)
+    scored.sort(
+        key=lambda x: (
+            x[0],
+            x[1].published_at.timestamp() if x[1].published_at else 0,
+            x[1].id,
+        ),
+        reverse=True
+    )
 
-    return [item for score, item in scored[:5]]
+    return [item for score, item in scored[:SEARCH_LIMIT]]
+
 
 def build_answer(query: str, results):
     if not results:
@@ -111,6 +126,20 @@ def build_answer(query: str, results):
         text = f"Найдена подходящая новость: {first.title}"
     elif first.source_type == "project":
         text = f"Найден подходящий проект: {first.title}"
+    elif first.source_type == "document":
+        text = f"Найден подходящий документ: {first.title}"
+    elif first.source_type == "document_category":
+        text = f"Найден раздел документов: {first.title}"
+    elif first.source_type == "event":
+        text = f"Найдено событие в календаре: {first.title}"
+    elif first.source_type == "media":
+        text = f"Найден медиаматериал: {first.title}"
+    elif first.source_type == "person":
+        text = f"Найден участник федерации: {first.title}"
+    elif first.source_type == "partner":
+        text = f"Найден партнер федерации: {first.title}"
+    elif first.source_type == "season":
+        text = f"Найден сезон сборной: {first.title}"
     elif first.source_type == "team_member":
         text = f"Найден игрок: {first.title}"
     elif first.source_type == "coach":

@@ -476,7 +476,7 @@
 
         <div class="qa-panel-body">
             <div class="qa-hint">
-                Спросите о новостях, проектах, сборных, тренерах или судьях.
+                Спросите о новостях, документах, календаре, проектах, сборных, медиа или структуре федерации.
             </div>
 
             <form id="qa-form" class="qa-form">
@@ -484,7 +484,7 @@
                     type="text"
                     id="qa-input"
                     class="form-control"
-                    placeholder="Например: Какие есть последние новости?"
+                    placeholder="Например: Где найти календарь турниров?"
                     autocomplete="off"
                 >
                 <button type="submit" class="btn btn-accent mt-2 w-100">
@@ -500,6 +500,7 @@
 
                 <div id="qa-top-result" class="qa-top-result d-none">
                     <a id="qa-top-link" href="#" class="fw-semibold"></a>
+                    <div id="qa-top-type" class="small text-muted mt-1"></div>
                     <div id="qa-top-summary" class="small text-muted mt-1"></div>
                 </div>
 
@@ -526,6 +527,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const topResultBox = document.getElementById("qa-top-result");
     const topLink = document.getElementById("qa-top-link");
+    const topType = document.getElementById("qa-top-type");
     const topSummary = document.getElementById("qa-top-summary");
 
     const resultsBlock = document.getElementById("qa-results-block");
@@ -556,6 +558,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         topLink.textContent = "";
         topLink.href = "#";
+        topType.textContent = "";
         topSummary.textContent = "";
         topResultBox.classList.add("d-none");
 
@@ -572,6 +575,7 @@ document.addEventListener("DOMContentLoaded", function () {
         if (data.top_result) {
             topLink.textContent = data.top_result.title;
             topLink.href = data.top_result.url;
+            topType.textContent = data.top_result.source_type || "";
             topSummary.textContent = data.top_result.summary || "";
             topResultBox.classList.remove("d-none");
         }

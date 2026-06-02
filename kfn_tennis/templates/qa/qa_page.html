@@ -2,17 +2,18 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>Вопрос-ответ</title>
+    <title>Поиск по сайту</title>
 </head>
 <body>
-    <h1>Вопрос-ответ по сайту</h1>
+    <h1>Поиск по сайту</h1>
+    <p>Ищите по новостям, документам, календарю, проектам, сборным, медиа и структуре федерации.</p>
 
     <form method="get">
         <input
             type="text"
             name="q"
             value="{{ query }}"
-            placeholder="Введите вопрос"
+            placeholder="Например: Где найти документы?"
             style="width: 420px;"
         >
         <button type="submit">Найти</button>
@@ -33,7 +34,7 @@
     {% endif %}
 
     {% if results %}
-        <h3>Другие подходящие материалы</h3>
+        <h3>Найденные материалы</h3>
         <ul>
             {% for item in results %}
                 <li>
