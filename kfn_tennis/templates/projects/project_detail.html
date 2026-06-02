@@ -1,7 +1,16 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block title %}{{ project.title }}{% endblock %}
+{% block title %}{{ project.title }} - Проекты федерации{% endblock %}
+{% block meta_description %}{{ project.short_description|striptags|truncatechars:160 }}{% endblock %}
+{% block og_type %}article{% endblock %}
+{% block og_title %}{{ project.title }}{% endblock %}
+{% block og_description %}{{ project.short_description|striptags|truncatechars:160 }}{% endblock %}
+{% block og_image %}{% if project.main_image %}{{ site_base_url }}{{ project.main_image.url }}{% else %}{{ block.super }}{% endif %}{% endblock %}
+{% block twitter_image %}{% if project.main_image %}{{ site_base_url }}{{ project.main_image.url }}{% else %}{{ block.super }}{% endif %}{% endblock %}
+{% block og_image_alt %}{{ project.title }}{% endblock %}
+{% block twitter_title %}{{ project.title }}{% endblock %}
+{% block twitter_description %}{{ project.short_description|striptags|truncatechars:160 }}{% endblock %}
 {% block body_class %}project-page{% endblock %}
 
 {% block extra_css %}

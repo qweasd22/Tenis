@@ -1,6 +1,13 @@
 {% extends "base.html" %}
 {% load static %}
 
+{% block title %}Календарь соревнований и событий{% endblock %}
+{% block meta_description %}Календарь турниров, соревнований и событий Курской федерации настольного тенниса с расписанием и прикрепленными документами.{% endblock %}
+{% block og_title %}Календарь Курской федерации настольного тенниса{% endblock %}
+{% block og_description %}Расписание турниров, соревнований и событий федерации.{% endblock %}
+{% block twitter_title %}Календарь Курской федерации настольного тенниса{% endblock %}
+{% block twitter_description %}Расписание турниров, соревнований и событий федерации.{% endblock %}
+
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'css/calendar.css' %}">
 <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/main.min.css" rel="stylesheet" />

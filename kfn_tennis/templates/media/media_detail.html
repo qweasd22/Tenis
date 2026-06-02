@@ -1,7 +1,16 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block title %}{{ event.title }}{% endblock %}
+{% block title %}{{ event.title }} - Медиа{% endblock %}
+{% block meta_description %}{% if event.description %}{{ event.description|striptags|truncatechars:160 }}{% else %}Фотогалерея события «{{ event.title }}» Курской федерации настольного тенниса.{% endif %}{% endblock %}
+{% block og_type %}article{% endblock %}
+{% block og_title %}{{ event.title }}{% endblock %}
+{% block og_description %}{% if event.description %}{{ event.description|striptags|truncatechars:160 }}{% else %}Фотогалерея события Курской федерации настольного тенниса.{% endif %}{% endblock %}
+{% block og_image %}{% if event.cover %}{{ site_base_url }}{{ event.cover.url }}{% else %}{{ block.super }}{% endif %}{% endblock %}
+{% block twitter_image %}{% if event.cover %}{{ site_base_url }}{{ event.cover.url }}{% else %}{{ block.super }}{% endif %}{% endblock %}
+{% block og_image_alt %}{{ event.title }}{% endblock %}
+{% block twitter_title %}{{ event.title }}{% endblock %}
+{% block twitter_description %}{% if event.description %}{{ event.description|striptags|truncatechars:160 }}{% else %}Фотогалерея события Курской федерации настольного тенниса.{% endif %}{% endblock %}
 {% block body_class %}news-detail-page{% endblock %}
 
 {% block extra_css %}

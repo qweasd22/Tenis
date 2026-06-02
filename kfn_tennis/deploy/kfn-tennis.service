@@ -1,0 +1,16 @@
+[Unit]
+Description=KFN Tennis Django application
+After=network.target
+
+[Service]
+Type=simple
+User=www-data
+Group=www-data
+WorkingDirectory=/var/www/kfn_tennis
+EnvironmentFile=/var/www/kfn_tennis/.env
+ExecStart=/var/www/kfn_tennis/venv/bin/gunicorn kfn_tennis.wsgi:application -c /var/www/kfn_tennis/deploy/gunicorn_config.py
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

@@ -1,7 +1,16 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block title %}{{ news.title }} - Новости{% endblock %}
+{% block title %}{{ news.title }} - Новости настольного тенниса{% endblock %}
+{% block meta_description %}{{ news.full_description|striptags|truncatechars:160 }}{% endblock %}
+{% block og_type %}article{% endblock %}
+{% block og_title %}{{ news.title }}{% endblock %}
+{% block og_description %}{{ news.full_description|striptags|truncatechars:160 }}{% endblock %}
+{% block og_image %}{% if news.image %}{{ site_base_url }}{{ news.image.url }}{% else %}{{ block.super }}{% endif %}{% endblock %}
+{% block twitter_image %}{% if news.image %}{{ site_base_url }}{{ news.image.url }}{% else %}{{ block.super }}{% endif %}{% endblock %}
+{% block og_image_alt %}{{ news.title }}{% endblock %}
+{% block twitter_title %}{{ news.title }}{% endblock %}
+{% block twitter_description %}{{ news.full_description|striptags|truncatechars:160 }}{% endblock %}
 {% block body_class %}news-detail-page{% endblock %}
 
 {% block content %}

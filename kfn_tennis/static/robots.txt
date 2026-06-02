@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /django-admin/
+Disallow: /ckeditor5/
+Disallow: /qa/ask/
+
+Sitemap: /sitemap.xml
