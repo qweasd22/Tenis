@@ -135,18 +135,6 @@
     box-shadow: 0 5px 15px rgba(255,107,107,0.3);
 }
 
-/* Заголовок */
-.news-detail-header {
-    background: linear-gradient(135deg, rgba(255,107,107,0.12), rgba(255,142,114,0.08));
-    padding: 2rem 1.5rem;
-    border-radius: 1rem;
-    text-align: center;
-}
-.news-title {
-    font-size: 2rem;
-    font-weight: 700;
-    color: #2c2c2c;
-}
 .news-date {
     color: #555;
     margin-top: 0.5rem;

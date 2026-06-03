@@ -1,32 +1,9 @@
-/* ===== Hero календаря ===== */
-.calendar-hero {
-    background: linear-gradient(135deg, rgba(255,107,107,0.15), rgba(255,142,114,0.1));
-    padding: 3rem 1rem;
-    border-radius: 1rem;
-    text-align: center;
-}
-
-.calendar-hero h1 {
-    color: #343A40;
-    font-weight: 700;
-}
-
-.calendar-hero p {
-    color: #6c757d;
-    font-size: 1.1rem;
-}
-
 /* ===== Карточка календаря ===== */
 .calendar-card {
     background-color: #ffffff;
     padding: 25px;
     border-radius: 12px;
     box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-}
-
-/* ===== FullCalendar стили ===== */
-.fc {
-    font-family: 'Inter', sans-serif;
 }
 
 .fc-toolbar-title {

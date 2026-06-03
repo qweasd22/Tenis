@@ -12,24 +12,6 @@
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'css/project.css' %}">
 <style>
-/* Заголовок секции */
-.projects-header {
-    background: linear-gradient(135deg, rgba(255,107,107,0.15), rgba(255,142,114,0.1));
-    padding: 3rem 1rem;
-    border-radius: 1rem;
-    text-align: center;
-    margin-bottom: 3rem;
-}
-
-.projects-header h1 {
-    font-weight: 700;
-    color: #2c2c2c;
-}
-
-.projects-header p {
-    color: #6c757d;
-}
-
 /* Карточки проектов */
 .project-card {
     background: #fff;
@@ -133,7 +115,7 @@
 <div class="container my-1">
 
     <!-- Заголовок -->
-    <div class="projects-header">
+    <div class="public-page-header projects-header">
         <h1 class="fw-bold">Проекты</h1>
         <p class="text-muted">Реализуемые и завершённые проекты, программы и инициативы</p>
     </div>

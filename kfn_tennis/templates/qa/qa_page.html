@@ -11,7 +11,7 @@
 
 {% block content %}
 <div class="container my-1">
-    <section class="qa-search-header text-center mb-4">
+    <section class="public-page-header qa-search-header">
         <h1 class="fw-bold">Поиск по сайту</h1>
         <p class="mt-2 text-muted mb-4">
             Ищите по новостям, документам, календарю, проектам, сборным, медиа и структуре федерации.
@@ -78,20 +78,6 @@
 
 {% block extra_css %}
 <style>
-body.qa-search-page {
-    background: linear-gradient(135deg, #fff5f5, #ffe3e3);
-}
-
-.qa-search-header {
-    background: linear-gradient(
-        135deg,
-        rgba(255, 107, 107, 0.15),
-        rgba(255, 142, 114, 0.1)
-    );
-    padding: 3rem 1rem;
-    border-radius: 1rem;
-}
-
 .qa-search-form {
     max-width: 640px;
 }
@@ -165,10 +151,6 @@ body.qa-search-page {
 }
 
 @media (max-width: 576px) {
-    .qa-search-header {
-        padding: 2rem 1rem;
-    }
-
     .qa-search-form .input-group {
         display: block;
     }

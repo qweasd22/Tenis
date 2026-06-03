@@ -17,24 +17,6 @@
         color: var(--text-color);
     }
 
-    .projects-header {
-        background: linear-gradient(135deg, rgba(255,107,107,0.15), rgba(255,142,114,0.1));
-        padding: 3rem 1rem;
-        border-radius: 1rem;
-        text-align: center;
-        margin-bottom: 3rem;
-    }
-
-    .projects-header h1 {
-        color: #343A40;
-        font-weight: 700;
-    }
-
-    .projects-header p {
-        color: #6c757d;
-        font-size: 1.1rem;
-    }
-
     .calendar-layout-card {
         background: #fff;
         border-radius: 1rem;
@@ -308,10 +290,6 @@
             flex: 1;
         }
 
-        .projects-header h1 {
-            font-size: 1.5rem;
-        }
-
         .calendar-chip-title {
             font-size: 0.72rem;
         }
@@ -321,7 +299,7 @@
 
 {% block content %}
 <div class="container calendar-page my-1">
-    <section class="projects-header">
+    <section class="public-page-header calendar-header">
         <h1 class="fw-bold">Календарь событий</h1>
         <p class="text-muted mt-2">Следите за турнирами, соревнованиями и другими событиями федерации</p>
     </section>

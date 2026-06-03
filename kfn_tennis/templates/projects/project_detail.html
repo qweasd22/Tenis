@@ -46,19 +46,14 @@
     box-shadow: 0 5px 15px rgba(255,107,107,0.3);
 }
 
-/* Заголовок проекта */
-.project-header h1 {
-    font-weight: 700;
-    color: #2c2c2c;
-    margin-bottom: 0.5rem;
-}
-
 .category-badge {
     background: var(--accent-color);
     color: #fff;
     font-weight: 500;
     padding: 0.25rem 0.75rem;
     border-radius: 0.5rem;
+    display: inline-block;
+    margin-top: 0.75rem;
 }
 
 /* Главное изображение */
@@ -222,7 +217,7 @@
     </div>
 
     <!-- Заголовок -->
-    <div class="mb-4 project-header">
+    <div class="public-page-header project-header">
         <h1 class="fw-bold">{{ project.title }}</h1>
         <span class="category-badge">{{ project.category.title }}</span>
     </div>

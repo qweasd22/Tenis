@@ -1,14 +1,3 @@
-/* ===== Header ===== */
-.documents-header {
-    background: linear-gradient(
-        135deg,
-        rgba(255,107,107,0.15),
-        rgba(255,142,114,0.1)
-    );
-    padding: 3rem 1rem;
-    border-radius: 1rem;
-}
-
 /* ===== Карточки категорий ===== */
 .document-card {
     background: #fff;
@@ -81,15 +70,6 @@
 .document-item:hover .document-action i {
     transform: scale(1.2);
 }
-/* Header / Hero */
-.documents-header {
-    background: linear-gradient(135deg, rgba(255,107,107,0.15), rgba(255,142,114,0.1));
-    padding: 3rem 1rem;
-    border-radius: 1rem;
-    text-align: center;
-}
-.documents-header h1 { color: #343A40; font-weight: 700; }
-.documents-header p { color: #6c757d; font-size: 1.1rem; }
 .documents-header .btn-outline-accent {
     border: 2px solid #ff6b6b;
     color: #ff6b6b;

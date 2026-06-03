@@ -33,15 +33,6 @@
 }
 .btn-back:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(255,107,107,0.3); }
 
-/* Заголовок */
-.news-detail-header {
-    background: linear-gradient(135deg, rgba(255,107,107,0.12), rgba(255,142,114,0.08));
-    padding: 2rem 1.5rem;
-    border-radius: 1rem;
-    text-align: center;
-    margin-bottom: 2rem;
-}
-.news-title { font-size: 2rem; font-weight: 700; color: #2c2c2c; }
 .news-date { color: #555; margin-top: 0.5rem; }
 
 /* Статья */
@@ -97,7 +88,7 @@
     </div>
 
     <!-- Заголовок -->
-    <div class="news-detail-header">
+    <div class="public-page-header media-detail-header">
         <h1 class="news-title">{{ event.title }}</h1>
         {% if event.date %}
             <p class="news-date">{{ event.date|date:"d.m.Y" }}</p>

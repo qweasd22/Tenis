@@ -1,15 +1,3 @@
-/* Header */
-.news-header {
-    background: linear-gradient(
-        135deg,
-        rgba(255,107,107,0.15),
-        rgba(255,142,114,0.1)
-    );
-    padding: 3rem 1rem;
-    border-radius: 1rem;
-    text-align: center;
-}
-
 /* Поиск */
 .search-form .form-control {
     border-radius: 0.5rem 0 0 0.5rem;
@@ -82,28 +70,6 @@
     border-radius: 1.2rem;
     padding: 2rem;
     box-shadow: 0 10px 30px rgba(0,0,0,0.06);
-}
-
-/* Заголовок */
-/* ===== HEADER новости (фикс проблемы) ===== */
-
-.news-detail-header {
-    background: linear-gradient(
-        135deg,
-        rgba(255,107,107,0.12),
-        rgba(255,142,114,0.08)
-    );
-    padding: 2rem 1.5rem;
-    border-radius: 1rem;
-    text-align: center;
-}
-
-/* Заголовок */
-.news-title {
-    font-size: 2rem;
-    font-weight: 700;
-    color: #2c2c2c;   /* темнее = читаемо */
-    margin-bottom: 0.5rem;
 }
 
 /* Дата */
