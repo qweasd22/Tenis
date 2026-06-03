@@ -1,10 +1,3 @@
-/* Фон как на главной */
-body.news-page {
-    background: linear-gradient(135deg, #ff6b6b, #ff8e72, #ffb199, #ffe0e0); 
-    font-family: 'Inter', sans-serif;
-    color: #343A40;
-}
-
 /* Header */
 .news-header {
     background: linear-gradient(
@@ -77,12 +70,6 @@ body.news-page {
     background: rgba(255,107,107,0.1);
 }
 
-/* ===== Детальная страница (финал) ===== */
-
-body.news-detail-page {
-    background: linear-gradient(135deg, #fff5f5, #ffe3e3);
-}
-
 /* Контейнер */
 .news-detail-container {
     max-width: 900px;
@@ -124,10 +111,6 @@ body.news-detail-page {
     color: #555;   /* было слишком бледно */
 }
 
-/* Мета */
-.news-meta {
-    font-size: 0.95rem;
-}
 /* Картинка — БЕЗ ОБРЕЗКИ */
 .news-image-full {
     text-align: center;
@@ -145,7 +128,6 @@ body.news-detail-page {
 
 /* Контент */
 .news-content {
-    font-size: 1.05rem;
     line-height: 1.75;
     margin-top: 1.5rem;
 }

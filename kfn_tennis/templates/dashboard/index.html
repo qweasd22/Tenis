@@ -1,4 +1,5 @@
 {% extends "dashboard/base.html" %}
+{% load public_extras %}
 
 {% block title %}Панель управления{% endblock %}
 {% block extra_css %}
@@ -164,6 +165,10 @@
     </div>
 
     <div class="dashboard-page-actions">
+        <form method="post" action="{% url 'dashboard:qa_rebuild' %}">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-outline-secondary btn-sm">Пересобрать Q&A</button>
+        </form>
         <a href="{% url 'dashboard:news_create' %}" class="btn btn-accent btn-sm">Добавить новость</a>
         <a href="{% url 'dashboard:event_create' %}" class="btn btn-outline-secondary btn-sm">Добавить событие</a>
         <a href="{% url 'dashboard:document_create' %}" class="btn btn-outline-secondary btn-sm">Добавить документ</a>
@@ -282,13 +287,28 @@
 
     <div>
         <div class="dashboard-side-card">
+            <div class="dashboard-side-title">Q&A помощник</div>
+
+            <div class="dashboard-mini-meta mb-3">
+                Записей в поисковом индексе: {{ qa_index_total }}
+            </div>
+
+            <form method="post" action="{% url 'dashboard:qa_rebuild' %}">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-accent btn-sm w-100">
+                    Пересобрать индекс
+                </button>
+            </form>
+        </div>
+
+        <div class="dashboard-side-card">
             <div class="dashboard-side-title">Последние новости</div>
 
             {% if recent_news %}
                 <ul class="dashboard-mini-list">
                     {% for item in recent_news %}
                         <li>
-                            <div class="dashboard-mini-title">{{ item.title }}</div>
+                            <div class="dashboard-mini-title">{{ item.title|clean_text }}</div>
                             <div class="dashboard-mini-meta">{{ item.created_at|date:"d.m.Y H:i" }}</div>
                         </li>
                     {% endfor %}
@@ -305,7 +325,7 @@
                 <ul class="dashboard-mini-list">
                     {% for item in upcoming_events %}
                         <li>
-                            <div class="dashboard-mini-title">{{ item.title }}</div>
+                            <div class="dashboard-mini-title">{{ item.title|clean_text }}</div>
                             <div class="dashboard-mini-meta">
                                 {{ item.start_date|date:"d.m.Y" }}
                                 {% if item.end_date and item.end_date != item.start_date %}

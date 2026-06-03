@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load static %}
+{% load static public_extras %}
 
 {% block title %}Новости настольного тенниса Курской области{% endblock %}
 {% block meta_description %}Актуальные новости, события, объявления и материалы Курской федерации настольного тенниса.{% endblock %}
@@ -42,11 +42,11 @@
                             {% if news.image %}
                                 <img src="{{ news.image.url }}"
                                      class="card-img-top object-fit-cover"
-                                     alt="{{ news.title }}">
+                                     alt="{{ news.title|clean_text }}">
                             {% else %}
                                 <div class="news-placeholder d-flex align-items-center justify-content-center">
                                     <span class="news-placeholder-text">
-                                        {{ news.title|truncatechars:40 }}
+                                        {{ news.title|clean_truncate:40 }}
                                     </span>
                                 </div>
                             {% endif %}
@@ -59,11 +59,11 @@
                             </div>
 
                             <h5 class="card-title fw-semibold">
-                                {{ news.title }}
+                                {{ news.title|clean_text }}
                             </h5>
 
                             <p class="card-text text-muted small mb-4">
-                                {{ news.content|truncatechars:120 }}
+                                {{ news.full_description|clean_truncate:120 }}
                             </p>
 
                             <div class="mt-auto">

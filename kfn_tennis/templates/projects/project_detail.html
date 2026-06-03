@@ -16,13 +16,6 @@
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'css/project.css' %}">
 <style>
-/* Фон и шрифт */
-body.project-page {
-    background: linear-gradient(135deg, #ff6b6b, #ff8e72, #ffb199, #ffe0e0);
-    font-family: 'Inter', sans-serif;
-    color: #343A40;
-}
-
 /* Хлебные крошки */
 .breadcrumb {
     background: transparent;
@@ -56,7 +49,6 @@ body.project-page {
 /* Заголовок проекта */
 .project-header h1 {
     font-weight: 700;
-    font-size: 2rem;
     color: #2c2c2c;
     margin-bottom: 0.5rem;
 }
@@ -67,7 +59,6 @@ body.project-page {
     font-weight: 500;
     padding: 0.25rem 0.75rem;
     border-radius: 0.5rem;
-    font-size: 0.85rem;
 }
 
 /* Главное изображение */
@@ -215,9 +206,6 @@ body.project-page {
     font-weight: 500;
 }
 
-.related-projects .btn-project {
-    font-size: 0.9rem;
-}
 </style>
 {% endblock %}
 

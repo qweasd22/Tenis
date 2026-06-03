@@ -1,12 +1,6 @@
 /* =======================================
-   MEDIA (стиль как новости)
+   MEDIA
    ======================================= */
-
-body.news-page, body.news-detail-page {
-    background: linear-gradient(135deg, #ff6b6b, #ff8e72, #ffb199, #ffe0e0);
-    font-family: 'Inter', sans-serif;
-    color: #343A40;
-}
 
 /* Заголовки и хлебные крошки наследуют стиль новостей */
 .breadcrumb a {

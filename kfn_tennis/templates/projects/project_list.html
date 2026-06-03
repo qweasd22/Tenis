@@ -12,13 +12,6 @@
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'css/project.css' %}">
 <style>
-/* Фон и шрифт */
-body.projects-page {
-    background: linear-gradient(135deg, #ff6b6b, #ff8e72, #ffb199, #ffe0e0);
-    font-family: 'Inter', sans-serif;
-    color: #343A40;
-}
-
 /* Заголовок секции */
 .projects-header {
     background: linear-gradient(135deg, rgba(255,107,107,0.15), rgba(255,142,114,0.1));
@@ -29,14 +22,12 @@ body.projects-page {
 }
 
 .projects-header h1 {
-    font-size: 2rem;
     font-weight: 700;
     color: #2c2c2c;
 }
 
 .projects-header p {
     color: #6c757d;
-    font-size: 1.1rem;
 }
 
 /* Карточки проектов */
@@ -101,7 +92,6 @@ body.projects-page {
 /* Краткое описание */
 .project-card .card-text {
     color: #6c757d;
-    font-size: 0.9rem;
     line-height: 1.4;
 }
 
@@ -133,9 +123,7 @@ body.projects-page {
 
 /* Мобильная адаптация */
 @media (max-width: 576px) {
-    .projects-header h1 { font-size: 1.5rem; }
-    .project-card .card-text { font-size: 0.85rem; }
-    .btn-project { padding: 0.5rem 1rem; font-size: 0.85rem; }
+    .btn-project { padding: 0.5rem 1rem; }
     .project-main-image img { height: 200px; }
 }
 </style>

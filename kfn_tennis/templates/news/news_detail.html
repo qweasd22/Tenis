@@ -1,16 +1,16 @@
 {% extends "base.html" %}
-{% load static %}
+{% load static public_extras %}
 
-{% block title %}{{ news.title }} - Новости настольного тенниса{% endblock %}
-{% block meta_description %}{{ news.full_description|striptags|truncatechars:160 }}{% endblock %}
+{% block title %}{{ news.title|clean_text }} - Новости настольного тенниса{% endblock %}
+{% block meta_description %}{{ news.full_description|clean_truncate:160 }}{% endblock %}
 {% block og_type %}article{% endblock %}
-{% block og_title %}{{ news.title }}{% endblock %}
-{% block og_description %}{{ news.full_description|striptags|truncatechars:160 }}{% endblock %}
+{% block og_title %}{{ news.title|clean_text }}{% endblock %}
+{% block og_description %}{{ news.full_description|clean_truncate:160 }}{% endblock %}
 {% block og_image %}{% if news.image %}{{ site_base_url }}{{ news.image.url }}{% else %}{{ block.super }}{% endif %}{% endblock %}
 {% block twitter_image %}{% if news.image %}{{ site_base_url }}{{ news.image.url }}{% else %}{{ block.super }}{% endif %}{% endblock %}
-{% block og_image_alt %}{{ news.title }}{% endblock %}
-{% block twitter_title %}{{ news.title }}{% endblock %}
-{% block twitter_description %}{{ news.full_description|striptags|truncatechars:160 }}{% endblock %}
+{% block og_image_alt %}{{ news.title|clean_text }}{% endblock %}
+{% block twitter_title %}{{ news.title|clean_text }}{% endblock %}
+{% block twitter_description %}{{ news.full_description|clean_truncate:160 }}{% endblock %}
 {% block body_class %}news-detail-page{% endblock %}
 
 {% block content %}
@@ -29,7 +29,7 @@
         <header class="news-detail-header mb-4">
 
     <h1 class="news-title">
-        {{ news.title }}
+        {{ news.title|clean_text }}
     </h1>
 
     <div class="news-meta d-flex gap-3 flex-wrap justify-content-center">
@@ -53,7 +53,7 @@
         <!-- Картинка -->
         {% if news.image %}
         <div class="news-image-full mb-4">
-            <img src="{{ news.image.url }}" alt="{{ news.title }}">
+            <img src="{{ news.image.url }}" alt="{{ news.title|clean_text }}">
         </div>
         {% endif %}
 

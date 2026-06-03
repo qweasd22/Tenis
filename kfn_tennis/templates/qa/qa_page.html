@@ -1,49 +1,187 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <title>Поиск по сайту</title>
-</head>
-<body>
-    <h1>Поиск по сайту</h1>
-    <p>Ищите по новостям, документам, календарю, проектам, сборным, медиа и структуре федерации.</p>
+{% extends "base.html" %}
+{% load public_extras %}
 
-    <form method="get">
-        <input
-            type="text"
-            name="q"
-            value="{{ query }}"
-            placeholder="Например: Где найти документы?"
-            style="width: 420px;"
-        >
-        <button type="submit">Найти</button>
-    </form>
+{% block title %}Поиск по сайту{% endblock %}
+{% block meta_description %}Поиск по материалам Курской федерации настольного тенниса: новости, документы, календарь, проекты, сборные, медиа и структура федерации.{% endblock %}
+{% block og_title %}Поиск по сайту{% endblock %}
+{% block og_description %}Найдите нужные материалы Курской федерации настольного тенниса на сайте.{% endblock %}
+{% block twitter_title %}Поиск по сайту{% endblock %}
+{% block twitter_description %}Найдите нужные материалы Курской федерации настольного тенниса на сайте.{% endblock %}
+{% block body_class %}qa-search-page{% endblock %}
+
+{% block content %}
+<div class="container my-1">
+    <section class="qa-search-header text-center mb-4">
+        <h1 class="fw-bold">Поиск по сайту</h1>
+        <p class="mt-2 text-muted mb-4">
+            Ищите по новостям, документам, календарю, проектам, сборным, медиа и структуре федерации.
+        </p>
+
+        <form method="get" class="qa-search-form mx-auto">
+            <div class="input-group">
+                <input
+                    type="text"
+                    name="q"
+                    value="{{ query }}"
+                    class="form-control"
+                    placeholder="Например: Где найти документы?"
+                    autocomplete="off"
+                >
+                <button class="btn btn-qa-search" type="submit">Найти</button>
+            </div>
+        </form>
+    </section>
 
     {% if answer_data %}
-        <h2>Ответ</h2>
-        <p>{{ answer_data.text }}</p>
+        <section class="qa-answer-card mb-4">
+            <h2 class="qa-section-title">Ответ</h2>
+            <p class="mb-3">{{ answer_data.text|clean_text }}</p>
 
-        {% if answer_data.top_result %}
-            <p>
-                <a href="{{ answer_data.top_result.url }}">
-                    Перейти к материалу: {{ answer_data.top_result.title }}
-                </a>
-            </p>
-            <p>{{ answer_data.top_result.summary }}</p>
-        {% endif %}
+            {% if answer_data.top_result %}
+                <div class="qa-top-material">
+                    <a href="{{ answer_data.top_result.url }}" class="fw-semibold">
+                        Перейти к материалу: {{ answer_data.top_result.title|clean_text }}
+                    </a>
+                    <div class="small text-muted mt-2">
+                        {{ answer_data.top_result.summary|clean_text }}
+                    </div>
+                </div>
+            {% endif %}
+        </section>
     {% endif %}
 
     {% if results %}
-        <h3>Найденные материалы</h3>
-        <ul>
-            {% for item in results %}
-                <li>
-                    <a href="{{ item.url }}">{{ item.title }}</a>
-                    — {{ item.get_source_type_display }}<br>
-                    <small>{{ item.summary }}</small>
-                </li>
-            {% endfor %}
-        </ul>
+        <section class="qa-results">
+            <h2 class="qa-section-title text-center mb-4">Найденные материалы</h2>
+
+            <div class="row g-4">
+                {% for item in results %}
+                    <div class="col-lg-4 col-md-6">
+                        <article class="qa-result-card h-100">
+                            <div class="qa-result-type">{{ item.get_source_type_display }}</div>
+                            <h3>
+                                <a href="{{ item.url }}">{{ item.title|clean_text }}</a>
+                            </h3>
+                            <p>{{ item.summary|clean_text }}</p>
+                        </article>
+                    </div>
+                {% endfor %}
+            </div>
+        </section>
+    {% elif query %}
+        <div class="text-center text-muted py-4">
+            Ничего не найдено.
+        </div>
     {% endif %}
-</body>
-</html>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+body.qa-search-page {
+    background: linear-gradient(135deg, #fff5f5, #ffe3e3);
+}
+
+.qa-search-header {
+    background: linear-gradient(
+        135deg,
+        rgba(255, 107, 107, 0.15),
+        rgba(255, 142, 114, 0.1)
+    );
+    padding: 3rem 1rem;
+    border-radius: 1rem;
+}
+
+.qa-search-form {
+    max-width: 640px;
+}
+
+.qa-search-form .form-control {
+    border-radius: 0.5rem 0 0 0.5rem;
+}
+
+.btn-qa-search {
+    background: linear-gradient(90deg, #ff6b6b, #ff8e72);
+    border: none;
+    color: #fff;
+}
+
+.btn-qa-search:hover {
+    background: linear-gradient(90deg, #ff8e72, #ff6b6b);
+    color: #fff;
+}
+
+.qa-answer-card,
+.qa-result-card {
+    background: #fff;
+    border-radius: 1rem;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+}
+
+.qa-answer-card {
+    padding: 2rem;
+}
+
+.qa-section-title {
+    color: #343A40;
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+.qa-top-material {
+    background: #fff5f5;
+    border-radius: 0.75rem;
+    padding: 1rem;
+}
+
+.qa-result-card {
+    padding: 1.5rem;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.qa-result-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 25px rgba(255, 107, 107, 0.3);
+}
+
+.qa-result-card h3 {
+    font-size: 1.1rem;
+    font-weight: 700;
+    line-height: 1.35;
+    margin: 0.5rem 0 0.75rem;
+}
+
+.qa-result-card p {
+    color: #6c757d;
+    font-size: 0.95rem;
+    line-height: 1.5;
+    margin-bottom: 0;
+}
+
+.qa-result-type {
+    color: #ff6b6b;
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+@media (max-width: 576px) {
+    .qa-search-header {
+        padding: 2rem 1rem;
+    }
+
+    .qa-search-form .input-group {
+        display: block;
+    }
+
+    .qa-search-form .form-control,
+    .qa-search-form .btn {
+        border-radius: 0.5rem;
+        width: 100%;
+    }
+
+    .qa-search-form .btn {
+        margin-top: 0.75rem;
+    }
+}
+</style>
+{% endblock %}

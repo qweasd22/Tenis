@@ -1,6 +1,7 @@
 from django.urls import path
 from .views import (
     DashboardHomeView,
+    DashboardQaRebuildView,
     DashboardLoginView,
     dashboard_logout_view,
     PartnerListView,
@@ -66,6 +67,7 @@ urlpatterns = [
     path("login/", DashboardLoginView.as_view(), name="login"),
     path("logout/", dashboard_logout_view, name="logout"),
     path("", DashboardHomeView.as_view(), name="index"),
+    path("qa/rebuild/", DashboardQaRebuildView.as_view(), name="qa_rebuild"),
 
     path("partners/", PartnerListView.as_view(), name="partner_list"),
     path("partners/create/", PartnerCreateView.as_view(), name="partner_create"),

@@ -4,12 +4,15 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.http import HttpResponseRedirect
 from django.shortcuts import redirect
 from django.urls import reverse, reverse_lazy
+from django.views import View
 from django.views.generic import TemplateView, ListView, CreateView, UpdateView, DeleteView, FormView
 from documents.models import Category, Document
 from core.models import Partner
 from .forms import PartnerForm, CategoryForm, DocumentForm
 from .mixins import SuperuserRequiredMixin
 from django.utils import timezone
+from qa.indexers import rebuild_all
+from qa.models import QaIndex
 
 class DashboardLoginView(FormView):
     template_name = "dashboard/login.html"
@@ -80,12 +83,20 @@ class DashboardHomeView(SuperuserRequiredMixin, TemplateView):
         context["team_members_total"] = TeamMember.objects.count()
         context["coaches_total"] = Coach.objects.count()
         context["judges_total"] = Judge.objects.count()
+        context["qa_index_total"] = QaIndex.objects.count()
 
         context["recent_news"] = News.objects.order_by("-created_at")[:5]
         context["recent_projects"] = Project.objects.order_by("-updated_at")[:5]
         context["upcoming_events"] = Event.objects.filter(start_date__gte=today).order_by("start_date")[:5]
 
         return context
+
+
+class DashboardQaRebuildView(SuperuserRequiredMixin, View):
+    def post(self, request, *args, **kwargs):
+        indexed_count = rebuild_all()
+        messages.success(request, f"Индекс Q&A пересобран. Записей: {indexed_count}.")
+        return redirect("dashboard:index")
 
 
 class PartnerListView(SuperuserRequiredMixin, ListView):
@@ -379,7 +390,6 @@ class EventDeleteView(SuperuserRequiredMixin, DeleteView):
         context["cancel_url"] = reverse_lazy("dashboard:event_list")
         return context
     
-from django.views import View
 from django.shortcuts import get_object_or_404, redirect
 from MediaPhoto.models import MediaEvent, MediaPhoto
 from MediaPhoto.forms import MultiUploadForm

@@ -1,21 +1,66 @@
-"""
-Django settings for kfn_tennis.
+"""Django settings for kfn_tennis.
 
 Production values are read from environment variables. Keep real secrets out
 of the repository and use .env.example as a deployment checklist.
 """
 
 from pathlib import Path
-
-from decouple import Csv, config
+import os
 
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
+def load_env_file(path):
+    if not path.exists():
+        return
+
+    for raw_line in path.read_text(encoding='utf-8').splitlines():
+        line = raw_line.strip()
+        if not line or line.startswith('#') or '=' not in line:
+            continue
+
+        key, value = line.split('=', 1)
+        key = key.strip()
+        value = value.strip().strip('"').strip("'")
+
+        if key and key not in os.environ:
+            os.environ[key] = value
+
+
+def cast_bool(value):
+    if isinstance(value, bool):
+        return value
+
+    normalized = str(value).strip().lower()
+    if normalized in {'1', 'true', 'yes', 'y', 'on', 'dev', 'development', 'debug'}:
+        return True
+    if normalized in {'0', 'false', 'no', 'n', 'off', '', 'release', 'prod', 'production'}:
+        return False
+
+    raise ValueError(f'Invalid truth value: {value}')
+
+
+def config(name, default='', cast=str):
+    value = os.environ.get(name, default)
+
+    if cast is bool:
+        return cast_bool(value)
+    if cast is int:
+        return int(value)
+    if cast is str or cast is None:
+        return value
+    return cast(value)
+
+
 def csv_config(name, default=''):
-    values = config(name, default=default, cast=Csv())
+    values = config(name, default=default)
+    if isinstance(values, str):
+        values = [value.strip() for value in values.split(',')]
     return [value for value in values if value]
+
+
+load_env_file(BASE_DIR / '.env')
 
 
 DEBUG = config('DEBUG', default=False, cast=bool)
@@ -123,6 +168,7 @@ STATICFILES_DIRS = [BASE_DIR / 'static']
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
+SERVE_STATIC_FILES = config('SERVE_STATIC_FILES', default=True, cast=bool)
 
 
 WEASYPRINT_BASEURL = '/'

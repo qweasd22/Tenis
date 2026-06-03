@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load static %}
+{% load static public_extras %}
 
 {% block title %}Курская федерация настольного тенниса{% endblock %}
 {% block meta_description %}Официальный сайт Курской федерации настольного тенниса: новости, календарь соревнований, документы, проекты, сборные, тренеры, судьи и медиа Курской области.{% endblock %}
@@ -35,17 +35,17 @@
                 <div class="card h-100 news-card border-0 shadow-sm">
                     <div class="ratio ratio-16x9 position-relative">
                         {% if news.image %}
-                            <img src="{{ news.image.url }}" class="card-img-top object-fit-cover" alt="{{ news.title }}">
+                            <img src="{{ news.image.url }}" class="card-img-top object-fit-cover" alt="{{ news.title|clean_text }}">
                         {% else %}
                             <div class="news-placeholder d-flex align-items-center justify-content-center">
-                                <span class="news-placeholder-text">{{ news.title|truncatechars:40 }}</span>
+                                <span class="news-placeholder-text">{{ news.title|clean_truncate:40 }}</span>
                             </div>
                         {% endif %}
                     </div>
                     <div class="card-body d-flex flex-column">
                         <div class="text-muted small mb-2">{{ news.created_at|date:"d.m.Y" }}</div>
-                        <h5 class="card-title fw-semibold">{{ news.title }}</h5>
-                        <p class="card-text text-muted small mb-4">{{ news.full_description|truncatechars:100|striptags }}</p>
+                        <h5 class="card-title fw-semibold">{{ news.title|clean_text }}</h5>
+                        <p class="card-text text-muted small mb-4">{{ news.full_description|clean_truncate:100 }}</p>
                         <div class="mt-auto">
                             <a href="{{ news.get_absolute_url }}" class="btn w-100 btn-news">Подробнее</a>
                         </div>

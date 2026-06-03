@@ -1,15 +1,6 @@
-/* ====================== */
-/* Страница проектов */
-/* ====================== */
-body.projects-page {
-    background: linear-gradient(180deg, #f0f3f5 0%, #e6e9ec 100%);
-    font-family: 'Inter', sans-serif;
-    color: #343A40;
-}
-
 /* ==== Заголовок секции ==== */
 .projects-header {
-    background: linear-gradient(90deg, rgba(32,192,204,0.15), rgba(32,192,204,0.05));
+    background: linear-gradient(135deg, rgba(255,107,107,0.15), rgba(255,142,114,0.1));
     padding: 3rem 1rem;
     border-radius: 1rem;
     text-align: center;
@@ -23,7 +14,6 @@ body.projects-page {
 
 .projects-header p {
     color: #6c757d;
-    font-size: 1.1rem;
 }
 
 /* ==== Карточки проектов ==== */
@@ -37,7 +27,7 @@ body.projects-page {
 
 .project-card:hover {
     transform: translateY(-5px);
-    box-shadow: 0 12px 25px rgba(32,192,204,0.3);
+    box-shadow: 0 12px 25px rgba(255,107,107,0.3);
 }
 
 /* Изображение карточки */
@@ -76,14 +66,14 @@ body.projects-page {
 
 /* Кнопка Подробнее */
 .project-card .btn {
-    background: linear-gradient(90deg, var(--accent-color), #17a2b8);
+    background: linear-gradient(90deg, #ff6b6b, #ff8e72);
     color: #fff;
     border: none;
     transition: background 0.3s ease;
 }
 
 .project-card .btn:hover {
-    background: linear-gradient(90deg, #17a2b8, var(--accent-color));
+    background: linear-gradient(90deg, #ff8e72, #ff6b6b);
     color: #fff;
 }
 
@@ -113,7 +103,7 @@ body.projects-page {
 
 /* Кнопки на странице проекта */
 .project-content .btn {
-    background: linear-gradient(90deg, var(--accent-color), #17a2b8);
+    background: linear-gradient(90deg, #ff6b6b, #ff8e72);
     color: #fff;
     border: none;
     padding: 0.6rem 1.2rem;
@@ -121,7 +111,7 @@ body.projects-page {
 }
 
 .project-content .btn:hover {
-    background: linear-gradient(90deg, #17a2b8, var(--accent-color));
+    background: linear-gradient(90deg, #ff8e72, #ff6b6b);
 }
 
 /* Боковая панель */
@@ -165,23 +155,9 @@ body.projects-page {
     }
 }
 
-/* ==== Разделение строк карточек ==== */
-.row:nth-child(even) {
-    background: rgba(32,192,204,0.02);
-    padding: 2rem 0;
-    border-radius: 1rem;
-}
-
 /* ======================= */
 /* Страница конкретного проекта */
 /* ======================= */
-
-/* Фон страницы */
-body.project-page {
-    background: linear-gradient(180deg, #f7f8fa 0%, #e6e9ec 100%);
-    font-family: 'Inter', sans-serif;
-    color: #343A40;
-}
 
 /* Заголовок и категория */
 .project-header h1 {
@@ -195,7 +171,6 @@ body.project-page {
     font-weight: 500;
     padding: 0.25rem 0.75rem;
     border-radius: 0.5rem;
-    font-size: 0.85rem;
 }
 
 /* Главное изображение */
@@ -240,12 +215,12 @@ body.project-page {
 }
 
 .project-content table tr:hover {
-    background-color: rgba(32,192,204,0.05);
+    background-color: rgba(255,107,107,0.05);
 }
 
 /* Кнопки */
 .btn-project {
-    background: linear-gradient(90deg, var(--accent-color), #17a2b8);
+    background: linear-gradient(90deg, #ff6b6b, #ff8e72);
     color: #fff;
     border: none;
     padding: 0.6rem 1.2rem;
@@ -256,7 +231,7 @@ body.project-page {
 }
 
 .btn-project:hover {
-    background: linear-gradient(90deg, #17a2b8, var(--accent-color));
+    background: linear-gradient(90deg, #ff8e72, #ff6b6b);
     transform: translateY(-2px);
 }
 
@@ -308,7 +283,7 @@ body.project-page {
 
 .related-projects .project-card:hover {
     transform: translateY(-5px);
-    box-shadow: 0 12px 25px rgba(32,192,204,0.3);
+    box-shadow: 0 12px 25px rgba(255,107,107,0.3);
 }
 
 .related-projects .project-card img {
@@ -326,15 +301,14 @@ body.project-page {
 }
 
 .related-projects .btn-project {
-    background: linear-gradient(90deg, var(--accent-color), #17a2b8);
+    background: linear-gradient(90deg, #ff6b6b, #ff8e72);
     color: #fff;
     border: none;
     padding: 0.5rem 1rem;
     transition: background 0.3s ease, transform 0.2s ease;
-    font-size: 0.9rem;
 }
 
 .related-projects .btn-project:hover {
-    background: linear-gradient(90deg, #17a2b8, var(--accent-color));
+    background: linear-gradient(90deg, #ff8e72, #ff6b6b);
     transform: translateY(-2px);
 }
