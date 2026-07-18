@@ -44,9 +44,9 @@
                     </div>
                     <div class="card-body d-flex flex-column">
                         <div class="text-muted small mb-2">{{ news.created_at|date:"d.m.Y" }}</div>
-                        <h5 class="card-title fw-semibold">{{ news.title|clean_text }}</h5>
-                        <p class="card-text text-muted small mb-4">{{ news.full_description|clean_truncate:100 }}</p>
-                        <div class="mt-auto">
+                        <h5 class="card-title fw-semibold news-card-title">{{ news.title|clean_text }}</h5>
+                        <p class="card-text text-muted small mb-4 news-card-text">{{ news.full_description|clean_truncate:100 }}</p>
+                        <div class="mt-auto news-card-actions">
                             <a href="{{ news.get_absolute_url }}" class="btn w-100 btn-news">Подробнее</a>
                         </div>
                     </div>
@@ -200,6 +200,36 @@ document.addEventListener('DOMContentLoaded', () => {
     margin: 0 auto;
     position: relative; /* важно для абсолютного позиционирования кнопок */
      min-height: 250px; /* минимум, под размер карточки с изображением */
+}
+
+#newsCarousel .news-card {
+    height: 100%;
+}
+
+#newsCarousel .news-card .card-body {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+#newsCarousel .news-card-title {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    min-height: 4.5rem;
+}
+
+#newsCarousel .news-card-text {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    min-height: 4.5rem;
+}
+
+#newsCarousel .news-card-actions {
+    margin-top: auto;
 }
 
 #newsCarousel .carousel-control-prev,
