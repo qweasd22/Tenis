@@ -164,10 +164,13 @@ class NewsForm(forms.ModelForm):
 
         self.fields["image"].widget.attrs.update({"class": "form-control"})
 
-        if self.instance and self.instance.pk and self.instance.created_at:
-            self.initial["created_at"] = timezone.localtime(self.instance.created_at).strftime("%Y-%m-%dT%H:%M")
-        elif not self.initial.get("created_at"):
-            self.initial["created_at"] = timezone.localtime().strftime("%Y-%m-%dT%H:%M")
+        # Only set initial created_at when form is not bound (i.e. GET view),
+        # so that submitted POST data is not overwritten on validation errors.
+        if not self.is_bound:
+            if self.instance and self.instance.pk and self.instance.created_at:
+                self.initial["created_at"] = timezone.localtime(self.instance.created_at).strftime("%Y-%m-%dT%H:%M")
+            elif not self.initial.get("created_at"):
+                self.initial["created_at"] = timezone.localtime().strftime("%Y-%m-%dT%H:%M")
 
 from projects.models import Project, ProjectCategory
 

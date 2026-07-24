@@ -13,6 +13,7 @@ class ProjectCategory(models.Model):
     slug = models.SlugField(
         max_length=255,
         unique=True,
+        blank=True,
         verbose_name='Slug'
     )
     order = models.PositiveIntegerField(
@@ -31,6 +32,17 @@ class ProjectCategory(models.Model):
 
     def __str__(self):
         return self.title
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            base_slug = slugify(self.title)
+            slug = base_slug
+            counter = 1
+            while ProjectCategory.objects.filter(slug=slug).exclude(pk=self.pk).exists():
+                slug = f"{base_slug}-{counter}"
+                counter += 1
+            self.slug = slug
+        super().save(*args, **kwargs)
 
 
 class ProjectStatus(models.TextChoices):

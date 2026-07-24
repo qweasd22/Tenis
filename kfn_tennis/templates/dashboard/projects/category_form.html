@@ -9,12 +9,16 @@
     {% csrf_token %}
 
     <div class="mb-3">
-        <label class="form-label" for="{{ form.title.id_for_label }}">Название</label>
+        <label class="form-label" for="{{ form.title.id_for_label }}">Название
+            {% if form.title.field.required %}<span class="text-danger">*</span>{% endif %}
+        </label>
         {{ form.title }}
     </div>
 
     <div class="mb-3">
-        <label class="form-label" for="{{ form.slug.id_for_label }}">Slug</label>
+        <label class="form-label" for="{{ form.slug.id_for_label }}">Slug
+            {% if form.slug.field.required %}<span class="text-danger">*</span>{% endif %}
+        </label>
         {{ form.slug }}
     </div>
 

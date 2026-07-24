@@ -1,10 +1,11 @@
 from django.db import models
 from django.utils import timezone
 from django.urls import reverse
+from django.utils.text import slugify
 from django_ckeditor_5.fields import CKEditor5Field
 class News(models.Model):
     title = models.CharField(verbose_name='Заголовок', max_length=255)
-    slug = models.SlugField(unique=True)
+    slug = models.SlugField(unique=True, blank=True)
     full_description = CKEditor5Field(
     verbose_name='Полное описание',
     config_name='default'
@@ -27,3 +28,14 @@ class News(models.Model):
 
     def get_absolute_url(self):
         return reverse('news:news_detail', kwargs={'slug': self.slug})
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            base_slug = slugify(self.title)
+            slug = base_slug
+            counter = 1
+            while News.objects.filter(slug=slug).exclude(pk=self.pk).exists():
+                slug = f"{base_slug}-{counter}"
+                counter += 1
+            self.slug = slug
+        super().save(*args, **kwargs)

@@ -245,6 +245,59 @@
     </main>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Add red asterisk to labels of required inputs across all dashboard forms
+        (function(){
+            function markRequiredLabels(container){
+                const selector = 'input[required], select[required], textarea[required]';
+                const fields = container.querySelectorAll(selector);
+                fields.forEach(function(field){
+                    const id = field.id;
+                    if(!id) return;
+                    const label = container.querySelector('label[for="'+id+'"]');
+                    if(label && !label.querySelector('.required-star')){
+                        const star = document.createElement('span');
+                        star.className = 'text-danger required-star';
+                        star.textContent = ' *';
+                        label.appendChild(star);
+                    }
+                });
+            }
+
+            document.querySelectorAll('form').forEach(function(form){
+                markRequiredLabels(form);
+
+                // Basic client-side file/type checks to reduce common server-side rejections
+                form.addEventListener('submit', function(e){
+                    const fileInputs = form.querySelectorAll('input[type=file]');
+                    for(const fi of fileInputs){
+                        if(fi.files && fi.files.length){
+                            const accept = fi.getAttribute('accept');
+                            if(accept){
+                                const name = fi.files[0].name.toLowerCase();
+                                // build accept patterns
+                                const types = accept.split(',').map(s => s.trim().toLowerCase());
+                                let ok = false;
+                                for(const t of types){
+                                    if(t.startsWith('.')){
+                                        if(name.endsWith(t)) { ok = true; break; }
+                                    } else if(t.includes('/')){
+                                        // mime-type: skip deep check, assume ok
+                                        ok = true;
+                                    }
+                                }
+                                if(!ok){
+                                    e.preventDefault();
+                                    alert('Некорректный формат файла для поля: ' + (fi.name || fi.id));
+                                    return false;
+                                }
+                            }
+                        }
+                    }
+                });
+            });
+        })();
+    </script>
     {% block extra_js %}{% endblock %}
 </body>
 </html>

@@ -11,18 +11,24 @@
     {% csrf_token %}
 
     <div class="mb-3">
-        <label class="form-label" for="{{ form.title.id_for_label }}">Название проекта</label>
+        <label class="form-label" for="{{ form.title.id_for_label }}">Название проекта
+            {% if form.title.field.required %}<span class="text-danger">*</span>{% endif %}
+        </label>
         {{ form.title }}
     </div>
 
     <div class="mb-3">
-        <label class="form-label" for="{{ form.slug.id_for_label }}">Slug</label>
+        <label class="form-label" for="{{ form.slug.id_for_label }}">Slug
+            {% if form.slug.field.required %}<span class="text-danger">*</span>{% endif %}
+        </label>
         {{ form.slug }}
         <div class="form-text">Можно оставить пустым — заполнится автоматически при сохранении.</div>
     </div>
 
     <div class="mb-3">
-        <label class="form-label" for="{{ form.category.id_for_label }}">Категория</label>
+        <label class="form-label" for="{{ form.category.id_for_label }}">Категория
+            {% if form.category.field.required %}<span class="text-danger">*</span>{% endif %}
+        </label>
         {{ form.category }}
     </div>
 
@@ -37,7 +43,9 @@
     </div>
 
     <div class="mb-3">
-        <label class="form-label" for="{{ form.main_image.id_for_label }}">Главное изображение</label>
+        <label class="form-label" for="{{ form.main_image.id_for_label }}">Главное изображение
+            {% if form.main_image.field.required %}<span class="text-danger">*</span>{% endif %}
+        </label>
         {{ form.main_image }}
         {% if object and object.main_image %}
             <div class="mt-2">

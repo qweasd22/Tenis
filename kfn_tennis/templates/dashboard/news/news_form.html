@@ -11,22 +11,30 @@
     {% csrf_token %}
 
     <div class="mb-3">
-        <label class="form-label" for="{{ form.title.id_for_label }}">Заголовок</label>
+        <label class="form-label" for="{{ form.title.id_for_label }}">Заголовок
+            {% if form.title.field.required %}<span class="text-danger">*</span>{% endif %}
+        </label>
         {{ form.title }}
     </div>
 
     <div class="mb-3">
-        <label class="form-label" for="{{ form.slug.id_for_label }}">Slug</label>
+        <label class="form-label" for="{{ form.slug.id_for_label }}">Slug
+            {% if form.slug.field.required %}<span class="text-danger">*</span>{% endif %}
+        </label>
         {{ form.slug }}
     </div>
 
     <div class="mb-3">
-        <label class="form-label" for="{{ form.full_description.id_for_label }}">Полное описание</label>
+        <label class="form-label" for="{{ form.full_description.id_for_label }}">Полное описание
+            {% if form.full_description.field.required %}<span class="text-danger">*</span>{% endif %}
+        </label>
         {{ form.full_description }}
     </div>
 
     <div class="mb-3">
-        <label class="form-label" for="{{ form.image.id_for_label }}">Изображение</label>
+        <label class="form-label" for="{{ form.image.id_for_label }}">Изображение
+            {% if form.image.field.required %}<span class="text-danger">*</span>{% endif %}
+        </label>
         {{ form.image }}
         {% if object and object.image %}
             <div class="mt-2">
@@ -36,9 +44,30 @@
     </div>
 
     <div class="mb-4">
-        <label class="form-label" for="{{ form.created_at.id_for_label }}">Дата создания</label>
+        <label class="form-label" for="{{ form.created_at.id_for_label }}">Дата создания
+            {% if form.created_at.field.required %}<span class="text-danger">*</span>{% endif %}
+        </label>
         {{ form.created_at }}
     </div>
+
+    <script>
+        // Client-side basic validation to avoid common server-side file/type errors
+        (function(){
+            const form = document.currentScript.parentElement.querySelector('form');
+            if(!form) return;
+            form.addEventListener('submit', function(e){
+                const img = form.querySelector('[name="image"]');
+                if(img && img.files && img.files.length){
+                    const name = img.files[0].name.toLowerCase();
+                    const ok = name.endsWith('.jpg') || name.endsWith('.jpeg') || name.endsWith('.png') || name.endsWith('.gif');
+                    if(!ok){
+                        e.preventDefault();
+                        alert('Пожалуйста, загрузите изображение в формате JPG, PNG или GIF.');
+                    }
+                }
+            });
+        })();
+    </script>
 
     <div class="form-check mb-2">
         {{ form.published }}
