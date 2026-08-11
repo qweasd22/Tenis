@@ -30,8 +30,8 @@ class News(models.Model):
         return reverse('news:news_detail', kwargs={'slug': self.slug})
 
     def save(self, *args, **kwargs):
-        if not self.slug:
-            base_slug = slugify(self.title)
+        if not self.slug or not self.slug.strip():
+            base_slug = slugify(self.title or "") or "news"
             slug = base_slug
             counter = 1
             while News.objects.filter(slug=slug).exclude(pk=self.pk).exists():

@@ -162,8 +162,8 @@ document.addEventListener('DOMContentLoaded', () => {
 /* Hero Section */
 .hero-section {
     position: relative;
-    background: url("{% static 'images/home.jpg' %}") center/cover no-repeat;
-    height: 500px;
+    min-height: clamp(320px, 55vh, 500px);
+    padding: 2rem 1.25rem;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -172,7 +172,23 @@ document.addEventListener('DOMContentLoaded', () => {
     text-shadow: 1px 2px 8px rgba(0,0,0,0.6);
     border-radius: 16px;
     margin-bottom: 50px;
+    overflow: hidden;
+    background: linear-gradient(90deg, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.25) 100%),
+                url("{% static 'images/home.jpg' %}") center/cover no-repeat;
+    background-color: #ffffff;
 }
+
+@media (max-width: 767.7px) {
+    .hero-section {
+        min-height: 300px;
+        padding: 1.25rem 1rem;
+        border-radius: 0;
+        margin-bottom: 24px;
+        background-size: contain;
+        background-position: center center;
+    }
+}
+
 /* Кнопки карусели - одинаковые для новостей и партнеров */
 
 
@@ -342,6 +358,9 @@ document.addEventListener('DOMContentLoaded', () => {
     display: flex;
     justify-content: center;
     align-items: center;
+    background-color: #fff;
+    border-radius: 12px;
+    padding: 12px;
 }
 .about-img {
     max-width: 300px;
@@ -350,7 +369,7 @@ document.addEventListener('DOMContentLoaded', () => {
     object-fit: contain;
     border-radius: 12px;
     padding: 10px;
-    background: #fff;
+    background-color: #fff;
     box-shadow: 0 8px 20px rgba(0,0,0,0.1);
     transition: transform 0.3s, box-shadow 0.3s;
 }
