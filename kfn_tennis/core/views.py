@@ -5,14 +5,12 @@ from news.models import News
 def home(request):
     partners = list(Partner.objects.all())
 
-    # Все новости для слайдера
+    # Новости для слайдера — только отмеченные галочкой
     priority_news = list(News.objects.filter(published=True, show_in_slider=True).order_by('-created_at'))
+    slider_news = priority_news[:6]
+
+    # Последние новости для списка под слайдером, исключаем уже показанные в слайдере
     latest_news = list(News.objects.filter(published=True).exclude(id__in=[n.id for n in priority_news]).order_by('-created_at'))
-
-    # Объединяем приоритетные и последние для слайдера (например, максимум 6 слайдов)
-    slider_news = priority_news + latest_news[:6 - len(priority_news)]
-
-    # Последние новости для списка под слайдером (можно тоже исключить приоритетные, чтобы не дублировать)
     latest_news_display = latest_news[:6]
 
     # Группируем партнеров по 4 для карусели
