@@ -90,23 +90,130 @@
         }
 
         /* Футер */
-        .footer a { text-decoration: none; }
+        .footer {
+            background: #1f2a34;
+            color: #f2f4f7;
+            padding: 2.1rem 0 1.5rem;
+            position: relative;
+        }
+        .footer a {
+            text-decoration: none;
+        }
+        .footer-inner {
+            display: grid;
+            grid-template-columns: 1.3fr 0.7fr 1.8fr;
+            align-items: center;
+            gap: 2rem;
+        }
+        .footer-left {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            justify-content: center;
+            min-width: 0;
+        }
+        .footer-left strong {
+            display: block;
+            margin: 0;
+            font-size: 2rem;
+            line-height: 1.15;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+        }
+        .footer-left .status-text {
+            margin-top: 0.7rem;
+            color: rgba(255,255,255,0.82);
+            font-size: 0.95rem;
+        }
+        .footer-center {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .footer-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 58px;
+            height: 58px;
+            border-radius: 12px;
+            background: transparent;
+            box-shadow: none;
+        }
         .footer-icon-img {
-            width: 32px;
-            height: 32px;
-            transition: transform 0.3s, opacity 0.3s;
+            width: 34px;
+            height: 34px;
+            display: block;
+            filter: none;
+            transition: transform 0.2s ease;
         }
-        .footer-icon-img:hover {
-            transform: scale(1.2);
-            opacity: 0.8;
+        .footer-icon:hover .footer-icon-img {
+            transform: scale(1.02);
         }
-        .footer-center { display: flex; gap: 15px; align-items: center; }
-        .footer-left, .footer-center, .footer-right { margin: 0.5rem 0; }
-        .footer-center a:hover { text-decoration: underline; }
+        .footer-right {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: flex-end;
+            text-align: right;
+            gap: 0.25rem;
+        }
+        .footer-right .address,
+        .footer-right .phone {
+            color: rgba(255,255,255,0.96);
+            line-height: 1.45;
+            font-size: 1.02rem;
+        }
+        .footer-doc-links {
+            margin-top: 0.8rem;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 0.2rem;
+            max-width: 420px;
+        }
+        .footer-doc-links a {
+            color: rgba(255,255,255,0.74);
+            font-size: 0.8rem;
+            line-height: 1.4;
+            text-decoration: none;
+        }
+        .footer-doc-links a:hover {
+            color: #ffffff;
+            text-decoration: underline;
+        }
+        .footer-chat {
+            position: fixed;
+            right: 18px;
+            bottom: 18px;
+            width: 54px;
+            height: 54px;
+            border-radius: 50%;
+            background: #d93030;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            box-shadow: 0 10px 22px rgba(0,0,0,0.22);
+            z-index: 1200;
+        }
         @media(max-width:768px){
-            .footer { text-align: center; }
-            .footer-left, .footer-center, .footer-right { text-align: center; }
-            .footer-right { margin-top: 1rem; }
+            .footer-inner {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+            .footer-left, .footer-right {
+                align-items: center;
+                text-align: center;
+            }
+            .footer-doc-links {
+                align-items: center;
+                max-width: none;
+            }
+            .footer-right .address,
+            .footer-right .phone {
+                text-align: center;
+            }
         }
 
         a {
@@ -459,31 +566,34 @@
 </main>
 
     <!-- Footer -->
-    <footer class="footer py-4 bg-dark text-white">
-    <div class="container d-flex justify-content-between align-items-center flex-wrap">
-        <!-- Левый блок -->
-        <div class="footer-left">
-            <strong>КСО РОО «ФНТ»</strong>
+    <footer class="footer">
+        <div class="container footer-inner">
+            <div class="footer-left">
+                <strong>КФС РОО «ФНТ»</strong>
+                <div class="status-text">Сайт находится в стадии разработки</div>
+            </div>
+
+            <div class="footer-center">
+                <a href="https://vk.com/" target="_blank" class="footer-icon" aria-label="VK">
+                    <img src="{% static 'images/base/vk.png' %}" alt="VK" class="footer-icon-img">
+                </a>
+            </div>
+
+            <div class="footer-right">
+                <div class="address">г. Курск, ул. Карла Маркса, д. 10 ТЦ «Европа 50» 4 этаж</div>
+                <div class="phone">8-930-858-81-08</div>
+                <div class="footer-doc-links">
+                    <a href="/documents/">Политика обработки персональных данных</a>
+                    <a href="/documents/">Согласие на обработку персональных данных</a>
+                    <a href="/documents/">Согласие на размещение и обработку фотографий и видеоматериалов</a>
+                </div>
+            </div>
         </div>
 
-        <!-- Центр: иконки мессенджеров -->
-        <div class="footer-center d-flex gap-3">
-            <a href="#" target="_blank" class="footer-icon">
-                <img src="{% static 'images/base/vk.png' %}" alt="VK" class="footer-icon-img">
-            </a>
-            <a href="#" target="_blank" class="footer-icon">
-                <img src="{% static 'images/base/max.svg' %}" alt="MAX" class="footer-icon-img">
-            </a>
-            
+        <div class="footer-chat" aria-label="Чат">
+            <i class="bi bi-chat-left-text"></i>
         </div>
-
-        <!-- Правый блок -->
-        <div class="footer-right text-end">
-            <div>г. Курск, ул. Примерная, д.1</div>
-            <div>+7 (XXX) XXX-XX-XX</div>
-        </div>
-    </div>
-</footer>
+    </footer>
 
     <!-- Bootstrap JS -->
      <div id="qa-widget">
